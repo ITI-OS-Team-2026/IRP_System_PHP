@@ -1,0 +1,11 @@
+vendor/
+node_modules/
+.env
+storage/logs/*
+storage/certificates/*
+storage/receipts/*
+public/uploads/*
+!storage/logs/.gitkeep
+!storage/certificates/.gitkeep
+!storage/receipts/.gitkeep
+!public/uploads/.gitkeep

@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+:root {
+    --primary: #1e3a8a; /* Deep blue for medical/academic feel */
+    --primary-light: #2563eb;
+    --primary-dark: #1e40af;
+    --secondary: #eab308; /* Premium gold */
+    --background: #f0fdfa;
+    --surface: #ffffff;
+    --surface-glass: rgba(255, 255, 255, 0.7);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: rgba(148, 163, 184, 0.2);
+    --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    --ring: rgba(30, 58, 138, 0.15);
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    color: var(--text-main);
+    direction: rtl;
+    min-height: 100vh;
+    font-size: 16px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Decorative Background Elements */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(100px);
+}
+body::before {
+    width: 600px; height: 600px;
+    background: rgba(37, 99, 235, 0.15);
+    top: -100px; right: -100px;
+}
+body::after {
+    width: 600px; height: 600px;
+    background: rgba(234, 179, 8, 0.1);
+    bottom: -200px; left: -100px;
+}
+
+.glass-panel {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Auth Layout */
+.auth-container {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    gap: 4rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.auth-card {
+    flex: 1;
+    padding: 3rem;
+    max-width: 450px;
+    animation: fadeUp 0.6s ease-out;
+    margin: 0 auto;
+}
+
+.auth-header { text-align: center; margin-bottom: 2.5rem; }
+.auth-header .logo {
+    font-size: 2.5rem;
+    color: var(--primary);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+.auth-header h2 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 0.5rem; }
+.auth-header p { color: var(--text-muted); font-size: 1rem; }
+
+.input-group { margin-bottom: 1.5rem; text-align: right; }
+.input-group label {
+    display: block; font-weight: 600;
+    margin-bottom: 0.5rem; color: var(--text-main);
+}
+.input-group input {
+    width: 100%; padding: 0.875rem 1rem;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    font-size: 1rem; font-family: inherit;
+    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.input-group input:focus {
+    outline: none; border-color: var(--primary-light);
+    background: #fff;
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+.btn-primary {
+    width: 100%; padding: 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white; border: none;
+    border-radius: 12px; font-size: 1.125rem; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+.auth-footer {
+    margin-top: 2rem; text-align: center;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+}
+.auth-footer a {
+    color: var(--primary-light); text-decoration: none; font-weight: 600;
+    transition: var(--transition);
+}
+.auth-footer a:hover { color: var(--secondary); }
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Illustration Side */
+.auth-illustration {
+    flex: 1.2;
+    height: 600px;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.75), rgba(37, 99, 235, 0.6)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    display: none;
+    animation: fadeUp 0.8s ease-out;
+}
+
+@media (min-width: 900px) {
+    .auth-illustration { display: block; }
+}
