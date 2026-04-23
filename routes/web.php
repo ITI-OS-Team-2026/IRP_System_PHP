@@ -4,8 +4,10 @@
  */
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-// Strip out query parameters and base path
-$basePath = '/ITI/IRP_System_PHP/public';
+$scriptName = $_SERVER['SCRIPT_NAME'];
+$basePath = str_replace('/index.php', '', $scriptName);
+
+// Clean up the path: remove base path and query strings
 $path = str_replace($basePath, '', $requestUri);
 $path = parse_url($path, PHP_URL_PATH);
 $path = rtrim($path, '/') ?: '/';
@@ -39,6 +41,7 @@ switch ($path) {
 
     default:
         http_response_code(404);
-        echo json_encode(['error' => 'Endpoint not found']);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Endpoint not found', 'path' => $path]);
         break;
 }
