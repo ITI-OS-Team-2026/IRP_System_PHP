@@ -84,7 +84,7 @@ $summaryCards = [
 $sidebarItems = [
     ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => true],
     ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '#'],
-    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '#'],
+    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create'],
     ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '#'],
 ];
 
@@ -145,7 +145,7 @@ function timeAgo($datetime) {
                     <h2 class="font-h1 text-2xl text-charcoal">مرحباً، <?= htmlspecialchars($currentUser['name'] ?? '', ENT_QUOTES, 'UTF-8') ?></h2>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="#"
+                    <a href="/student/submission/create"
                        class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
                         <span class="material-symbols-outlined text-[18px]">note_add</span>
                         تقديم بحث جديد
@@ -191,7 +191,7 @@ function timeAgo($datetime) {
                                 <span class="material-symbols-outlined text-5xl text-slate-300 mb-4 block">science</span>
                                 <p class="text-slate-gray text-lg mb-2">لا توجد أبحاث حتى الآن</p>
                                 <p class="text-sm text-slate-400 mb-6">ابدأ بتقديم أول بحث لك عبر الزر</p>
-                                <a href="#"
+                                <a href="/student/submission/create"
                                    class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors">
                                     <span class="material-symbols-outlined text-[18px]">note_add</span>
                                     تقديم بحث جديد
