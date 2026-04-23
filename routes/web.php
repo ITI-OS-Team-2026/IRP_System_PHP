@@ -18,12 +18,27 @@ switch ($path) {
         break;
         
     case '/register':
-        // Placeholder for student registration
-        echo "<h1>Student Registration Page (Coming Soon)</h1>";
+        require __DIR__ . '/../app/Views/auth/register.php';
+        break;
+
+    // API Routes
+    case '/api/register':
+        require __DIR__ . '/../app/Controllers/AuthController.php';
+        (new AuthController())->register();
+        break;
+
+    case '/api/login':
+        require __DIR__ . '/../app/Controllers/AuthController.php';
+        (new AuthController())->login();
+        break;
+
+    case '/api/logout':
+        require __DIR__ . '/../app/Controllers/AuthController.php';
+        (new AuthController())->logout();
         break;
 
     default:
         http_response_code(404);
-        echo "<h1 style='text-align:center; padding: 50px;'>404 - الصفحة غير موجودة</h1>";
+        echo json_encode(['error' => 'Endpoint not found']);
         break;
 }
