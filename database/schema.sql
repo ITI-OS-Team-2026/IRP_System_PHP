@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     national_id VARCHAR(20) UNIQUE NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    department VARCHAR(100),
-    faculty VARCHAR(100),
+    faculty VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
     role ENUM('student', 'admin', 'sample_size_officer', 'reviewer', 'manager') NOT NULL,
     is_active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>إنشاء حساب جديد - IRB Institutional Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2dfff",
+                        "on-surface-variant": "#474651",
+                        "outline-variant": "#c8c5d3",
+                        "inverse-on-surface": "#f0f0f3",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1e",
+                        "on-error": "#ffffff",
+                        "crimson": "#991B1B",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-container": "#9c9af4",
+                        "surface-container": "#eeeef0",
+                        "surface-variant": "#e2e2e5",
+                        "surface-container-high": "#e8e8ea",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#5c5f61",
+                        "on-secondary-container": "#626567",
+                        "primary": "#1a146b",
+                        "on-secondary-fixed": "#191c1e",
+                        "outline": "#777682",
+                        "background": "#f9f9fc",
+                        "on-secondary-fixed-variant": "#444749",
+                        "inverse-primary": "#c3c0ff",
+                        "forest": "#166534",
+                        "on-tertiary-fixed-variant": "#70380b",
+                        "charcoal": "#1A1C1E",
+                        "tertiary-fixed-dim": "#ffb688",
+                        "tertiary-container": "#5f2b00",
+                        "primary-container": "#312e81",
+                        "surface-tint": "#5654a8",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2f3133",
+                        "on-primary-fixed": "#100563",
+                        "royal-indigo": "#312E81",
+                        "on-primary-fixed-variant": "#3e3c8f",
+                        "on-background": "#1a1c1e",
+                        "tertiary": "#3e1a00",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "paper-white": "#FDFDFC",
+                        "secondary-fixed": "#e0e3e5",
+                        "surface-dim": "#dadadc",
+                        "surface-container-lowest": "#ffffff",
+                        "cool-slate": "#F8FAFC",
+                        "surface-container-low": "#f3f3f6",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e2e2e5",
+                        "secondary-container": "#e0e3e5",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#de915e",
+                        "surface": "#f9f9fc",
+                        "slate-gray": "#64748B",
+                        "surface-bright": "#f9f9fc",
+                        "on-tertiary-fixed": "#311300",
+                        "tertiary-fixed": "#ffdbc7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "section-stack": "3rem",
+                        "gutter": "1.5rem",
+                        "form-gap": "1.25rem",
+                        "edge-margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "h1": ["Amiri"],
+                        "display-md": ["Amiri"],
+                        "display-lg": ["Amiri"],
+                        "button": ["Tajawal"],
+                        "body-sm": ["Tajawal"],
+                        "numeral": ["Tajawal"],
+                        "body-lg": ["Tajawal"]
+                    },
+                    "fontSize": {
+                        "h1": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "display-md": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "button": ["15px", { "lineHeight": "1", "fontWeight": "700" }],
+                        "body-sm": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "numeral": ["14px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-paper-white text-on-surface min-h-screen flex font-body-lg">
+<!-- Content Canvas -->
+<main class="flex-1 flex flex-col md:flex-row min-h-screen">
+<!-- Left Panel: Branding & Quote -->
+<div class="hidden md:flex md:w-1/2 bg-royal-indigo text-on-primary flex-col justify-between p-12 relative overflow-hidden">
+<div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-12">
+<span class="material-symbols-outlined text-4xl" data-icon="account_balance">account_balance</span>
+<span class="font-h1 text-h1 tracking-widest uppercase">IRB Portal</span>
+</div>
+</div>
+<div class="relative z-10 max-w-md">
+<blockquote class="font-display-md text-display-md leading-tight mb-6">
+                    "البحث العلمي هو نافذة الأمة نحو المستقبل، والأخلاقيات هي الإطار الذي يحمي هذا المستقبل."
+                </blockquote>
+<p class="font-body-lg text-body-lg text-primary-fixed-dim">
+                    — الميثاق الأخلاقي للبحث العلمي
+                </p>
+</div>
+<div class="relative z-10 text-body-sm font-body-sm text-primary-fixed-dim">
+                © 2024 Institutional Review Board. All rights reserved.
+            </div>
+</div>
+<!-- Right Panel: Registration Form -->
+<div class="w-full md:w-1/2 flex items-center justify-center p-8 lg:p-16 bg-paper-white relative">
+<div class="w-full max-w-lg">
+<div class="md:hidden flex items-center gap-2 mb-8 text-royal-indigo">
+<span class="material-symbols-outlined text-3xl" data-icon="account_balance">account_balance</span>
+<span class="font-h1 text-h1 tracking-widest uppercase">IRB Portal</span>
+</div>
+<div class="mb-10">
+<h1 class="font-display-lg text-display-lg text-charcoal mb-2">إنشاء حساب جديد</h1>
+<p class="font-body-lg text-body-lg text-secondary">يرجى إدخال بياناتك الأكاديمية والشخصية بدقة للمتابعة.</p>
+</div>
+<form id="registerForm" class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-form-gap">
+<!-- Full Name -->
+<div class="flex flex-col gap-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="fullName">الاسم بالكامل</label>
+<input class="w-full bg-paper-white border border-charcoal text-charcoal font-body-lg text-body-lg p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none" id="fullName" placeholder="الاسم الرباعي" type="text" required/>
+</div>
+<!-- National ID -->
+<div class="flex flex-col gap-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="nationalId">الرقم القومي (رقم البطاقة)</label>
+<input class="w-full bg-paper-white border border-charcoal text-charcoal font-numeral text-numeral p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none" dir="ltr" id="nationalId" placeholder="14 Digits" type="text" required/>
+</div>
+<!-- University Email -->
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="email">البريد الإلكتروني الجامعي</label>
+<input class="w-full bg-paper-white border border-charcoal text-charcoal font-body-lg text-body-lg p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none" dir="ltr" id="email" placeholder="user@university.edu.eg" type="email" required/>
+</div>
+<!-- Phone Number -->
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="phone">رقم الهاتف</label>
+<input class="w-full bg-paper-white border border-charcoal text-charcoal font-numeral text-numeral p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none" dir="ltr" id="phone" placeholder="+20 10X XXX XXXX" type="tel" required/>
+</div>
+<!-- Faculty -->
+<div class="flex flex-col gap-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="faculty">الكلية</label>
+<div class="relative">
+<select class="w-full bg-paper-white border border-charcoal text-charcoal font-body-lg text-body-lg p-3 appearance-none focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none pr-3 pl-10" id="faculty" required>
+<option disabled="" selected="" value="">اختر الكلية</option>
+<option value="medicine">الطب البشري</option>
+<option value="pharmacy">الصيدلة</option>
+<option value="science">العلوم</option>
+</select>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-charcoal pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Department -->
+<div class="flex flex-col gap-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="department">القسم</label>
+<div class="relative">
+<select class="w-full bg-paper-white border border-charcoal text-charcoal font-body-lg text-body-lg p-3 appearance-none focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none pr-3 pl-10" id="department" required>
+<option disabled="" selected="" value="">اختر القسم</option>
+<option value="anatomy">التشريح</option>
+<option value="pathology">الباثولوجيا</option>
+<option value="microbiology">الميكروبيولوجي</option>
+</select>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-charcoal pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Password -->
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="font-body-sm text-body-sm text-charcoal font-medium" for="password">كلمة المرور</label>
+<input class="w-full bg-paper-white border border-charcoal text-charcoal font-body-lg text-body-lg p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo focus:border-transparent transition-all rounded-none" dir="ltr" id="password" placeholder="••••••••" type="password" required/>
+<p class="font-body-sm text-body-sm text-secondary mt-1">يجب أن تحتوي على 8 أحرف على الأقل، وحرف كبير، ورقم.</p>
+</div>
+</div>
+<div class="pt-4 flex flex-col gap-4">
+<button id="submitBtn" class="w-full bg-royal-indigo text-on-primary font-button text-button py-4 px-6 hover:bg-primary-container active:bg-primary transition-colors duration-200 rounded-none flex justify-center items-center gap-2" type="submit">
+                            تسجيل الحساب
+                            <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="text-center mt-2">
+<a class="font-body-lg text-body-lg text-royal-indigo hover:text-primary-container font-medium hover:underline decoration-1 underline-offset-4 transition-all" href="/ITI/IRP_System_PHP/public/login">
+                                لديك حساب بالفعل؟ تسجيل الدخول
+                            </a>
+</div>
+</div>
+</form>
+</div>
+</div>
+</main>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const formData = {
+        full_name: document.getElementById('fullName').value,
+        national_id: document.getElementById('nationalId').value,
+        email: document.getElementById('email').value,
+        phone_number: document.getElementById('phone').value,
+        faculty: document.getElementById('faculty').value,
+        department: document.getElementById('department').value,
+        password: document.getElementById('password').value,
+        role: 'student'
+    };
+
+    // Validation
+    if (!formData.full_name || !formData.national_id || !formData.email || !formData.password || !formData.faculty || !formData.department || !formData.phone_number) {
+        alert('يرجى ملء جميع الحقول المطلوبة.');
+        return;
+    }
+
+    if (formData.national_id.length !== 14) {
+        alert('الرقم القومي يجب أن يكون 14 رقماً');
+        return;
+    }
+
+    if (formData.password.length < 8) {
+        alert('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
+        return;
+    }
+
+    try {
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'جاري المعالجة...';
+
+        const response = await fetch('/ITI/IRP_System_PHP/public/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.');
+            window.location.href = '/ITI/IRP_System_PHP/public/login';
+        } else {
+            alert(result.error || 'فشل إنشاء الحساب');
+        }
+    } catch (error) {
+        alert('حدث خطأ في الاتصال بالخادم');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'تسجيل الحساب <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>';
+    }
+});
+</script>
+</body></html>
