@@ -14,4 +14,5 @@ if (file_exists($envPath)) {
     }
 }
 
+require __DIR__ . '/../app/Middleware/AuthMiddleware.php';
 require __DIR__ . '/../routes/web.php';

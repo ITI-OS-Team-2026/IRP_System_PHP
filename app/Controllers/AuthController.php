@@ -10,19 +10,26 @@ class AuthController {
     }
 
     public function register() {
+        // Handle multipart/form-data for files
+        $data = $_POST;
 
-        $input = json_decode(file_get_contents('php://input'), true);
+        // Secure ID image uploads
+        if (isset($_FILES['id_front']) && $_FILES['id_front']['error'] === UPLOAD_ERR_OK) {
+            $data['id_front_path'] = $this->uploadFile($_FILES['id_front'], 'ids');
+        }
+        if (isset($_FILES['id_back']) && $_FILES['id_back']['error'] === UPLOAD_ERR_OK) {
+            $data['id_back_path'] = $this->uploadFile($_FILES['id_back'], 'ids');
+        }
 
-        if (!$input) {
-            $this->jsonResponse(['error' => 'Invalid input'], 400);
+        if (empty($data['email']) || empty($data['password'])) {
+            $this->jsonResponse(['error' => 'البريد الإلكتروني وكلمة المرور مطلوبان'], 400);
             return;
         }
 
         try {
-
-            $userId = $this->authService->register($input);
+            $userId = $this->authService->register($data);
             $this->jsonResponse([
-                'message' => 'Registration successful',
+                'message' => 'تم التسجيل بنجاح',
                 'user_id' => $userId
             ], 201);
         } catch (Exception $e) {
@@ -31,19 +38,18 @@ class AuthController {
     }
 
     public function login() {
-
         $json = json_decode(file_get_contents('php://input'), true);
         $data = $json ?? $_POST;
 
         if (empty($data['email']) || empty($data['password'])) {
-            $this->jsonResponse(['error' => 'Email and password are required'], 400);
+            $this->jsonResponse(['error' => 'البريد الإلكتروني وكلمة المرور مطلوبان'], 400);
             return;
         }
 
         try {
             $user = $this->authService->login($data['email'], $data['password']);
             $this->jsonResponse([
-                'message' => 'Login successful',
+                'message' => 'تم تسجيل الدخول بنجاح',
                 'user' => [
                     'id' => $user['id'],
                     'full_name' => $user['full_name'],
@@ -57,14 +63,33 @@ class AuthController {
 
     public function logout() {
         $this->authService->logout();
-        $this->jsonResponse(['message' => 'Logged out successfully']);
+        $this->jsonResponse(['message' => 'تم تسجيل الخروج بنجاح']);
     }
 
     private function uploadFile($file, $folder) {
         $uploadDir = __DIR__ . '/../../public/uploads/' . $folder . '/';
-        
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0777, true);
+        }
+
+        // 1. Check for errors
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("فشل في رفع الملف.");
+        }
+
+        // 2. Validate File Size (Max 5MB)
+        if ($file['size'] > 5 * 1024 * 1024) {
+            throw new Exception("حجم الملف كبير جداً. الحد الأقصى هو 5 ميجابايت.");
+        }
+
+        // 3. Validate File Type (MIME Type)
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($fileInfo, $file['tmp_name']);
+        finfo_close($fileInfo);
+
+        if (!in_array($mimeType, $allowedTypes)) {
+            throw new Exception("نوع الملف غير مسموح. يرجى رفع صورة (JPG, PNG).");
         }
 
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -74,8 +99,7 @@ class AuthController {
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return '/uploads/' . $folder . '/' . $fileName;
         }
-
-        throw new Exception("Failed to upload file.");
+        throw new Exception("فشل في حفظ الملف على الخادم.");
     }
 
     private function jsonResponse($data, $code = 200) {
