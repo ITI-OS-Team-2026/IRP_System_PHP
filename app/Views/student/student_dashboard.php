@@ -50,6 +50,20 @@ $statusMap = [
     'rejected'           => ['label' => 'مرفوض',             'color' => 'bg-red-100 text-red-800'],
 ];
 
+$actionLabels = [
+    'research_submitted' => 'تم تقديم البحث',
+    'status_updated' => 'تم تحديث الحالة',
+    'admin_reviewed' => 'تمت مراجعة البحث من الإدارة',
+    'serial_number_issued' => 'تم إصدار الرقم التسلسلي',
+    'payment_confirmed' => 'تم تأكيد الدفع',
+    'sample_size_recorded' => 'تم تسجيل حجم العينة',
+    'reviewer_assigned' => 'تم تعيين مراجع',
+    'revision_requested' => 'مطلوب تعديل على البحث',
+    'research_approved' => 'تمت الموافقة على البحث',
+    'research_rejected' => 'تم رفض البحث',
+    'certificate_issued' => 'تم إصدار الشهادة',
+];
+
 $summaryCards = [
     [
         'count' => $totalSubmissions,
@@ -256,9 +270,12 @@ function timeAgo($datetime) {
                         <?php else: ?>
                             <div class="divide-y divide-slate-200">
                                 <?php foreach ($notifications as $notif): ?>
+                                    <?php
+                                        $actionLabel = $actionLabels[$notif['action']] ?? $notif['action'];
+                                    ?>
                                     <div class="px-5 py-4 flex items-start gap-3">
                                         <span class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1.5 text-xs font-button text-on-primary shrink-0">
-                                            <?= htmlspecialchars(mb_substr($notif['action'], 0, 20, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
+                                            <?= htmlspecialchars(mb_substr($actionLabel, 0, 20, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
                                         </span>
                                         <div class="flex-1 text-right">
                                             <p class="text-sm leading-7 text-charcoal"><?= htmlspecialchars($notif['details'] ?? $notif['action'], ENT_QUOTES, 'UTF-8') ?></p>
