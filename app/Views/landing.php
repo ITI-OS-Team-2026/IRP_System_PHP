@@ -4,6 +4,7 @@
 <?php
 $pageTitle = 'نظام إدارة أخلاقيات البحث العلمي | Scholarly Slate IRB';
 require __DIR__ . '/layouts/head.php';
+$currentUser = AuthMiddleware::user();
 ?>
 </head>
 <body class="bg-paper-white text-on-background min-h-screen flex flex-col font-body-lg">
@@ -20,6 +21,17 @@ require __DIR__ . '/layouts/head.php';
 </nav>
 </div>
 <div class="flex items-center gap-4">
+<?php if ($currentUser): ?>
+<?php if (($currentUser['role'] ?? '') === 'admin'): ?>
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/admin/dashboard">
+                لوحة الإدارة
+            </a>
+<?php else: ?>
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/dashboard">
+                لوحة التحكم
+            </a>
+<?php endif; ?>
+<?php else: ?>
 <div class="hidden md:flex relative mr-4">
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
 <input class="bg-surface-container-low border border-charcoal focus:border-2 focus:border-royal-indigo focus:ring-0 rounded-none py-2 pr-10 pl-4 w-48 text-body-sm transition-all placeholder:text-outline focus:w-64 font-body-sm" placeholder="بحث..." type="text"/>
@@ -30,6 +42,7 @@ require __DIR__ . '/layouts/head.php';
 <a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/login">
                 تسجيل الدخول
             </a>
+<?php endif; ?>
 </div>
 </header>
 <!-- Main Canvas -->

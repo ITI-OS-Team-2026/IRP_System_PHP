@@ -27,6 +27,11 @@ switch ($path) {
         require __DIR__ . '/../app/Views/dashboard.php';
         break;
 
+    case '/admin/dashboard':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Views/admin/admin_dashboard.php';
+        break;
+
     case '/login':
         require __DIR__ . '/../app/Views/auth/login.php';
         break;
