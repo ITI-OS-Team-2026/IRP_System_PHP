@@ -10,29 +10,29 @@ class AuthController {
     }
 
     public function register() {
-        // Handle multipart/form-data for files
-        $data = $_POST;
-
-        // Secure ID image uploads
-        if (isset($_FILES['id_front']) && $_FILES['id_front']['error'] === UPLOAD_ERR_OK) {
-            $data['id_front_path'] = $this->uploadFile($_FILES['id_front'], 'ids');
-        }
-        if (isset($_FILES['id_back']) && $_FILES['id_back']['error'] === UPLOAD_ERR_OK) {
-            $data['id_back_path'] = $this->uploadFile($_FILES['id_back'], 'ids');
-        }
-
-        if (empty($data['email']) || empty($data['password'])) {
-            $this->jsonResponse(['error' => 'البريد الإلكتروني وكلمة المرور مطلوبان'], 400);
-            return;
-        }
-
         try {
+            // Handle multipart/form-data for files
+            $data = $_POST;
+
+            // Secure ID image uploads
+            if (isset($_FILES['id_front']) && $_FILES['id_front']['error'] === UPLOAD_ERR_OK) {
+                $data['id_front_path'] = $this->uploadFile($_FILES['id_front'], 'ids');
+            }
+            if (isset($_FILES['id_back']) && $_FILES['id_back']['error'] === UPLOAD_ERR_OK) {
+                $data['id_back_path'] = $this->uploadFile($_FILES['id_back'], 'ids');
+            }
+
+            if (empty($data['email']) || empty($data['password'])) {
+                $this->jsonResponse(['error' => 'البريد الإلكتروني وكلمة المرور مطلوبان'], 400);
+                return;
+            }
+
             $userId = $this->authService->register($data);
             $this->jsonResponse([
                 'message' => 'تم التسجيل بنجاح',
                 'user_id' => $userId
             ], 201);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $this->jsonResponse(['error' => $e->getMessage()], 400);
         }
     }
@@ -86,7 +86,6 @@ class AuthController {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($fileInfo, $file['tmp_name']);
-        finfo_close($fileInfo);
 
         if (!in_array($mimeType, $allowedTypes)) {
             throw new Exception("نوع الملف غير مسموح. يرجى رفع صورة (JPG, PNG).");
