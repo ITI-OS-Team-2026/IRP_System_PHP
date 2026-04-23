@@ -48,12 +48,26 @@ class AuthController {
 
         try {
             $user = $this->authService->login($data['email'], $data['password']);
+
+            if (!(bool) $user['is_active']) {
+                $this->jsonResponse([
+                    'error' => 'حسابك قيد المراجعة من قبل الإدارة. سيتم تفعيل الحساب بعد الموافقة.',
+                    'redirect_to' => '/pending-approval'
+                ], 403);
+                return;
+            }
+
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['full_name'];
+            $_SESSION['user_role'] = $user['role'];
+
             $this->jsonResponse([
                 'message' => 'تم تسجيل الدخول بنجاح',
                 'user' => [
                     'id' => $user['id'],
                     'full_name' => $user['full_name'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'is_active' => (bool) $user['is_active']
                 ]
             ]);
         } catch (Exception $e) {

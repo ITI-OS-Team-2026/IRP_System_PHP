@@ -242,7 +242,10 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         if (response.ok) {
             showToast('تم تسجيل الدخول بنجاح! جاري التحويل...');
-            setTimeout(() => { window.location.href = '/'; }, 1500);
+            setTimeout(() => { window.location.href = '/dashboard'; }, 1500);
+        } else if (response.status === 403 && result.redirect_to) {
+            showToast(result.error || 'حسابك قيد المراجعة حالياً', 'error');
+            setTimeout(() => { window.location.href = result.redirect_to; }, 1200);
         } else {
             showToast(result.error || 'فشل تسجيل الدخول', 'error');
         }

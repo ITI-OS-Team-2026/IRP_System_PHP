@@ -18,6 +18,15 @@ switch ($path) {
         require __DIR__ . '/../app/Views/landing.php';
         break;
         
+    case '/pending-approval':
+        require __DIR__ . '/../app/Views/pending-approval.php';
+        break;
+
+    case '/dashboard':
+        AuthMiddleware::requireLogin();
+        require __DIR__ . '/../app/Views/dashboard.php';
+        break;
+
     case '/login':
         require __DIR__ . '/../app/Views/auth/login.php';
         break;

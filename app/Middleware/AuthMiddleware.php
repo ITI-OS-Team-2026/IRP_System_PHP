@@ -9,7 +9,7 @@ class AuthMiddleware {
 
     public static function requireLogin() {
         if (!self::isAuthenticated()) {
-            header("Location: /ITI/IRP_System_PHP/public/login");
+            header("Location: /login");
             exit;
         }
     }

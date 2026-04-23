@@ -31,10 +31,6 @@ class AuthService {
             throw new Exception("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
         }
 
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['full_name'];
-        $_SESSION['user_role'] = $user['role'];
-
         return $user;
     }
 
