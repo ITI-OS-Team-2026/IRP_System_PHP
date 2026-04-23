@@ -24,7 +24,20 @@ switch ($path) {
 
     case '/dashboard':
         AuthMiddleware::requireLogin();
+        $role = $_SESSION['user_role'] ?? '';
+        if ($role === 'student') {
+            header('Location: /student/dashboard');
+            exit;
+        } elseif ($role === 'admin') {
+            header('Location: /admin/dashboard');
+            exit;
+        }
         require __DIR__ . '/../app/Views/dashboard.php';
+        break;
+
+    case '/student/dashboard':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Views/student/student_dashboard.php';
         break;
 
     case '/admin/dashboard':
