@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/../../config/database.php';
+
 class SubmissionController {
 
     public function create() {
@@ -21,18 +23,28 @@ class SubmissionController {
         // Validate required text fields
         $title = trim($_POST['title'] ?? '');
         $principalInvestigator = trim($_POST['principal_investigator'] ?? '');
-        $department = trim($_POST['department'] ?? '');
-        $faculty = trim($_POST['faculty'] ?? '');
-        $specialization = trim($_POST['specialization'] ?? '');
         $coInvestigators = trim($_POST['co_investigators'] ?? '');
+
+        // Fetch department and specialty from database
+        $stmt = $db->prepare("SELECT department, specialty FROM users WHERE id = ?");
+        $stmt->bind_param('i', $studentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        if (!$user) {
+            $_SESSION['submission_error'] = 'حدث خطأ في استرجاع بيانات المستخدم. يرجى المحاولة مرة أخرى.';
+            header('Location: /student/submission/create');
+            exit;
+        }
+
+        $department = $user['department'];
+        $specialization = $user['specialty'];
 
         $errors = [];
 
         if (empty($title)) $errors[] = 'عنوان البحث مطلوب';
         if (empty($principalInvestigator)) $errors[] = 'اسم الباحث الرئيسي مطلوب';
-        if (empty($department)) $errors[] = 'القسم مطلوب';
-        if (empty($faculty)) $errors[] = 'الكلية مطلوبة';
-        if (empty($specialization)) $errors[] = 'التخصص مطلوب';
 
         // Validate required documents
         $requiredDocuments = [

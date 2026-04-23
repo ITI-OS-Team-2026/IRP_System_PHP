@@ -96,7 +96,7 @@ if (isset($_SESSION['submission_success'])) {
                     <form id="submissionForm" method="POST" action="/student/submission/store" enctype="multipart/form-data" class="space-y-6">
                         <!-- Section 1: Research Information -->
                         <div class="px-5 md:px-8 py-6 border-b border-slate-200">
-                            <h3 class="font-h1 text-lg text-charcoal mb-5">معلومات البحث</h3>
+                            <h3 class="font-display-lg text-2xl font-bold text-charcoal mb-5">معلومات البحث</h3>
 
                             <div class="space-y-4">
                                 <!-- Research Title -->
@@ -128,47 +128,17 @@ if (isset($_SESSION['submission_success'])) {
                                               class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                                               placeholder="أدخل أسماء المشاركين في البحث مفصولة بفواصل"></textarea>
                                 </div>
-
-                                <!-- Department -->
-                                <div>
-                                    <label for="department" class="block text-sm font-button text-charcoal mb-2">
-                                        القسم <span class="text-red-600">*</span>
-                                    </label>
-                                    <input type="text" id="department" name="department" required
-                                           class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                           placeholder="أدخل القسم">
-                                </div>
-
-                                <!-- Faculty -->
-                                <div>
-                                    <label for="faculty" class="block text-sm font-button text-charcoal mb-2">
-                                        الكلية <span class="text-red-600">*</span>
-                                    </label>
-                                    <input type="text" id="faculty" name="faculty" required
-                                           class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                           placeholder="أدخل الكلية">
-                                </div>
-
-                                <!-- Specialization -->
-                                <div>
-                                    <label for="specialization" class="block text-sm font-button text-charcoal mb-2">
-                                        التخصص <span class="text-red-600">*</span>
-                                    </label>
-                                    <input type="text" id="specialization" name="specialization" required
-                                           class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                           placeholder="أدخل التخصص">
-                                </div>
                             </div>
                         </div>
 
                         <!-- Section 2: Required Documents -->
                         <div class="px-5 md:px-8 py-6">
-                            <h3 class="font-h1 text-lg text-charcoal mb-5">المستندات المطلوبة</h3>
+                            <h3 class="font-display-lg text-2xl font-bold text-charcoal mb-5">المستندات المطلوبة</h3>
 
                             <div class="space-y-5">
                                 <!-- Protocol -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         البروتوكول - وصف البحث الكامل <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_protocol" accept=".pdf,.doc,.docx" required
@@ -177,8 +147,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- Protocol Review Application -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         استمارة طلب المراجعة <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_review_application" accept=".pdf,.doc,.docx" required
@@ -187,8 +157,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- Conflict of Interest -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         إقرار تضارب المصالح <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_conflict_of_interest" accept=".pdf,.doc,.docx" required
@@ -197,8 +167,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- IRB Review Checklist -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         قائمة المراجعة <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_irb_checklist" accept=".pdf,.doc,.docx" required
@@ -207,8 +177,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- Principal Investigator Consent -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         إقرار الموافقة من الباحث الرئيسي <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_pi_consent" accept=".pdf,.doc,.docx" required
@@ -217,8 +187,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- Patient Consent -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         إقرار موافقة المريض <span class="text-red-600">*</span>
                                     </label>
                                     <input type="file" name="document_patient_consent" accept=".pdf,.doc,.docx" required
@@ -227,8 +197,8 @@ if (isset($_SESSION['submission_success'])) {
                                 </div>
 
                                 <!-- Photos & Biopsies Consent (Optional) -->
-                                <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
-                                    <label class="block text-sm font-button text-charcoal mb-2">
+                                <div class="p-4 rounded-lg border-2 border-slate-300 bg-blue-50">
+                                    <label class="block text-sm font-button font-bold text-charcoal mb-3">
                                         إقرار الموافقة على الصور والخزعات <span class="text-slate-400">(اختياري)</span>
                                     </label>
                                     <input type="file" name="document_photos_biopsies_consent" accept=".pdf,.doc,.docx"
@@ -261,10 +231,7 @@ if (isset($_SESSION['submission_success'])) {
         const form = document.getElementById('submissionForm');
         const requiredFields = {
             title: 'عنوان البحث',
-            principal_investigator: 'اسم الباحث الرئيسي',
-            department: 'القسم',
-            faculty: 'الكلية',
-            specialization: 'التخصص'
+            principal_investigator: 'اسم الباحث الرئيسي'
         };
 
         const requiredDocuments = [
@@ -275,6 +242,20 @@ if (isset($_SESSION['submission_success'])) {
             'document_pi_consent',
             'document_patient_consent'
         ];
+
+        // Add file upload change listeners for border color indicator
+        const allFileInputs = document.querySelectorAll('input[type="file"]');
+        allFileInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const container = this.closest('.bg-blue-50');
+
+                if (this.files && this.files.length > 0) {
+                    container.classList.replace('border-slate-300', 'border-green-500');
+                } else {
+                    container.classList.replace('border-green-500', 'border-slate-300');
+                }
+            });
+        });
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
