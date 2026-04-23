@@ -77,7 +77,8 @@ class AuthController {
 
     public function logout() {
         $this->authService->logout();
-        $this->jsonResponse(['message' => 'تم تسجيل الخروج بنجاح']);
+        header('Location: /login');
+        exit;
     }
 
     private function uploadFile($file, $folder) {
