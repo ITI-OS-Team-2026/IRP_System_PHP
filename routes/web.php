@@ -40,6 +40,16 @@ switch ($path) {
         require __DIR__ . '/../app/Views/student/student_dashboard.php';
         break;
 
+    case '/student/submission/create':
+        require __DIR__ . '/../app/Controllers/SubmissionController.php';
+        (new SubmissionController())->create();
+        break;
+
+    case '/student/submission/store':
+        require __DIR__ . '/../app/Controllers/SubmissionController.php';
+        (new SubmissionController())->store();
+        break;
+
     case '/admin/dashboard':
         AuthMiddleware::requireRole('admin');
         require __DIR__ . '/../app/Views/admin/admin_dashboard.php';
@@ -65,6 +75,11 @@ switch ($path) {
         break;
 
     case '/api/logout':
+        require __DIR__ . '/../app/Controllers/AuthController.php';
+        (new AuthController())->logout();
+        break;
+
+    case '/logout':
         require __DIR__ . '/../app/Controllers/AuthController.php';
         (new AuthController())->logout();
         break;

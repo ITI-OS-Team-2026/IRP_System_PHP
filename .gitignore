@@ -9,3 +9,4 @@ public/uploads/*
 !storage/certificates/.gitkeep
 !storage/receipts/.gitkeep
 !public/uploads/.gitkeep
+storage/submissions/
