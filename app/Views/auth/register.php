@@ -1,28 +1,10 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>إنشاء حساب جديد - IRB Portal</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#1a146b",
-                        "royal-indigo": "#312E81",
-                        "paper-white": "#FDFDFC",
-                        "charcoal": "#1A1C1E",
-                        "secondary": "#5c5f61",
-                        "on-primary": "#ffffff"
-                    }
-                }
-            }
-        }
-    </script>
+    <?php
+    $pageTitle = 'إنشاء حساب جديد - IRB Portal';
+    require __DIR__ . '/../layouts/head.php';
+    ?>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .toast {
@@ -128,7 +110,7 @@
                         <span class="material-symbols-outlined transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
                     </button>
                     <div class="text-center mt-2">
-                        <a class="text-royal-indigo hover:underline font-bold" href="/ITI/IRP_System_PHP/public/login">
+                        <a class="text-royal-indigo hover:underline font-bold" href="/login">
                             لديك حساب بالفعل؟ تسجيل الدخول
                         </a>
                     </div>
@@ -210,7 +192,7 @@
             submitBtn.disabled = true;
             submitBtn.querySelector('span').textContent = 'جاري المعالجة...';
 
-            const response = await fetch('/ITI/IRP_System_PHP/public/api/register', {
+            const response = await fetch('/api/register', {
                 method: 'POST',
                 body: formData
             });
@@ -219,7 +201,7 @@
 
             if (response.ok) {
                 showToast('تم إنشاء الحساب بنجاح! جاري تحويلك...');
-                setTimeout(() => { window.location.href = '/ITI/IRP_System_PHP/public/login'; }, 1500);
+                setTimeout(() => { window.location.href = '/login'; }, 1500);
             } else {
                 showToast(result.error || 'فشل التسجيل', 'error');
             }

@@ -15,6 +15,9 @@ $path = rtrim($path, '/') ?: '/';
 // Simple Route mapping
 switch ($path) {
     case '/':
+        require __DIR__ . '/../app/Views/landing.php';
+        break;
+        
     case '/login':
         require __DIR__ . '/../app/Views/auth/login.php';
         break;

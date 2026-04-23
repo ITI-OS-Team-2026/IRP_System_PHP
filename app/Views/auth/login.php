@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 
 <html dir="rtl" lang="ar"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Scholarly Slate IRB - Auth</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<?php
+$pageTitle = 'Scholarly Slate IRB - Auth';
+require __DIR__ . '/../layouts/head.php';
+?>
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -138,7 +133,7 @@
                 <button class="flex-1 pb-3 text-center border-b-2 border-charcoal font-button text-button text-charcoal focus:outline-none">
                     تسجيل الدخول
                 </button>
-                <a href="/ITI/IRP_System_PHP/public/register" class="flex-1 pb-3 text-center border-b border-charcoal font-button text-button text-outline hover:text-charcoal focus:outline-none transition-colors">
+                <a href="/register" class="flex-1 pb-3 text-center border-b border-charcoal font-button text-button text-outline hover:text-charcoal focus:outline-none transition-colors">
                     إنشاء حساب
                 </a>
             </div>
@@ -237,7 +232,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const originalBtnContent = submitBtn.innerHTML;
         submitBtn.innerHTML = 'جاري التحقق...';
 
-        const response = await fetch('/ITI/IRP_System_PHP/public/api/login', {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -247,7 +242,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         if (response.ok) {
             showToast('تم تسجيل الدخول بنجاح! جاري التحويل...');
-            setTimeout(() => { window.location.href = '/ITI/IRP_System_PHP/public/'; }, 1500);
+            setTimeout(() => { window.location.href = '/'; }, 1500);
         } else {
             showToast(result.error || 'فشل تسجيل الدخول', 'error');
         }
