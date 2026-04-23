@@ -40,6 +40,11 @@ switch ($path) {
         require __DIR__ . '/../app/Views/student/student_dashboard.php';
         break;
 
+    case '/student/submissions':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Views/student/submissions.php';
+        break;
+
     case '/student/submission/create':
         require __DIR__ . '/../app/Controllers/SubmissionController.php';
         (new SubmissionController())->create();

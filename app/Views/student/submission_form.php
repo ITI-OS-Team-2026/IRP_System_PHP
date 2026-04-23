@@ -4,7 +4,7 @@ $pageTitle = 'تقديم بحث جديد - IRB Portal';
 
 $sidebarItems = [
     ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => false],
-    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '#'],
+    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions'],
     ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create', 'active' => true],
     ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '#'],
 ];
