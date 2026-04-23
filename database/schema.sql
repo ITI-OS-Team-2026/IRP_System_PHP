@@ -3,10 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    national_id VARCHAR(20) UNIQUE NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    faculty VARCHAR(100) NOT NULL,
-    department VARCHAR(100) NOT NULL,
     role ENUM('student', 'admin', 'sample_size_officer', 'reviewer', 'manager') NOT NULL,
     is_active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -29,7 +26,16 @@ CREATE TABLE IF NOT EXISTS research_submissions (
 CREATE TABLE IF NOT EXISTS research_documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     submission_id INT NOT NULL,
-    document_type ENUM('protocol', 'review_application', 'conflict_of_interest', 'irb_checklist', 'pi_consent', 'patient_consent', 'photos_biopsies_consent') NOT NULL,
+    document_type ENUM(
+        'protocol', 
+        'review_application', 
+        'conflict_of_interest', 
+        'irb_checklist', 
+        'pi_consent', 
+        'patient_consent', 
+        'photos_biopsies_consent',
+        'research_file'
+    ) NOT NULL,
     file_path VARCHAR(500) NOT NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE
@@ -67,4 +73,20 @@ CREATE TABLE IF NOT EXISTS system_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
     FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL,
+
+    national_id VARCHAR(50) NOT NULL,
+    
+    faculty VARCHAR(100),
+    department VARCHAR(100),
+    specialty VARCHAR(100),
+
+    id_front_path VARCHAR(500),
+    id_back_path VARCHAR(500),
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

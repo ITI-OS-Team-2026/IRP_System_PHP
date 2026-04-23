@@ -10,10 +10,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
+    <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem;
+            padding: 1rem 1.5rem; border-radius: 0.5rem;
+            color: white; font-weight: 500; z-index: 50;
+            display: flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(150%); transition: transform 0.3s ease-out;
+        }
+        .toast.show { transform: translateY(0); }
+        .toast-success { background-color: #059669; }
+        .toast-error { background-color: #dc2626; }
     </style>
 <script id="tailwind-config">
         tailwind.config = {
@@ -123,14 +134,14 @@
 <!-- Form Container -->
 <div class="w-full max-w-md">
 <!-- Tabs -->
-<div class="flex w-full mb-8">
-<button class="flex-1 pb-3 text-center border-b-2 border-charcoal font-button text-button text-charcoal focus:outline-none">
+            <div class="flex w-full mb-8">
+                <button class="flex-1 pb-3 text-center border-b-2 border-charcoal font-button text-button text-charcoal focus:outline-none">
                     تسجيل الدخول
                 </button>
-<button class="flex-1 pb-3 text-center border-b border-charcoal font-button text-button text-outline hover:text-charcoal focus:outline-none transition-colors">
+                <a href="/ITI/IRP_System_PHP/public/register" class="flex-1 pb-3 text-center border-b border-charcoal font-button text-button text-outline hover:text-charcoal focus:outline-none transition-colors">
                     إنشاء حساب
-                </button>
-</div>
+                </a>
+            </div>
 <!-- Login Form -->
 <form id="loginForm" action="#" class="flex flex-col gap-form-gap" method="POST">
 <!-- Email Input -->
@@ -190,7 +201,25 @@
 </div>
 </div>
 </aside>
+<!-- Toast Container -->
+<div id="toast" class="toast">
+    <span id="toastIcon" class="material-symbols-outlined"></span>
+    <span id="toastMessage"></span>
+</div>
+
 <script>
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const icon = document.getElementById('toastIcon');
+    const msg = document.getElementById('toastMessage');
+
+    toast.className = `toast show toast-${type}`;
+    icon.textContent = type === 'success' ? 'check_circle' : 'error';
+    msg.textContent = message;
+
+    setTimeout(() => { toast.classList.remove('show'); }, 4000);
+}
+
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -199,7 +228,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const submitBtn = this.querySelector('button[type="submit"]');
 
     if (!email || !password) {
-        alert('يرجى ملء جميع الحقول');
+        showToast('يرجى ملء جميع الحقول', 'error');
         return;
     }
 
@@ -217,12 +246,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         const result = await response.json();
 
         if (response.ok) {
-            window.location.href = '/ITI/IRP_System_PHP/public/'; 
+            showToast('تم تسجيل الدخول بنجاح! جاري التحويل...');
+            setTimeout(() => { window.location.href = '/ITI/IRP_System_PHP/public/'; }, 1500);
         } else {
-            alert(result.error || 'فشل تسجيل الدخول');
+            showToast(result.error || 'فشل تسجيل الدخول', 'error');
         }
     } catch (error) {
-        alert('حدث خطأ في الاتصال بالخادم');
+        showToast('حدث خطأ في الاتصال بالخادم', 'error');
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<span>متابعة</span><span class="material-symbols-outlined text-paper-white transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>';

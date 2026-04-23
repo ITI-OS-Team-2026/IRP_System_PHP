@@ -10,6 +10,7 @@ class AuthController {
     }
 
     public function register() {
+
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!$input) {
@@ -18,9 +19,10 @@ class AuthController {
         }
 
         try {
+
             $userId = $this->authService->register($input);
             $this->jsonResponse([
-                'message' => 'User registered successfully',
+                'message' => 'Registration successful',
                 'user_id' => $userId
             ], 201);
         } catch (Exception $e) {
@@ -28,17 +30,18 @@ class AuthController {
         }
     }
 
-
     public function login() {
-        $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['email']) || !isset($input['password'])) {
+        $json = json_decode(file_get_contents('php://input'), true);
+        $data = $json ?? $_POST;
+
+        if (empty($data['email']) || empty($data['password'])) {
             $this->jsonResponse(['error' => 'Email and password are required'], 400);
             return;
         }
 
         try {
-            $user = $this->authService->login($input['email'], $input['password']);
+            $user = $this->authService->login($data['email'], $data['password']);
             $this->jsonResponse([
                 'message' => 'Login successful',
                 'user' => [
@@ -57,6 +60,23 @@ class AuthController {
         $this->jsonResponse(['message' => 'Logged out successfully']);
     }
 
+    private function uploadFile($file, $folder) {
+        $uploadDir = __DIR__ . '/../../public/uploads/' . $folder . '/';
+        
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $fileName = uniqid() . '_' . time() . '.' . $extension;
+        $targetPath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            return '/uploads/' . $folder . '/' . $fileName;
+        }
+
+        throw new Exception("Failed to upload file.");
+    }
 
     private function jsonResponse($data, $code = 200) {
         header('Content-Type: application/json');

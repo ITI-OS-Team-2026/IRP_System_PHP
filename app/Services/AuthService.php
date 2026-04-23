@@ -12,7 +12,7 @@ class AuthService {
 
     public function register($data) {
         if ($this->userRepo->findByEmail($data['email'])) {
-            throw new Exception("Email already registered.");
+            throw new Exception("هذا البريد الإلكتروني مسجل بالفعل.");
         }
 
         $userId = $this->userRepo->create($data);
@@ -28,7 +28,7 @@ class AuthService {
         $user = $this->userRepo->findByEmail($email);
 
         if (!$user || !password_verify($password, $user['password_hash'])) {
-            throw new Exception("Invalid email or password.");
+            throw new Exception("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
         }
 
         $_SESSION['user_id'] = $user['id'];
