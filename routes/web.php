@@ -100,7 +100,13 @@ switch ($path) {
 
     case '/admin/reviewer-assignment':
         AuthMiddleware::requireRole('admin');
-        require __DIR__ . '/../app/Views/admin/reviewer_assignment.php';
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->reviewerAssignment();
+        break;
+
+    case '/admin/reviewer-assignment/save':
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->saveReviewerAssignment();
         break;
 
     case '/admin/settings':

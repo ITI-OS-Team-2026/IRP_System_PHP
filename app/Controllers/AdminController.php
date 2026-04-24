@@ -95,4 +95,57 @@ class AdminController {
         header('Location: /admin/initial-preview-queue');
         exit;
     }
+
+    public function reviewerAssignment() {
+        AuthMiddleware::requireRole('admin');
+
+        $search = trim((string) ($_GET['q'] ?? ''));
+        $data = $this->adminService->getReviewerAssignmentData($search);
+
+        $searchQuery = $data['search'];
+        $reviewerAssignmentTotal = $data['totalCount'];
+        $reviewerAssignmentRows = $data['submissions'];
+        $reviewerOptions = $data['reviewers'];
+
+        $reviewerAssignmentSuccess = $_SESSION['admin_reviewer_assignment_success'] ?? null;
+        $reviewerAssignmentError = $_SESSION['admin_reviewer_assignment_error'] ?? null;
+        unset($_SESSION['admin_reviewer_assignment_success'], $_SESSION['admin_reviewer_assignment_error']);
+
+        require __DIR__ . '/../Views/admin/reviewer_assignment.php';
+    }
+
+    public function saveReviewerAssignment() {
+        AuthMiddleware::requireRole('admin');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            die('Method not allowed');
+        }
+
+        $submissionId = (int) ($_POST['submission_id'] ?? 0);
+        $reviewerId = (int) ($_POST['reviewer_id'] ?? 0);
+
+        try {
+            $mode = $this->adminService->assignReviewerToSubmission(
+                $submissionId,
+                $reviewerId,
+                isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null
+            );
+
+            $_SESSION['admin_reviewer_assignment_success'] = $mode === 'created'
+                ? 'تم حفظ تعيين المراجع بنجاح.'
+                : 'تم تحديث تعيين المراجع بنجاح.';
+        } catch (Throwable $e) {
+            $_SESSION['admin_reviewer_assignment_error'] = $e->getMessage();
+        }
+
+        $redirect = '/admin/reviewer-assignment';
+        $q = trim((string) ($_POST['q'] ?? ''));
+        if ($q !== '') {
+            $redirect .= '?q=' . urlencode($q);
+        }
+
+        header('Location: ' . $redirect);
+        exit;
+    }
 }

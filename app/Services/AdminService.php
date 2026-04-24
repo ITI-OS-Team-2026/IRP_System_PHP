@@ -165,6 +165,70 @@ class AdminService {
         return $serialNumber;
     }
 
+    public function getReviewerAssignmentData($search = '') {
+        $search = trim((string) $search);
+        $submissions = $this->adminRepository->getReviewerAssignmentSubmissions($search, 30);
+        $total = $this->adminRepository->countReviewerAssignmentSubmissions($search);
+        $reviewers = $this->adminRepository->getReviewers();
+
+        $normalizedSubmissions = [];
+        foreach ($submissions as $row) {
+            $normalizedSubmissions[] = [
+                'id' => (int) $row['id'],
+                'serial_number' => (string) $row['serial_number'],
+                'title' => (string) $row['title'],
+                'payment_status_label' => 'مدفوع',
+                'reviewer_id' => $row['reviewer_id'] !== null ? (int) $row['reviewer_id'] : null,
+                'reviewer_name' => (string) ($row['reviewer_name'] ?? ''),
+                'reviewer_specialty' => (string) ($row['reviewer_specialty'] ?? ''),
+            ];
+        }
+
+        $normalizedReviewers = [];
+        foreach ($reviewers as $reviewer) {
+            $normalizedReviewers[] = [
+                'id' => (int) $reviewer['id'],
+                'label' => $this->buildReviewerLabel($reviewer),
+            ];
+        }
+
+        return [
+            'search' => $search,
+            'totalCount' => $total,
+            'submissions' => $normalizedSubmissions,
+            'reviewers' => $normalizedReviewers,
+        ];
+    }
+
+    public function assignReviewerToSubmission($submissionId, $reviewerId, $adminUserId = null) {
+        $submissionId = (int) $submissionId;
+        $reviewerId = (int) $reviewerId;
+
+        if ($submissionId <= 0 || $reviewerId <= 0) {
+            throw new Exception('بيانات التعيين غير صالحة.');
+        }
+
+        if (!$this->adminRepository->submissionExistsForReviewerAssignment($submissionId)) {
+            throw new Exception('هذا البحث غير متاح حالياً للتعيين.');
+        }
+
+        if (!$this->adminRepository->reviewerExists($reviewerId)) {
+            throw new Exception('المراجع المختار غير متاح.');
+        }
+
+        $mode = $this->adminRepository->upsertReviewerAssignment($submissionId, $reviewerId);
+        $action = $mode === 'created' ? 'reviewer_assigned' : 'reviewer_reassigned';
+
+        $this->adminRepository->logAction(
+            $action,
+            'تم تعيين المراجع رقم ' . $reviewerId . ' للطلب رقم ' . $submissionId,
+            $adminUserId !== null ? (int) $adminUserId : null,
+            $submissionId
+        );
+
+        return $mode;
+    }
+
     private function buildDepartmentLabel(array $user) {
         $department = trim((string) ($user['department'] ?? ''));
         $specialty = trim((string) ($user['specialty'] ?? ''));
@@ -244,6 +308,17 @@ class AdminService {
         }
 
         throw new Exception('تعذر إنشاء رقم تسلسلي فريد. يرجى المحاولة لاحقاً.');
+    }
+
+    private function buildReviewerLabel(array $reviewer) {
+        $name = trim((string) ($reviewer['full_name'] ?? ''));
+        $specialty = trim((string) ($reviewer['specialty'] ?? ''));
+
+        if ($specialty !== '') {
+            return $name . ' (' . $specialty . ')';
+        }
+
+        return $name;
     }
 
     private function mapActivityLabel($action) {

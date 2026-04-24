@@ -205,6 +205,166 @@ class AdminRepository {
         return $stmt->affected_rows > 0;
     }
 
+    public function getReviewerAssignmentSubmissions($search = '', $limit = 30) {
+        $limit = (int) $limit;
+        $search = trim((string) $search);
+
+        $where = "rs.status = 'fully_paid' AND rs.serial_number IS NOT NULL";
+        $types = '';
+        $params = [];
+
+        if ($search !== '') {
+            $where .= " AND (rs.serial_number LIKE ? OR rs.title LIKE ? OR u.full_name LIKE ?)";
+            $like = '%' . $search . '%';
+            $types .= 'sss';
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+        }
+
+        $sql = "SELECT
+                    rs.id,
+                    rs.serial_number,
+                    rs.title,
+                    rs.status,
+                    rv.reviewer_id,
+                    ru.full_name AS reviewer_name,
+                    ru.specialty AS reviewer_specialty
+                FROM research_submissions rs
+                INNER JOIN users u ON u.id = rs.student_id
+                LEFT JOIN reviews rv ON rv.submission_id = rs.id
+                LEFT JOIN users ru ON ru.id = rv.reviewer_id
+                WHERE $where
+                ORDER BY rs.created_at DESC
+                LIMIT $limit";
+
+        $stmt = $this->db->prepare($sql);
+        if ($types !== '') {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $items = [];
+        while ($row = $result->fetch_assoc()) {
+            $items[] = $row;
+        }
+
+        return $items;
+    }
+
+    public function countReviewerAssignmentSubmissions($search = '') {
+        $search = trim((string) $search);
+
+        $where = "rs.status = 'fully_paid' AND rs.serial_number IS NOT NULL";
+        $types = '';
+        $params = [];
+
+        if ($search !== '') {
+            $where .= " AND (rs.serial_number LIKE ? OR rs.title LIKE ? OR u.full_name LIKE ?)";
+            $like = '%' . $search . '%';
+            $types .= 'sss';
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+        }
+
+        $sql = "SELECT COUNT(*) AS total
+                FROM research_submissions rs
+                INNER JOIN users u ON u.id = rs.student_id
+                WHERE $where";
+
+        $stmt = $this->db->prepare($sql);
+        if ($types !== '') {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    public function getReviewers() {
+        $sql = "SELECT id, full_name, specialty
+                FROM users
+                WHERE role = 'reviewer' AND is_active = 1
+                ORDER BY full_name ASC";
+
+        $result = $this->db->query($sql);
+        if (!$result) {
+            throw new Exception('Failed to fetch reviewers: ' . $this->db->error);
+        }
+
+        $reviewers = [];
+        while ($row = $result->fetch_assoc()) {
+            $reviewers[] = $row;
+        }
+
+        return $reviewers;
+    }
+
+    public function submissionExistsForReviewerAssignment($submissionId) {
+        $submissionId = (int) $submissionId;
+        $stmt = $this->db->prepare(
+            "SELECT id FROM research_submissions
+             WHERE id = ? AND status = 'fully_paid' AND serial_number IS NOT NULL
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $submissionId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return (bool) $result->fetch_assoc();
+    }
+
+    public function reviewerExists($reviewerId) {
+        $reviewerId = (int) $reviewerId;
+        $stmt = $this->db->prepare(
+            "SELECT id FROM users WHERE id = ? AND role = 'reviewer' AND is_active = 1 LIMIT 1"
+        );
+        $stmt->bind_param('i', $reviewerId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return (bool) $result->fetch_assoc();
+    }
+
+    public function upsertReviewerAssignment($submissionId, $reviewerId) {
+        $submissionId = (int) $submissionId;
+        $reviewerId = (int) $reviewerId;
+
+        $stmt = $this->db->prepare("SELECT id FROM reviews WHERE submission_id = ? LIMIT 1");
+        $stmt->bind_param('i', $submissionId);
+        $stmt->execute();
+        $existing = $stmt->get_result()->fetch_assoc();
+
+        if ($existing) {
+            $reviewId = (int) $existing['id'];
+            $update = $this->db->prepare(
+                "UPDATE reviews
+                 SET reviewer_id = ?, review_status = 'pending', assigned_at = CURRENT_TIMESTAMP
+                 WHERE id = ?
+                 LIMIT 1"
+            );
+            $update->bind_param('ii', $reviewerId, $reviewId);
+            $update->execute();
+
+            return 'updated';
+        }
+
+        $insert = $this->db->prepare(
+            "INSERT INTO reviews (submission_id, reviewer_id, review_status)
+             VALUES (?, ?, 'pending')"
+        );
+        $insert->bind_param('ii', $submissionId, $reviewerId);
+        $insert->execute();
+
+        return 'created';
+    }
+
     private function fetchOne($sql) {
         $result = $this->db->query($sql);
         if (!$result) {
