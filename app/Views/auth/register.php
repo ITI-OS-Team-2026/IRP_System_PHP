@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-    <?php
-    $pageTitle = 'إنشاء حساب جديد - IRB Portal';
-    require __DIR__ . '/../layouts/head.php';
-    ?>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>إنشاء حساب جديد - IRB Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        window.BASE_URL = '<?php echo BASE_URL; ?>';
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a146b",
+                        "royal-indigo": "#312E81",
+                        "paper-white": "#FDFDFC",
+                        "charcoal": "#1A1C1E",
+                        "secondary": "#5c5f61",
+                        "on-primary": "#ffffff"
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .toast {
@@ -47,6 +66,16 @@
     <!-- Form Side -->
     <div class="w-full md:w-3/5 flex items-center justify-center p-8 lg:p-12 bg-paper-white relative overflow-y-auto">
         <div class="w-full max-w-xl">
+            <!-- Tabs -->
+            <div class="flex w-full mb-8">
+                <a href="<?php echo BASE_URL; ?>/login" class="flex-1 pb-3 text-center border-b border-outline text-outline hover:text-charcoal transition-colors">
+                    تسجيل الدخول
+                </a>
+                <a href="<?php echo BASE_URL; ?>/register" class="flex-1 pb-3 text-center border-b-2 border-charcoal font-bold text-charcoal">
+                    إنشاء حساب
+                </a>
+            </div>
+
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-charcoal mb-2">إنشاء حساب طالب</h1>
                 <p class="text-secondary">يرجى إدخال كافة البيانات المطلوبة ورفع صور البطاقة.</p>
@@ -54,73 +83,58 @@
 
             <form id="registerForm" class="space-y-4" enctype="multipart/form-data">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Name -->
                     <div class="flex flex-col gap-1 md:col-span-2">
                         <label class="text-sm font-bold text-charcoal" for="fullName">الاسم بالكامل (رباعي)</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="fullName" name="full_name" placeholder="الاسم رباعياً كما في البطاقة" type="text" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="fullName" name="full_name" placeholder="الاسم رباعياً كما في البطاقة" type="text" required/>
                     </div>
                     
-                    <!-- Email -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal" for="email">البريد الإلكتروني</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="email" name="email" placeholder="example@university.edu" type="email" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="email" name="email" placeholder="example@university.edu" type="email" required/>
                     </div>
 
-                    <!-- Phone -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal" for="phone">رقم الهاتف</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="phone" name="phone_number" placeholder="01XXXXXXXXX" type="tel" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="phone" name="phone_number" placeholder="01XXXXXXXXX" type="tel" required/>
                     </div>
 
-                    <!-- Department -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal" for="department">القسم</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="department" name="department" placeholder="القسم الأكاديمي" type="text" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="department" name="department" placeholder="القسم الأكاديمي" type="text" required/>
                     </div>
 
-                    <!-- Specialty -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal" for="specialty">التخصص</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="specialty" name="specialty" placeholder="التخصص الدقيق" type="text" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="specialty" name="specialty" placeholder="التخصص الدقيق" type="text" required/>
                     </div>
 
-                    <!-- ID Front -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal">صورة البطاقة (وجه)</label>
                         <input type="file" id="idFront" name="id_front" accept="image/*" class="w-full border border-dashed border-charcoal p-2 text-sm" required/>
                     </div>
 
-                    <!-- ID Back -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm font-bold text-charcoal">صورة البطاقة (ظهر)</label>
                         <input type="file" id="idBack" name="id_back" accept="image/*" class="w-full border border-dashed border-charcoal p-2 text-sm" required/>
                     </div>
 
-                    <!-- Password -->
                     <div class="flex flex-col gap-1 md:col-span-2">
                         <label class="text-sm font-bold text-charcoal" for="password">كلمة المرور</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 focus:outline-none focus:ring-2 focus:ring-royal-indigo rounded-none" id="password" name="password" placeholder="••••••••" type="password" required/>
-                        <p class="text-xs text-secondary mt-1">يجب أن تحتوي على 8 أحرف، حرف كبير ورقم واحد على الأقل.</p>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="password" name="password" placeholder="••••••••" type="password" required/>
                     </div>
                 </div>
 
-                <div class="pt-4 flex flex-col gap-4">
-                    <button id="submitBtn" class="w-full bg-royal-indigo text-white py-4 px-6 hover:bg-primary transition-colors font-bold rounded-none flex justify-center items-center gap-2 group" type="submit">
+                <div class="pt-4">
+                    <button id="submitBtn" class="w-full bg-royal-indigo text-white py-4 font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 group" type="submit">
                         <span>تسجيل الحساب</span>
                         <span class="material-symbols-outlined transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
                     </button>
-                    <div class="text-center mt-2">
-                        <a class="text-royal-indigo hover:underline font-bold" href="/login">
-                            لديك حساب بالفعل؟ تسجيل الدخول
-                        </a>
-                    </div>
                 </div>
             </form>
         </div>
     </div>
 </main>
 
-<!-- Toast Container -->
 <div id="toast" class="toast">
     <span id="toastIcon" class="material-symbols-outlined"></span>
     <span id="toastMessage"></span>
@@ -139,52 +153,14 @@
 
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const submitBtn = this.querySelector('#submitBtn');
+        const submitBtn = document.getElementById('submitBtn');
         const formData = new FormData(this);
         formData.append('role', 'student');
 
-
+        // Validation logic
         const nameParts = formData.get('full_name').trim().split(/\s+/);
         if (nameParts.length < 4) {
             showToast('الاسم يجب أن يكون رباعياً على الأقل', 'error');
-            return;
-        }
-
-
-        const phoneRegex = /^01[0125][0-9]{8}$/;
-        if (!phoneRegex.test(formData.get('phone_number'))) {
-            showToast('رقم الهاتف غير صحيح، يجب أن يكون رقم مصري مكون من 11 رقم', 'error');
-            return;
-        }
-
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-        if (!passwordRegex.test(formData.get('password'))) {
-            showToast('كلمة المرور ضعيفة: يجب أن تكون 8 أحرف، وتحتوي على حرف كبير ورقم واحد على الأقل', 'error');
-            return;
-        }
-
-        const idFront = formData.get('id_front');
-        const idBack = formData.get('id_back');
-
-        if (!idFront.name || !idBack.name) {
-            showToast('يرجى رفع صور البطاقة (وجه وظهرا)', 'error');
-            return;
-        }
-
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        for (let file of [idFront, idBack]) {
-            if (!allowedTypes.includes(file.type)) {
-                showToast('يرجى رفع صور فقط (JPG أو PNG)', 'error');
-                return;
-            }
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('حجم الصورة كبير جداً (الأقصى 5 ميجابايت)', 'error');
-                return;
-            }
-        }
-
-        if (!formData.get('department') || !formData.get('specialty')) {
-            showToast('يرجى ملء بيانات القسم والتخصص', 'error');
             return;
         }
 
@@ -192,7 +168,7 @@
             submitBtn.disabled = true;
             submitBtn.querySelector('span').textContent = 'جاري المعالجة...';
 
-            const response = await fetch('/api/register', {
+            const response = await fetch(window.BASE_URL + '/api/register', {
                 method: 'POST',
                 body: formData
             });
@@ -200,8 +176,8 @@
             const result = await response.json();
 
             if (response.ok) {
-                showToast('تم إنشاء الحساب بنجاح! جاري تحويلك...');
-                setTimeout(() => { window.location.href = '/login'; }, 1500);
+                showToast('تم التسجيل بنجاح! جاري تحويلك...');
+                setTimeout(() => { window.location.href = window.BASE_URL + '/login'; }, 1500);
             } else {
                 showToast(result.error || 'فشل التسجيل', 'error');
             }

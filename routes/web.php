@@ -1,16 +1,29 @@
 <?php
 /**
- * Simple Routing logic for the custom MVC
+ * Smart Routing logic for the custom MVC
+ * Automatically detects the base path for XAMPP or Linux/Homebrew
  */
 
+// 1. Detect Request URI and Script Name
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-$scriptName = $_SERVER['SCRIPT_NAME'];
-$basePath = str_replace('/index.php', '', $scriptName);
+$scriptName = $_SERVER['SCRIPT_NAME']; // e.g., /ITI/IRP_System_PHP/public/index.php
 
-// Clean up the path: remove base path and query strings
-$path = str_replace($basePath, '', $requestUri);
+// 2. Calculate the Base Path (e.g., /ITI/IRP_System_PHP/public)
+$basePath = str_replace('/index.php', '', $scriptName);
+if ($basePath === '/') $basePath = '';
+
+// 3. Extract the virtual path (remove base path from URI)
+$path = $requestUri;
+if (!empty($basePath) && strpos($requestUri, $basePath) === 0) {
+    $path = substr($requestUri, strlen($basePath));
+}
+
+// Strip out query parameters
 $path = parse_url($path, PHP_URL_PATH);
 $path = rtrim($path, '/') ?: '/';
+
+// Define a constant for globally accessible Base URL in views
+define('BASE_URL', $basePath);
 
 // Simple Route mapping
 switch ($path) {
@@ -26,10 +39,13 @@ switch ($path) {
         AuthMiddleware::requireLogin();
         $role = $_SESSION['user_role'] ?? '';
         if ($role === 'student') {
-            header('Location: /student/dashboard');
+            header('Location: ' . BASE_URL . '/student/dashboard');
             exit;
         } elseif ($role === 'admin') {
-            header('Location: /admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/dashboard');
+            exit;
+        } elseif ($role === 'sample_size_officer') {
+            header('Location: ' . BASE_URL . '/officer/sample-size/queue');
             exit;
         }
         require __DIR__ . '/../app/Views/dashboard.php';
@@ -55,6 +71,12 @@ switch ($path) {
         (new SubmissionController())->store();
         break;
 
+    case '/student/payment/process':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->process();
+        break;
+
     case '/student/settings':
         require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
         (new StudentSettingsController())->show();
@@ -68,6 +90,30 @@ switch ($path) {
     case '/student/settings/password':
         require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
         (new StudentSettingsController())->updatePassword();
+        break;
+
+    case '/officer/sample-size/queue':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->queue();
+        break;
+
+    case '/officer/sample-size/archives':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->archives();
+        break;
+
+    case '/officer/sample-size/store':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->store();
+        break;
+
+    case '/officer/sample-size/input':
+        AuthMiddleware::requireRole('officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->input();
         break;
 
     case '/admin/dashboard':
@@ -95,16 +141,13 @@ switch ($path) {
         break;
 
     case '/api/logout':
-        require __DIR__ . '/../app/Controllers/AuthController.php';
-        (new AuthController())->logout();
-        break;
-
     case '/logout':
         require __DIR__ . '/../app/Controllers/AuthController.php';
         (new AuthController())->logout();
         break;
 
     default:
+        // Dynamic routes (e.g. submissions/123)
         if (preg_match('#^/student/submissions/(\d+)$#', $path, $matches)) {
             AuthMiddleware::requireRole('student');
             $_GET['id'] = (int) $matches[1];
@@ -113,8 +156,24 @@ switch ($path) {
             break;
         }
 
+        if (preg_match('#^/officer/sample-size/input/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('sample_size_officer');
+            $_GET['id'] = (int) $matches[1];
+            require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+            (new SampleSizeController())->inputForm();
+            break;
+        }
+
+        if (preg_match('#^/student/payment/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('student');
+            $_GET['id'] = (int) $matches[1];
+            require __DIR__ . '/../app/Controllers/PaymentController.php';
+            (new PaymentController())->showPayment();
+            break;
+        }
+
         http_response_code(404);
         header('Content-Type: application/json');
-        echo json_encode(['error' => 'Endpoint not found', 'path' => $path]);
+        echo json_encode(['error' => 'Endpoint not found', 'path' => $path, 'base' => BASE_URL]);
         break;
 }

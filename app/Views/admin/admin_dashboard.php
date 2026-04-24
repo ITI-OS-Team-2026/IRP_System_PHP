@@ -39,7 +39,7 @@ $activityItems = [
 ];
 
 $sidebarItems = [
-	['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/admin/dashboard', 'active' => true],
+	['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => BASE_URL . '/admin/dashboard', 'active' => true],
 	['label' => 'تنشيط الحسابات', 'icon' => 'person_add', 'href' => '#'],
 	['label' => 'المراجعة المبدئية', 'icon' => 'fact_check', 'href' => '#'],
 	['label' => 'تعيين المراجعين', 'icon' => 'group_add', 'href' => '#'],
@@ -84,9 +84,9 @@ $sidebarItems = [
 					<button class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200" type="button">
 						<span class="material-symbols-outlined text-[20px]">notifications</span>
 					</button>
-					<button class="w-10 h-10 rounded-lg bg-red-600 text-white flex items-center justify-center border border-red-500" type="button">
+					<a href="<?php echo BASE_URL; ?>/logout" class="w-10 h-10 rounded-lg bg-red-600 text-white flex items-center justify-center border border-red-500" title="تسجيل الخروج">
 						<span class="material-symbols-outlined text-[20px]">logout</span>
-					</button>
+					</a>
 				</div>
 			</header>
 

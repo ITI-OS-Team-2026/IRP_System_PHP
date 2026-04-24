@@ -6,7 +6,7 @@
     $includeTailwind = false;
     require __DIR__ . '/head.php';
     ?>
-    <link rel="stylesheet" href="/ITI/IRP_System_PHP/public/assets/style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/style.css">
 </head>
 <body>
     <div class="app-wrapper">
