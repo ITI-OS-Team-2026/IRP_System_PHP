@@ -38,9 +38,10 @@ if ((int) $submission['student_id'] != (int) $studentId) {
 }
 
 $documentsStmt = $db->prepare(
-    "SELECT document_type, file_path, uploaded_at
+    "SELECT document_type, file_path, uploaded_at, version
      FROM research_documents
      WHERE submission_id = ?
+       AND is_current = 1
      ORDER BY uploaded_at DESC"
 );
 $documentsStmt->bind_param('i', $submissionId);
@@ -89,6 +90,11 @@ $documentTypeMap = [
     'photos_biopsies_consent' => 'إقرار الموافقة على الصور والخزعات',
     'research_file' => 'ملف البحث',
 ];
+
+$currentDocumentByType = [];
+foreach ($documents as $document) {
+    $currentDocumentByType[$document['document_type']] = $document;
+}
 
 $reviewStatusMap = [
     'pending' => ['label' => 'قيد المراجعة', 'color' => 'bg-slate-100 text-slate-700'],
@@ -190,6 +196,20 @@ function formatDateTime($datetime) {
             </header>
 
             <section class="px-4 md:px-8 py-6 space-y-6">
+                <?php if (!empty($_SESSION['submission_success'])): ?>
+                    <div class="rounded-lg bg-green-50 border border-green-300 text-green-800 px-5 py-4 flex items-center gap-3 font-button text-sm">
+                        <span class="material-symbols-outlined text-green-600" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                        <?= htmlspecialchars($_SESSION['submission_success'], ENT_QUOTES, 'UTF-8') ?>
+                        <?php unset($_SESSION['submission_success']); ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (!empty($_SESSION['submission_error'])): ?>
+                    <div class="rounded-lg bg-red-50 border border-red-300 text-red-800 px-5 py-4 flex items-center gap-3 font-button text-sm">
+                        <span class="material-symbols-outlined text-red-600" style="font-variation-settings:'FILL' 1;">error</span>
+                        <?= htmlspecialchars($_SESSION['submission_error'], ENT_QUOTES, 'UTF-8') ?>
+                        <?php unset($_SESSION['submission_error']); ?>
+                    </div>
+                <?php endif; ?>
                 <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
                     <div class="px-5 py-4 border-b border-slate-200">
                         <h3 class="font-h1 text-lg text-charcoal">معلومات البحث</h3>
@@ -354,6 +374,46 @@ function formatDateTime($datetime) {
                         </div>
                     <?php endif; ?>
                 </div>
+
+                <?php if ($submission['status'] === 'revision_requested'): ?>
+                <div class="rounded-xl border border-red-300 bg-red-50 shadow-[0_2px_12px_rgba(15,23,42,0.05)] mt-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
+                    <div class="px-5 py-4 border-b border-red-200">
+                        <h3 class="font-h1 text-lg text-red-800 flex items-center gap-2">
+                            <span class="material-symbols-outlined">upload_file</span>
+                            رفع التعديلات المطلوبة
+                        </h3>
+                    </div>
+                    <div class="p-5">
+                        <p class="text-sm text-red-700 mb-4">يرجى قراءة ملاحظات المراجع بعناية، ورفع الملفات التي تم تعديلها فقط. يمكنك رفع أكثر من ملف في نفس الإرسال.</p>
+                        <form action="<?php echo BASE_URL; ?>/student/submission/revision/<?= (int) $submission['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            <?php foreach ($documentTypeMap as $documentKey => $documentLabel): ?>
+                                <div class="rounded-lg border border-red-200 bg-white p-4 space-y-2">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <label class="block text-sm font-bold text-charcoal">
+                                            <?= htmlspecialchars($documentLabel, ENT_QUOTES, 'UTF-8') ?>
+                                        </label>
+                                        <?php if (isset($currentDocumentByType[$documentKey])): ?>
+                                            <span class="text-xs text-slate-600">
+                                                النسخة الحالية: V<?= (int) ($currentDocumentByType[$documentKey]['version'] ?? 1) ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <input type="file" name="revised_files[<?= htmlspecialchars($documentKey, ENT_QUOTES, 'UTF-8') ?>]" accept=".pdf,.doc,.docx"
+                                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-button file:bg-primary file:text-white hover:file:bg-indigo-700 cursor-pointer border border-slate-300 rounded-lg bg-white">
+                                </div>
+                            <?php endforeach; ?>
+                            <div class="flex justify-end pt-2">
+                                <button type="submit" class="bg-red-600 text-white px-6 py-2.5 rounded-lg font-button text-sm hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">send</span>
+                                    إرسال التعديلات للمراجع
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <?php endif; ?>
+
             </section>
         </main>
     </div>
