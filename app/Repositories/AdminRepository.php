@@ -144,6 +144,28 @@ class AdminRepository {
         return $stmt->insert_id;
     }
 
+    public function findUserByEmail($email) {
+        $email = $this->db->real_escape_string($email);
+        $sql = "SELECT id, email, role FROM users WHERE email = '$email' LIMIT 1";
+        $result = $this->db->query($sql);
+
+        return $result ? $result->fetch_assoc() : null;
+    }
+
+    public function createStaffUser($fullName, $email, $phoneNumber, $password, $role) {
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+
+        $stmt = $this->db->prepare(
+            "INSERT INTO users (full_name, email, password_hash, phone_number, department, specialty, id_front_path, id_back_path, role, is_active)
+             VALUES (?, ?, ?, ?, NULL, NULL, NULL, NULL, ?, 1)"
+        );
+
+        $stmt->bind_param('sssss', $fullName, $email, $passwordHash, $phoneNumber, $role);
+        $stmt->execute();
+
+        return $this->db->insert_id;
+    }
+
     public function getInitialPreviewQueueSubmissions($limit = 25, $offset = 0) {
         $limit = (int) $limit;
         $offset = (int) $offset;

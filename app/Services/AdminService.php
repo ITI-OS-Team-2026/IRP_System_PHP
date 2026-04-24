@@ -5,6 +5,12 @@ require __DIR__ . '/../Repositories/AdminRepository.php';
 class AdminService {
     private $adminRepository;
 
+    private $staffRoleOptions = [
+        'reviewer' => 'مراجع',
+        'sample_size_officer' => 'مسؤول حجم العينة',
+        'manager' => 'مدير',
+    ];
+
     public function __construct() {
         $this->adminRepository = new AdminRepository();
     }
@@ -288,6 +294,55 @@ class AdminService {
         );
 
         return $mode;
+    }
+
+    public function getAddStaffData() {
+        return [
+            'staffRoleOptions' => $this->staffRoleOptions,
+        ];
+    }
+
+    public function createStaffAccount(array $data, $adminUserId = null) {
+        $fullName = trim((string) ($data['full_name'] ?? ''));
+        $email = trim((string) ($data['email'] ?? ''));
+        $phoneNumber = trim((string) ($data['phone_number'] ?? ''));
+        $password = (string) ($data['password'] ?? '');
+        $role = trim((string) ($data['role'] ?? ''));
+
+        if ($fullName === '') {
+            throw new Exception('اسم الموظف مطلوب.');
+        }
+
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception('البريد الإلكتروني غير صالح.');
+        }
+
+        if ($phoneNumber === '') {
+            throw new Exception('رقم الهاتف مطلوب.');
+        }
+
+        if (strlen($password) < 8) {
+            throw new Exception('كلمة المرور يجب ألا تقل عن 8 أحرف.');
+        }
+
+        if (!array_key_exists($role, $this->staffRoleOptions)) {
+            throw new Exception('الوظيفة المختارة غير صالحة.');
+        }
+
+        if ($this->adminRepository->findUserByEmail($email)) {
+            throw new Exception('هذا البريد الإلكتروني مستخدم بالفعل.');
+        }
+
+        $userId = $this->adminRepository->createStaffUser($fullName, $email, $phoneNumber, $password, $role);
+
+        $this->adminRepository->logAction(
+            'staff_registered',
+            'تم تسجيل موظف جديد: ' . $fullName . ' (' . $role . ')',
+            $adminUserId !== null ? (int) $adminUserId : null,
+            null
+        );
+
+        return $userId;
     }
 
     private function buildDepartmentLabel(array $user) {

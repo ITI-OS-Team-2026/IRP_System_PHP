@@ -2,6 +2,7 @@
 $activeAdminPage = $activeAdminPage ?? 'dashboard';
 $adminSidebarItems = $adminSidebarItems ?? [
     ['key' => 'dashboard', 'label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/admin/dashboard'],
+    ['key' => 'add_staff', 'label' => 'إضافة الموظفين', 'icon' => 'badge', 'href' => '/admin/add-staff'],
     ['key' => 'user_activation', 'label' => 'تنشيط الحسابات', 'icon' => 'person_add', 'href' => '/admin/user-activation'],
     ['key' => 'initial_preview', 'label' => 'المراجعة المبدئية', 'icon' => 'fact_check', 'href' => '/admin/initial-preview-queue'],
     ['key' => 'reviewer_assignment', 'label' => 'تعيين المراجعين', 'icon' => 'group_add', 'href' => '/admin/reviewer-assignment'],

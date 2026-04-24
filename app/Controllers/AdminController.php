@@ -140,6 +140,56 @@ class AdminController {
         require __DIR__ . '/../Views/admin/reviewer_assignment.php';
     }
 
+    public function addStaff() {
+        AuthMiddleware::requireRole('admin');
+
+        $data = $this->adminService->getAddStaffData();
+        $staffRoleOptions = $data['staffRoleOptions'];
+
+        $addStaffSuccessMessage = $_SESSION['admin_add_staff_success'] ?? null;
+        $addStaffErrorMessage = $_SESSION['admin_add_staff_error'] ?? null;
+        $addStaffOldInput = $_SESSION['admin_add_staff_old'] ?? [];
+
+        unset($_SESSION['admin_add_staff_success'], $_SESSION['admin_add_staff_error'], $_SESSION['admin_add_staff_old']);
+
+        require __DIR__ . '/../Views/admin/add_staff.php';
+    }
+
+    public function storeStaff() {
+        AuthMiddleware::requireRole('admin');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            die('Method not allowed');
+        }
+
+        $payload = [
+            'full_name' => trim((string) ($_POST['full_name'] ?? '')),
+            'email' => trim((string) ($_POST['email'] ?? '')),
+            'phone_number' => trim((string) ($_POST['phone_number'] ?? '')),
+            'password' => (string) ($_POST['password'] ?? ''),
+            'role' => trim((string) ($_POST['role'] ?? '')),
+        ];
+
+        $_SESSION['admin_add_staff_old'] = [
+            'full_name' => $payload['full_name'],
+            'email' => $payload['email'],
+            'phone_number' => $payload['phone_number'],
+            'role' => $payload['role'],
+        ];
+
+        try {
+            $this->adminService->createStaffAccount($payload, isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null);
+            $_SESSION['admin_add_staff_success'] = 'تم تسجيل الموظف بنجاح.';
+            unset($_SESSION['admin_add_staff_old']);
+        } catch (Throwable $e) {
+            $_SESSION['admin_add_staff_error'] = $e->getMessage();
+        }
+
+        header('Location: /admin/add-staff');
+        exit;
+    }
+
     public function saveReviewerAssignment() {
         AuthMiddleware::requireRole('admin');
 

@@ -155,6 +155,17 @@ switch ($path) {
         (new AdminController())->saveReviewerAssignment();
         break;
 
+    case '/admin/add-staff':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->addStaff();
+        break;
+
+    case '/admin/add-staff/store':
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->storeStaff();
+        break;
+
     case '/admin/settings':
         AuthMiddleware::requireRole('admin');
         require __DIR__ . '/../app/Views/admin/settings.php';
