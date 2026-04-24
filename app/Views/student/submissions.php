@@ -6,6 +6,12 @@ require_once __DIR__ . '/../../../config/database.php';
 $db = Database::getConnection();
 
 $studentId = (int) $_SESSION['user_id'];
+$errorMessage = '';
+
+if (isset($_SESSION['submission_error'])) {
+    $errorMessage = $_SESSION['submission_error'];
+    unset($_SESSION['submission_error']);
+}
 
 // Fetch all submissions for this student
 $submissionsResult = $db->query(
@@ -49,9 +55,9 @@ function formatDate($datetime) {
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
 <body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
-    <div class="min-h-screen flex flex-col lg:flex-row-reverse">
+    <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <aside class="w-full lg:w-[260px] bg-white border-l border-slate-200 shadow-sm lg:shadow-none">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
             <div class="p-5 border-b border-slate-200 flex items-center gap-4">
                 <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
@@ -97,6 +103,16 @@ function formatDate($datetime) {
             </header>
 
             <section class="px-4 md:px-8 py-6">
+                <?php if (!empty($errorMessage)): ?>
+                    <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-600 text-2xl shrink-0">error</span>
+                        <div>
+                            <h3 class="font-button text-sm text-red-800">خطأ في الوصول</h3>
+                            <p class="text-sm text-red-700 mt-1"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Submissions Table -->
                 <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
                     <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
@@ -154,7 +170,7 @@ function formatDate($datetime) {
                                             </td>
                                             <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                             <td class="px-5 py-4">
-                                                <a href="#" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                <a href="/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
                                                     <span class="material-symbols-outlined text-[16px]">visibility</span>
                                                     عرض التفاصيل
                                                 </a>

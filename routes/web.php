@@ -90,6 +90,14 @@ switch ($path) {
         break;
 
     default:
+        if (preg_match('#^/student/submissions/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('student');
+            $_GET['id'] = (int) $matches[1];
+            require __DIR__ . '/../app/Controllers/SubmissionController.php';
+            (new SubmissionController())->show();
+            break;
+        }
+
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['error' => 'Endpoint not found', 'path' => $path]);
