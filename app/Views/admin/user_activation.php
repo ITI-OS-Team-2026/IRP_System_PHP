@@ -8,6 +8,8 @@ $adminPageSubtitle = 'مراجعة وتوثيق حسابات الباحثين ا
 
 $pendingCount = $pendingCount ?? 0;
 $pendingUsers = $pendingUsers ?? [];
+$activationSuccessMessage = $activationSuccessMessage ?? null;
+$activationErrorMessage = $activationErrorMessage ?? null;
 $userActivationPagination = $userActivationPagination ?? [
 	'currentPage' => 1,
 	'perPage' => 10,
@@ -29,6 +31,18 @@ $userActivationPagination = $userActivationPagination ?? [
 <?php require __DIR__ . '/partials/navbar.php'; ?>
 
 <section class="px-4 md:px-8 py-6 space-y-6">
+<?php if ($activationSuccessMessage): ?>
+<div class="rounded-lg border border-forest bg-green-50 text-forest px-4 py-3 text-sm">
+<?= htmlspecialchars($activationSuccessMessage, ENT_QUOTES, 'UTF-8') ?>
+</div>
+<?php endif; ?>
+
+<?php if ($activationErrorMessage): ?>
+<div class="rounded-lg border border-crimson bg-red-50 text-crimson px-4 py-3 text-sm">
+<?= htmlspecialchars($activationErrorMessage, ENT_QUOTES, 'UTF-8') ?>
+</div>
+<?php endif; ?>
+
 <div class="mb-4 pb-4 border-b-2 border-charcoal flex justify-between items-end">
 <div>
 <h2 class="font-display-lg text-display-lg text-charcoal mb-2">طلبات التسجيل المعلقة</h2>

@@ -29,6 +29,10 @@ class AdminController {
         $pendingUsers = $activationData['pendingUsers'];
         $userActivationPagination = $activationData['pagination'];
 
+        $activationSuccessMessage = $_SESSION['admin_user_activation_success'] ?? null;
+        $activationErrorMessage = $_SESSION['admin_user_activation_error'] ?? null;
+        unset($_SESSION['admin_user_activation_success'], $_SESSION['admin_user_activation_error']);
+
         require __DIR__ . '/../Views/admin/user_activation.php';
     }
 
