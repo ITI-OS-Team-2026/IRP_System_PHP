@@ -39,7 +39,7 @@ class SubmissionController {
 
         if (!$user) {
             $_SESSION['submission_error'] = 'حدث خطأ في استرجاع بيانات المستخدم. يرجى المحاولة مرة أخرى.';
-            header('Location: /student/submission/create');
+            header('Location: ' . BASE_URL . '/student/submission/create');
             exit;
         }
 
@@ -99,7 +99,7 @@ class SubmissionController {
         // If there are validation errors
         if (!empty($errors)) {
             $_SESSION['submission_error'] = implode(', ', $errors);
-            header('Location: /student/submission/create');
+            header('Location: ' . BASE_URL . '/student/submission/create');
             exit;
         }
 
@@ -166,13 +166,13 @@ class SubmissionController {
             $db->commit();
 
             $_SESSION['submission_success'] = "تم تقديم بحثك بنجاح. يمكنك متابعة حالة البحث من لوحة التحكم.";
-            header('Location: /student/dashboard');
+            header('Location: ' . BASE_URL . '/student/dashboard');
             exit;
 
         } catch (Exception $e) {
             $db->rollback();
             $_SESSION['submission_error'] = 'حدث خطأ أثناء تقديم البحث. يرجى المحاولة مرة أخرى.';
-            header('Location: /student/submission/create');
+            header('Location: ' . BASE_URL . '/student/submission/create');
             exit;
         }
     }

@@ -205,7 +205,7 @@ function timeAgo($datetime) {
                                 <span class="material-symbols-outlined text-5xl text-slate-300 mb-4 block">science</span>
                                 <p class="text-slate-gray text-lg mb-2">لا توجد أبحاث حتى الآن</p>
                                 <p class="text-sm text-slate-400 mb-6">ابدأ بتقديم أول بحث لك عبر الزر</p>
-                                <a href="/student/submission/create"
+                                <a href="<?php echo BASE_URL; ?>/student/submission/create"
                                    class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors">
                                     <span class="material-symbols-outlined text-[18px]">note_add</span>
                                     تقديم بحث جديد

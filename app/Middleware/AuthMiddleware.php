@@ -9,7 +9,7 @@ class AuthMiddleware {
 
     public static function requireLogin() {
         if (!self::isAuthenticated()) {
-            header("Location: /login");
+            header("Location: " . BASE_URL . "/login");
             exit;
         }
     }

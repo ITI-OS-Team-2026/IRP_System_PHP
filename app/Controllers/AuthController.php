@@ -52,7 +52,7 @@ class AuthController {
             if (!(bool) $user['is_active']) {
                 $this->jsonResponse([
                     'error' => 'حسابك قيد المراجعة من قبل الإدارة. سيتم تفعيل الحساب بعد الموافقة.',
-                    'redirect_to' => '/pending-approval'
+                    'redirect_to' => BASE_URL . '/pending-approval'
                 ], 403);
                 return;
             }
@@ -77,7 +77,7 @@ class AuthController {
 
     public function logout() {
         $this->authService->logout();
-        header('Location: /login');
+        header('Location: ' . BASE_URL . '/login');
         exit;
     }
 
