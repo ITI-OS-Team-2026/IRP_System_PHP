@@ -242,10 +242,20 @@ function timeAgo($datetime) {
                                                 </td>
                                                 <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td class="px-5 py-4">
-                                                    <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
-                                                        <span class="material-symbols-outlined text-[16px]">visibility</span>
-                                                        عرض التفاصيل
-                                                    </a>
+                                                    <div class="flex flex-col gap-2">
+                                                        <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                            <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                                            عرض التفاصيل
+                                                        </a>
+                                                        
+                                                        <?php if (in_array($sub['status'], ['admin_reviewed', 'sample_sized'])): ?>
+                                                            <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $sub['id'] ?>" 
+                                                               class="inline-flex items-center gap-1 px-3 py-1.5 bg-orange-500 text-white rounded text-xs font-button hover:bg-orange-600 transition-colors w-fit">
+                                                                <span class="material-symbols-outlined text-[14px]">payments</span>
+                                                                <?= $sub['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

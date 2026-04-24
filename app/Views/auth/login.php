@@ -5,10 +5,11 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>تسجيل الدخول - IRB Institutional Portal</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script>
-        // Store the base URL from PHP to JS
         window.BASE_URL = '<?php echo BASE_URL; ?>';
         
         tailwind.config = {
@@ -23,7 +24,16 @@
                         "outline": "#777682",
                         "paper-white": "#FDFDFC",
                         "cool-slate": "#F8FAFC",
-                        "surface": "#f9f9fc"
+                        "surface": "#f9f9fc",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Amiri"],
+                        "h1": ["Amiri"],
+                        "body-lg": ["Tajawal"],
+                        "numeral": ["Tajawal"],
+                        "button": ["Tajawal"],
+                        "body-sm": ["Tajawal"]
                     }
                 }
             }
@@ -45,61 +55,92 @@
         .toast-error { background-color: #dc2626; }
     </style>
 </head>
-<body class="bg-surface text-on-surface antialiased h-screen w-full overflow-hidden flex">
+<body class="bg-surface text-on-surface antialiased h-screen w-full overflow-hidden flex selection:bg-primary-fixed-dim selection:text-royal-indigo">
 
+<!-- Right Panel: Form (RTL Start) -->
 <main class="w-full lg:w-1/2 h-full bg-paper-white flex flex-col justify-center px-8 md:px-16 lg:px-24 xl:px-32 relative z-10">
+    <!-- Header / Logo -->
     <header class="mb-12">
-        <h1 class="text-3xl font-bold text-charcoal mb-1">مجلس المراجعة المؤسسية</h1>
-        <p class="text-sm text-outline uppercase tracking-widest">Institutional Review Board</p>
+        <h1 class="font-h1 text-4xl text-charcoal mb-1">مجلس المراجعة المؤسسية</h1>
+        <p class="font-body-sm text-sm text-outline uppercase tracking-widest">Institutional Review Board</p>
     </header>
 
+    <!-- Form Container -->
     <div class="w-full max-w-md">
         <!-- Tabs -->
         <div class="flex w-full mb-8">
-            <a href="<?php echo BASE_URL; ?>/login" class="flex-1 pb-3 text-center border-b-2 border-charcoal font-bold text-charcoal">
+            <a href="<?php echo BASE_URL; ?>/login" class="flex-1 pb-3 text-center border-b-2 border-charcoal font-button text-button text-charcoal focus:outline-none">
                 تسجيل الدخول
             </a>
-            <a href="<?php echo BASE_URL; ?>/register" class="flex-1 pb-3 text-center border-b border-outline text-outline hover:text-charcoal transition-colors">
+            <a href="<?php echo BASE_URL; ?>/register" class="flex-1 pb-3 text-center border-b border-charcoal font-button text-button text-outline hover:text-charcoal focus:outline-none transition-colors">
                 إنشاء حساب
             </a>
         </div>
 
+        <!-- Login Form -->
         <form id="loginForm" class="flex flex-col gap-6">
+            <!-- Email Input -->
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-bold text-charcoal" for="email">البريد الإلكتروني المؤسسي</label>
-                <input class="w-full p-3 bg-cool-slate border border-charcoal rounded-none focus:outline-none focus:ring-2 focus:ring-royal-indigo" id="email" name="email" placeholder="researcher@university.edu" required type="email"/>
+                <label class="font-body-sm text-sm text-charcoal font-bold" for="email">البريد الإلكتروني المؤسسي</label>
+                <input autocomplete="email" class="w-full p-3 bg-cool-slate border border-charcoal rounded-none font-body-lg text-base text-charcoal focus:bg-paper-white focus:outline-none focus:border-royal-indigo focus:ring-1 focus:ring-royal-indigo transition-colors" id="email" name="email" placeholder="researcher@university.edu" required type="email"/>
             </div>
 
+            <!-- Password Input -->
             <div class="flex flex-col gap-2">
-                <label class="text-sm font-bold text-charcoal" for="password">كلمة المرور</label>
-                <input class="w-full p-3 bg-cool-slate border border-charcoal rounded-none focus:outline-none focus:ring-2 focus:ring-royal-indigo" id="password" name="password" placeholder="••••••••" required type="password"/>
+                <div class="flex justify-between items-end">
+                    <label class="font-body-sm text-sm text-charcoal font-bold" for="password">كلمة المرور</label>
+                    <a class="font-body-sm text-sm text-outline hover:text-charcoal underline underline-offset-2 transition-colors" href="#">نسيت كلمة المرور؟</a>
+                </div>
+                <input autocomplete="current-password" class="w-full p-3 bg-cool-slate border border-charcoal rounded-none font-body-lg text-base text-charcoal focus:bg-paper-white focus:outline-none focus:border-royal-indigo focus:ring-1 focus:ring-royal-indigo transition-colors" id="password" name="password" placeholder="••••••••" required type="password"/>
             </div>
 
-            <button type="submit" id="submitBtn" class="w-full bg-royal-indigo text-white py-4 font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 group">
-                <span>دخول</span>
-                <span class="material-symbols-outlined transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn" class="w-full mt-4 bg-royal-indigo text-paper-white py-4 font-button text-button rounded-none border border-royal-indigo hover:bg-primary transition-colors flex justify-center items-center gap-2 group">
+                <span>متابعة</span>
+                <span class="material-symbols-outlined text-paper-white transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
             </button>
         </form>
+
+        <!-- Footer Links -->
+        <div class="mt-12 flex flex-col gap-2 border-t border-charcoal pt-6">
+            <p class="font-body-sm text-sm text-outline">
+                بالدخول إلى هذا النظام، فإنك توافق على <a class="text-charcoal underline hover:text-royal-indigo" href="#">بروتوكول الخصوصية</a> و <a class="text-charcoal underline hover:text-royal-indigo" href="#">المعايير الأخلاقية</a> الخاصة بمجلس المراجعة المؤسسية.
+            </p>
+        </div>
     </div>
 </main>
 
-<!-- Branding Side Panel (Pattern) -->
-<aside class="hidden lg:flex lg:w-1/2 bg-royal-indigo text-white flex-col justify-between p-16 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    <div class="relative z-10">
-        <div class="flex items-center gap-3 mb-12">
-            <span class="material-symbols-outlined text-4xl">account_balance</span>
-            <span class="text-2xl font-bold tracking-widest uppercase">IRB Portal</span>
+<!-- Left Panel: Quote/Branding -->
+<aside class="hidden lg:flex w-1/2 h-full relative flex-col justify-between p-16 overflow-hidden bg-primary" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuDqi_Ls0kDkZx8Bj2tZ0p_qJp8K13zi08ZVrjjXSozCbQCQZJN_AfZRP9pkEnihZFnLkUaBxduiJOup97VBq0cKVK6mI8kcnj9Aj_Oqg_WO42Kd3EJZzf9kgZQlgez5v2XgOWWnMcU3y2YUI1-tyJaTB-fc3thUkZ_Rpw0GNdKggpWcpsyOaQPOeiSfObhjgUWxY39nJG_D1efgBQwfMNzpR0uuRMdFoq7vFRdx5CHgGKEv_CZ-tRbDm3NVYQN8dRiHMDZGpj2ywJ'); background-size: cover; background-position: center;">
+    <!-- Deep Indigo Overlay -->
+    <div class="absolute inset-0 bg-primary/90 mix-blend-multiply z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-primary/60 z-0"></div>
+    
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col h-full justify-between" dir="rtl">
+        <!-- Branding -->
+        <div class="flex items-center gap-3 text-primary-fixed-dim">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+            <span class="font-body-lg text-lg uppercase tracking-widest font-bold">بوابة البحث العلمي</span>
         </div>
-    </div>
-    <div class="relative z-10 max-w-md">
-        <blockquote class="text-4xl font-bold leading-tight mb-6">
-            "البحث العلمي هو نافذة الأمة نحو المستقبل، والأخلاقيات هي الإطار الذي يحمي هذا المستقبل."
+        
+        <!-- Quote -->
+        <blockquote class="max-w-2xl self-start text-right">
+            <p class="font-display-lg text-4xl text-paper-white leading-relaxed mb-8 font-bold" style="line-height: 1.4;">
+                "النزاهة الأكاديمية الصارمة هي أساس كل تقدم علمي موثوق."
+            </p>
+            <footer class="flex items-center gap-4 justify-start">
+                <div class="h-[2px] w-16 bg-primary-fixed-dim"></div>
+                <span class="font-body-lg text-lg text-primary-fixed-dim tracking-wide font-bold">المعيار الذهبي لأخلاقيات البحث</span>
+            </footer>
         </blockquote>
-        <p class="text-lg opacity-80">— الميثاق الأخلاقي للبحث العلمي</p>
-    </div>
-    <div class="relative z-10 text-sm opacity-60">
-        © 2024 Institutional Review Board. All rights reserved.
+
+        <!-- Bottom Note -->
+        <div class="text-right">
+            <p class="font-numeral text-sm text-primary-fixed-dim opacity-70">
+                IRB.SYS.V2.0.4 // الأرشيف الآمن
+            </p>
+        </div>
     </div>
 </aside>
 
@@ -139,15 +180,20 @@
 
             if (response.ok) {
                 showToast('تم تسجيل الدخول بنجاح! جاري تحويلك...');
-                setTimeout(() => { window.location.href = window.BASE_URL + '/dashboard'; }, 1500);
+                const target = result.redirect_to || (window.BASE_URL + '/dashboard');
+                setTimeout(() => { window.location.href = target; }, 1500);
             } else {
-                showToast(result.error || 'فشل تسجيل الدخول', 'error');
+                if (result.redirect_to) {
+                    window.location.href = result.redirect_to;
+                } else {
+                    showToast(result.error || 'فشل تسجيل الدخول', 'error');
+                }
             }
         } catch (error) {
             showToast('حدث خطأ في الاتصال بالخادم', 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.querySelector('span').textContent = 'دخول';
+            submitBtn.querySelector('span').textContent = 'متابعة';
         }
     });
 </script>

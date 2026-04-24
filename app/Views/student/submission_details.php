@@ -227,10 +227,18 @@ function formatDateTime($datetime) {
                         <h3 class="font-h1 text-lg text-charcoal">الحالة الحالية</h3>
                     </div>
                     <div class="p-5 space-y-5">
-                        <div>
+                        <div class="flex flex-wrap items-center gap-4">
                             <span class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-button <?= htmlspecialchars($statusInfo['color'], ENT_QUOTES, 'UTF-8') ?>">
                                 <?= htmlspecialchars($statusInfo['label'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
+
+                            <?php if (in_array($submission['status'], ['admin_reviewed', 'sample_sized'])): ?>
+                                <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $submission['id'] ?>" 
+                                   class="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full font-button text-sm hover:bg-orange-600 transition-colors shadow-md">
+                                    <span class="material-symbols-outlined">payments</span>
+                                    <?= $submission['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
+                                </a>
+                            <?php endif; ?>
                         </div>
                         <div class="flex justify-center">
                             <div class="relative max-w-[500px]">

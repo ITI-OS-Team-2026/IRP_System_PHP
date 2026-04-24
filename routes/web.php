@@ -44,6 +44,9 @@ switch ($path) {
         } elseif ($role === 'admin') {
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit;
+        } elseif ($role === 'sample_size_officer') {
+            header('Location: ' . BASE_URL . '/officer/sample-size/queue');
+            exit;
         }
         require __DIR__ . '/../app/Views/dashboard.php';
         break;
@@ -68,6 +71,12 @@ switch ($path) {
         (new SubmissionController())->store();
         break;
 
+    case '/student/payment/process':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->process();
+        break;
+
     case '/student/settings':
         require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
         (new StudentSettingsController())->show();
@@ -81,6 +90,30 @@ switch ($path) {
     case '/student/settings/password':
         require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
         (new StudentSettingsController())->updatePassword();
+        break;
+
+    case '/officer/sample-size/queue':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->queue();
+        break;
+
+    case '/officer/sample-size/archives':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->archives();
+        break;
+
+    case '/officer/sample-size/store':
+        AuthMiddleware::requireRole('sample_size_officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->store();
+        break;
+
+    case '/officer/sample-size/input':
+        AuthMiddleware::requireRole('officer');
+        require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+        (new SampleSizeController())->input();
         break;
 
     case '/admin/dashboard':
@@ -120,6 +153,22 @@ switch ($path) {
             $_GET['id'] = (int) $matches[1];
             require __DIR__ . '/../app/Controllers/SubmissionController.php';
             (new SubmissionController())->show();
+            break;
+        }
+
+        if (preg_match('#^/officer/sample-size/input/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('sample_size_officer');
+            $_GET['id'] = (int) $matches[1];
+            require __DIR__ . '/../app/Controllers/SampleSizeController.php';
+            (new SampleSizeController())->inputForm();
+            break;
+        }
+
+        if (preg_match('#^/student/payment/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('student');
+            $_GET['id'] = (int) $matches[1];
+            require __DIR__ . '/../app/Controllers/PaymentController.php';
+            (new PaymentController())->showPayment();
             break;
         }
 
