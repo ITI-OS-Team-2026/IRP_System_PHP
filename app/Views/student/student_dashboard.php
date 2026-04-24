@@ -99,7 +99,7 @@ $sidebarItems = [
     ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => true],
     ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions'],
     ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create'],
-    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '#'],
+    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/student/settings'],
 ];
 
 function timeAgo($datetime) {
