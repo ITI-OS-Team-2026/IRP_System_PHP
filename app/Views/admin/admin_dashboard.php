@@ -6,41 +6,9 @@ $activeAdminPage = 'dashboard';
 $adminPageHeading = 'لوحة تحكم الإدارة';
 $adminPageSubtitle = 'نظرة عامة على النظام';
 
-$summaryCards = [
-	[
-		'count' => '12',
-		'title' => 'حسابات قيد التنشيط',
-		'description' => 'باحثون جدد ينتظرون التحقق من وثائقهم الأكاديمية والموافقة على حساباتهم.',
-		'action' => 'مراجعة الحسابات',
-		'icon' => 'person_add',
-		'accent' => 'bg-primary',
-		'buttonStyle' => 'bg-primary text-on-primary hover:bg-primary-container',
-	],
-	[
-		'count' => '5',
-		'title' => 'طلبات بانتظار الرقم التسلسلي',
-		'description' => 'دراسات استوفت الشروط الأولية وتنتظر إصدار رقم تسلسلي ورمز اعتماد.',
-		'action' => 'إصدار الأرقام',
-		'icon' => '123',
-		'accent' => 'bg-surface-container-low',
-		'buttonStyle' => 'border border-charcoal text-charcoal hover:bg-surface-container',
-	],
-	[
-		'count' => '8',
-		'title' => 'طلبات جاهزة للمراجعين',
-		'description' => 'مقترحات مكتملة من الناحية الإجرائية ويمكن توزيعها على المراجعين المختصين.',
-		'action' => 'تعيين المراجعين',
-		'icon' => 'badge',
-		'accent' => 'bg-surface-container-low',
-		'buttonStyle' => 'border border-charcoal text-charcoal hover:bg-surface-container',
-	],
-];
-
-$activityItems = [
-	['label' => 'تحديث مرفقات', 'title' => 'أ. أحمد محمود قام بتحديث مستندات الدراسة IRB-2023-045', 'time' => 'قبل 15 دقيقة'],
-	['label' => 'حساب جديد', 'title' => 'طلب إنشاء حساب جديد من سارة عبد الرحمن (كلية الطب)', 'time' => 'قبل ساعتين'],
-	['label' => 'مراجعة مكتملة', 'title' => 'تم اعتماد المراجعة المبدئية للدراسة IRB-2023-042 بواسطة المسؤول الإداري', 'time' => 'أمس 14:30'],
-];
+$summaryCards = $summaryCards ?? [];
+$activityItems = $activityItems ?? [];
+$quickMetrics = $quickMetrics ?? [];
 
 ?>
 <body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
@@ -64,7 +32,7 @@ $activityItems = [
 								<h3 class="font-h1 text-lg text-charcoal"><?= htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8') ?></h3>
 								<p class="text-sm leading-7 text-slate-gray"><?= htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8') ?></p>
 							</div>
-							<a href="#" class="inline-flex items-center justify-center rounded-lg px-4 py-3 font-button text-sm transition-colors <?= htmlspecialchars($card['buttonStyle'], ENT_QUOTES, 'UTF-8') ?>">
+							<a href="<?= htmlspecialchars($card['href'], ENT_QUOTES, 'UTF-8') ?>" class="inline-flex items-center justify-center rounded-lg px-4 py-3 font-button text-sm transition-colors <?= htmlspecialchars($card['buttonStyle'], ENT_QUOTES, 'UTF-8') ?>">
 								<?= htmlspecialchars($card['action'], ENT_QUOTES, 'UTF-8') ?>
 							</a>
 						</article>
@@ -93,9 +61,9 @@ $activityItems = [
 					<div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)] p-5">
 						<h3 class="font-h1 text-lg text-charcoal mb-4">مؤشرات سريعة</h3>
 						<div class="space-y-4 text-sm">
-							<div class="flex items-center justify-between"><span class="text-slate-gray">الحسابات المفعلة</span><span class="font-button text-charcoal">84%</span></div>
-							<div class="flex items-center justify-between"><span class="text-slate-gray">الطلبات المكتملة</span><span class="font-button text-charcoal">67%</span></div>
-							<div class="flex items-center justify-between"><span class="text-slate-gray">متوسط زمن المراجعة</span><span class="font-button text-charcoal">14 يوم</span></div>
+							<?php foreach ($quickMetrics as $metric): ?>
+								<div class="flex items-center justify-between"><span class="text-slate-gray"><?= htmlspecialchars($metric['label'], ENT_QUOTES, 'UTF-8') ?></span><span class="font-button text-charcoal"><?= htmlspecialchars($metric['value'], ENT_QUOTES, 'UTF-8') ?></span></div>
+							<?php endforeach; ?>
 						</div>
 						<div class="mt-6 rounded-lg bg-slate-50 border border-slate-200 p-4">
 							<p class="text-sm leading-7 text-slate-gray">

@@ -72,7 +72,34 @@ switch ($path) {
 
     case '/admin/dashboard':
         AuthMiddleware::requireRole('admin');
-        require __DIR__ . '/../app/Views/admin/admin_dashboard.php';
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->dashboard();
+        break;
+
+    case '/admin/user-activation':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->userActivation();
+        break;
+
+    case '/admin/user-activation/activate':
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->activateUser();
+        break;
+
+    case '/admin/initial-preview-queue':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Views/admin/initial_preview_queue.php';
+        break;
+
+    case '/admin/reviewer-assignment':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Views/admin/reviewer_assignment.php';
+        break;
+
+    case '/admin/settings':
+        AuthMiddleware::requireRole('admin');
+        require __DIR__ . '/../app/Views/admin/settings.php';
         break;
 
     case '/login':

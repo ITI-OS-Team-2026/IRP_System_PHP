@@ -5,7 +5,7 @@ $adminSidebarItems = $adminSidebarItems ?? [
     ['key' => 'user_activation', 'label' => 'تنشيط الحسابات', 'icon' => 'person_add', 'href' => '/admin/user-activation'],
     ['key' => 'initial_preview', 'label' => 'المراجعة المبدئية', 'icon' => 'fact_check', 'href' => '/admin/initial-preview-queue'],
     ['key' => 'reviewer_assignment', 'label' => 'تعيين المراجعين', 'icon' => 'group_add', 'href' => '/admin/reviewer-assignment'],
-    ['key' => 'settings', 'label' => 'الإعدادات', 'icon' => 'settings', 'href' => '#'],
+    ['key' => 'settings', 'label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/admin/settings'],
 ];
 ?>
 <aside class="w-full lg:w-[260px] bg-white border-l border-slate-200 shadow-sm lg:shadow-none">
