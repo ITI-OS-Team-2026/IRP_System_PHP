@@ -118,9 +118,9 @@ function timeAgo($datetime) {
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
 <body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
-    <div class="min-h-screen flex flex-col lg:flex-row-reverse">
+    <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <aside class="w-full lg:w-[260px] bg-white border-l border-slate-200 shadow-sm lg:shadow-none">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
             <div class="p-5 border-b border-slate-200 flex items-center gap-4">
                 <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
@@ -242,9 +242,9 @@ function timeAgo($datetime) {
                                                 </td>
                                                 <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td class="px-5 py-4">
-                                                    <a href="#" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                    <a href="/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
                                                         <span class="material-symbols-outlined text-[16px]">visibility</span>
-                                                        عرض
+                                                        عرض التفاصيل
                                                     </a>
                                                 </td>
                                             </tr>

@@ -9,6 +9,11 @@ class SubmissionController {
         require __DIR__ . '/../Views/student/submission_form.php';
     }
 
+    public function show() {
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../Views/student/submission_details.php';
+    }
+
     public function store() {
         AuthMiddleware::requireRole('student');
 
