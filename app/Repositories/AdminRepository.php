@@ -82,8 +82,9 @@ class AdminRepository {
         ];
     }
 
-    public function getPendingStudentUsers($limit = 20) {
+    public function getPendingStudentUsers($limit = 20, $offset = 0) {
         $limit = (int) $limit;
+        $offset = (int) $offset;
         $sql = "SELECT
                     u.id,
                     u.full_name,
@@ -105,7 +106,7 @@ class AdminRepository {
                 FROM users u
                 WHERE u.role = 'student' AND u.is_active = 0
                 ORDER BY u.created_at DESC
-                LIMIT $limit";
+                LIMIT $limit OFFSET $offset";
 
         $result = $this->db->query($sql);
         $users = [];
@@ -117,6 +118,11 @@ class AdminRepository {
         }
 
         return $users;
+    }
+
+    public function countPendingStudentUsers() {
+        $sql = "SELECT COUNT(*) AS total FROM users WHERE role = 'student' AND is_active = 0";
+        return (int) $this->fetchOne($sql)['total'];
     }
 
     public function activateStudentUser($userId) {
@@ -138,8 +144,9 @@ class AdminRepository {
         return $stmt->insert_id;
     }
 
-    public function getInitialPreviewQueueSubmissions($limit = 25) {
+    public function getInitialPreviewQueueSubmissions($limit = 25, $offset = 0) {
         $limit = (int) $limit;
+        $offset = (int) $offset;
         $sql = "SELECT
                     rs.id,
                     rs.title,
@@ -151,7 +158,7 @@ class AdminRepository {
                 INNER JOIN users u ON u.id = rs.student_id
                 WHERE rs.status = 'submitted' AND rs.serial_number IS NULL
                 ORDER BY rs.created_at ASC
-                LIMIT $limit";
+                LIMIT $limit OFFSET $offset";
 
         $result = $this->db->query($sql);
         if (!$result) {
@@ -164,6 +171,13 @@ class AdminRepository {
         }
 
         return $items;
+    }
+
+    public function countInitialPreviewQueueSubmissions() {
+        $sql = "SELECT COUNT(*) AS total
+                FROM research_submissions
+                WHERE status = 'submitted' AND serial_number IS NULL";
+        return (int) $this->fetchOne($sql)['total'];
     }
 
     public function serialNumberExists($serialNumber) {

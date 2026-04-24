@@ -76,8 +76,16 @@ class AdminService {
         ];
     }
 
-    public function getUserActivationData() {
-        $users = $this->adminRepository->getPendingStudentUsers(25);
+    public function getUserActivationData($page = 1, $perPage = 10) {
+        $perPage = max(1, min(50, (int) $perPage));
+        $requestedPage = max(1, (int) $page);
+
+        $total = $this->adminRepository->countPendingStudentUsers();
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $currentPage = min($requestedPage, $lastPage);
+        $offset = ($currentPage - 1) * $perPage;
+
+        $users = $this->adminRepository->getPendingStudentUsers($perPage, $offset);
 
         $pendingUsers = [];
         foreach ($users as $user) {
@@ -95,8 +103,19 @@ class AdminService {
         }
 
         return [
-            'pendingCount' => count($pendingUsers),
+            'pendingCount' => $total,
             'pendingUsers' => $pendingUsers,
+            'pagination' => [
+                'currentPage' => $currentPage,
+                'perPage' => $perPage,
+                'lastPage' => $lastPage,
+                'from' => $total > 0 ? $offset + 1 : 0,
+                'to' => min($offset + count($pendingUsers), $total),
+                'hasPrevious' => $currentPage > 1,
+                'hasNext' => $currentPage < $lastPage,
+                'previousPage' => max(1, $currentPage - 1),
+                'nextPage' => min($lastPage, $currentPage + 1),
+            ],
         ];
     }
 
@@ -115,8 +134,16 @@ class AdminService {
         );
     }
 
-    public function getInitialPreviewQueueData() {
-        $rows = $this->adminRepository->getInitialPreviewQueueSubmissions(25);
+    public function getInitialPreviewQueueData($page = 1, $perPage = 10) {
+        $perPage = max(1, min(50, (int) $perPage));
+        $requestedPage = max(1, (int) $page);
+
+        $total = $this->adminRepository->countInitialPreviewQueueSubmissions();
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $currentPage = min($requestedPage, $lastPage);
+        $offset = ($currentPage - 1) * $perPage;
+
+        $rows = $this->adminRepository->getInitialPreviewQueueSubmissions($perPage, $offset);
 
         $items = [];
         foreach ($rows as $row) {
@@ -130,8 +157,19 @@ class AdminService {
         }
 
         return [
-            'queueCount' => count($items),
+            'queueCount' => $total,
             'queueItems' => $items,
+            'pagination' => [
+                'currentPage' => $currentPage,
+                'perPage' => $perPage,
+                'lastPage' => $lastPage,
+                'from' => $total > 0 ? $offset + 1 : 0,
+                'to' => min($offset + count($items), $total),
+                'hasPrevious' => $currentPage > 1,
+                'hasNext' => $currentPage < $lastPage,
+                'previousPage' => max(1, $currentPage - 1),
+                'nextPage' => min($lastPage, $currentPage + 1),
+            ],
         ];
     }
 

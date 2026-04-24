@@ -10,6 +10,17 @@ $queueCount = $queueCount ?? 0;
 $queueItems = $queueItems ?? [];
 $serialSuccessMessage = $serialSuccessMessage ?? null;
 $serialErrorMessage = $serialErrorMessage ?? null;
+$initialPreviewPagination = $initialPreviewPagination ?? [
+	'currentPage' => 1,
+	'perPage' => 10,
+	'lastPage' => 1,
+	'from' => 0,
+	'to' => 0,
+	'hasPrevious' => false,
+	'hasNext' => false,
+	'previousPage' => 1,
+	'nextPage' => 1,
+];
 ?>
 
 <body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
@@ -67,6 +78,7 @@ $serialErrorMessage = $serialErrorMessage ?? null;
 <td class="py-6 px-4 align-top">
 <form method="post" action="/admin/initial-preview-queue/assign-serial" class="flex flex-col gap-2">
 <input type="hidden" name="submission_id" value="<?= htmlspecialchars((string) $item['id'], ENT_QUOTES, 'UTF-8') ?>"/>
+<input type="hidden" name="page" value="<?= htmlspecialchars((string) $initialPreviewPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
 <label class="font-body-sm text-body-sm text-on-surface">أدخل الرقم التسلسلي (اختياري)</label>
 <div class="flex items-center gap-3">
 <input name="serial_number" class="flex-1 border border-charcoal bg-paper-white px-3 py-2 font-numeral text-numeral text-on-surface focus:outline-none focus:border-royal-indigo focus:border-2 transition-all" placeholder="IRB-<?= date('Y') ?>-0001" type="text"/>
@@ -86,10 +98,21 @@ $serialErrorMessage = $serialErrorMessage ?? null;
 </table>
 
 <div class="mt-6 flex justify-between items-center border-t border-charcoal pt-4 px-4 pb-4">
-<span class="font-body-sm text-body-sm text-slate-gray">عرض 1-<?= htmlspecialchars((string) $queueCount, ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $queueCount, ENT_QUOTES, 'UTF-8') ?> تقديمات جديدة</span>
+<span class="font-body-sm text-body-sm text-slate-gray">عرض <?= htmlspecialchars((string) $initialPreviewPagination['from'], ENT_QUOTES, 'UTF-8') ?> إلى <?= htmlspecialchars((string) $initialPreviewPagination['to'], ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $queueCount, ENT_QUOTES, 'UTF-8') ?> تقديمات جديدة</span>
 <div class="flex gap-2">
-<button class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm" disabled>السابق</button>
-<button class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm" disabled>التالي</button>
+<?php if ($initialPreviewPagination['hasPrevious']): ?>
+<a href="/admin/initial-preview-queue?page=<?= htmlspecialchars((string) $initialPreviewPagination['previousPage'], ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal px-3 py-1 text-charcoal bg-paper-white hover:bg-surface-dim font-body-sm text-body-sm">السابق</a>
+<?php else: ?>
+<span class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm">السابق</span>
+<?php endif; ?>
+
+<span class="border border-charcoal px-3 py-1 bg-royal-indigo text-on-primary font-body-sm text-body-sm font-bold"><?= htmlspecialchars((string) $initialPreviewPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?> / <?= htmlspecialchars((string) $initialPreviewPagination['lastPage'], ENT_QUOTES, 'UTF-8') ?></span>
+
+<?php if ($initialPreviewPagination['hasNext']): ?>
+<a href="/admin/initial-preview-queue?page=<?= htmlspecialchars((string) $initialPreviewPagination['nextPage'], ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal px-3 py-1 text-charcoal bg-paper-white hover:bg-surface-dim font-body-sm text-body-sm">التالي</a>
+<?php else: ?>
+<span class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm">التالي</span>
+<?php endif; ?>
 </div>
 </div>
 </div>

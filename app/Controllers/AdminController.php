@@ -22,10 +22,12 @@ class AdminController {
 
     public function userActivation() {
         AuthMiddleware::requireRole('admin');
-        $activationData = $this->adminService->getUserActivationData();
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $activationData = $this->adminService->getUserActivationData($page, 10);
 
         $pendingCount = $activationData['pendingCount'];
         $pendingUsers = $activationData['pendingUsers'];
+        $userActivationPagination = $activationData['pagination'];
 
         require __DIR__ . '/../Views/admin/user_activation.php';
     }
@@ -39,9 +41,14 @@ class AdminController {
         }
 
         $userId = (int) ($_POST['user_id'] ?? 0);
+        $page = max(1, (int) ($_POST['page'] ?? 1));
         if ($userId <= 0) {
             $_SESSION['admin_user_activation_error'] = 'معرف المستخدم غير صالح';
-            header('Location: /admin/user-activation');
+            $redirect = '/admin/user-activation';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
             exit;
         }
 
@@ -52,16 +59,23 @@ class AdminController {
             $_SESSION['admin_user_activation_error'] = $e->getMessage();
         }
 
-        header('Location: /admin/user-activation');
+        $redirect = '/admin/user-activation';
+        if ($page > 1) {
+            $redirect .= '?page=' . $page;
+        }
+
+        header('Location: ' . $redirect);
         exit;
     }
 
     public function initialPreviewQueue() {
         AuthMiddleware::requireRole('admin');
-        $queueData = $this->adminService->getInitialPreviewQueueData();
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $queueData = $this->adminService->getInitialPreviewQueueData($page, 10);
 
         $queueCount = $queueData['queueCount'];
         $queueItems = $queueData['queueItems'];
+        $initialPreviewPagination = $queueData['pagination'];
 
         $serialSuccessMessage = $_SESSION['admin_serial_success'] ?? null;
         $serialErrorMessage = $_SESSION['admin_serial_error'] ?? null;
@@ -80,6 +94,7 @@ class AdminController {
 
         $submissionId = (int) ($_POST['submission_id'] ?? 0);
         $serialInput = $_POST['serial_number'] ?? '';
+        $page = max(1, (int) ($_POST['page'] ?? 1));
 
         try {
             $serialNumber = $this->adminService->assignInitialPreviewSerialNumber(
@@ -92,7 +107,12 @@ class AdminController {
             $_SESSION['admin_serial_error'] = $e->getMessage();
         }
 
-        header('Location: /admin/initial-preview-queue');
+        $redirect = '/admin/initial-preview-queue';
+        if ($page > 1) {
+            $redirect .= '?page=' . $page;
+        }
+
+        header('Location: ' . $redirect);
         exit;
     }
 
