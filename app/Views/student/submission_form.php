@@ -3,10 +3,10 @@ $currentUser = AuthMiddleware::user();
 $pageTitle = 'تقديم بحث جديد - IRB Portal';
 
 $sidebarItems = [
-    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => false],
-    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions'],
-    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create', 'active' => true],
-    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/student/settings'],
+    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => BASE_URL . '/student/dashboard', 'active' => false],
+    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => BASE_URL . '/student/submissions'],
+    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => BASE_URL . '/student/submission/create', 'active' => true],
+    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => BASE_URL . '/student/settings'],
 ];
 
 $errorMessage = '';
@@ -51,7 +51,7 @@ if (isset($_SESSION['submission_success'])) {
             </nav>
 
             <div class="p-4 mt-auto border-t border-slate-200">
-                <a href="/logout"
+                <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
                     <span>تسجيل الخروج</span>
@@ -93,7 +93,7 @@ if (isset($_SESSION['submission_success'])) {
 
                 <!-- Form Container -->
                 <div class="mx-auto max-w-3xl rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <form id="submissionForm" method="POST" action="/student/submission/store" enctype="multipart/form-data" class="space-y-6">
+                    <form id="submissionForm" method="POST" action="<?php echo BASE_URL; ?>/student/submission/store" enctype="multipart/form-data" class="space-y-6">
                         <!-- Section 1: Research Information -->
                         <div class="px-5 md:px-8 py-6 border-b border-slate-200">
                             <h3 class="font-display-lg text-2xl font-bold text-charcoal mb-5">معلومات البحث</h3>
@@ -215,7 +215,7 @@ if (isset($_SESSION['submission_success'])) {
                                 <span class="material-symbols-outlined text-[18px]">check</span>
                                 تقديم البحث
                             </button>
-                            <a href="/student/dashboard"
+                            <a href="<?php echo BASE_URL; ?>/student/dashboard"
                                class="inline-flex items-center gap-2 bg-slate-100 text-charcoal px-6 py-2.5 rounded-lg font-button text-sm hover:bg-slate-200 transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">close</span>
                                 إلغاء

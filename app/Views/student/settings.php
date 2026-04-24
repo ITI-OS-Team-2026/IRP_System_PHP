@@ -19,7 +19,7 @@ $result = $stmt->get_result();
 $student = $result->fetch_assoc();
 
 if (!$student) {
-    header('Location: /login');
+    header('Location: ' . BASE_URL . '/login');
     exit;
 }
 
@@ -31,10 +31,10 @@ $passwordErrorMessage = $_SESSION['settings_password_error'] ?? '';
 unset($_SESSION['settings_profile_success'], $_SESSION['settings_profile_error'], $_SESSION['settings_password_success'], $_SESSION['settings_password_error']);
 
 $sidebarItems = [
-    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => false],
-    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions'],
-    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create'],
-    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/student/settings', 'active' => true],
+    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => BASE_URL . '/student/dashboard', 'active' => false],
+    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => BASE_URL . '/student/submissions'],
+    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => BASE_URL . '/student/submission/create'],
+    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => BASE_URL . '/student/settings', 'active' => true],
 ];
 ?>
 <!DOCTYPE html>
@@ -66,7 +66,7 @@ $sidebarItems = [
             </nav>
 
             <div class="p-4 mt-auto border-t border-slate-200">
-                <a href="/logout"
+                <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
                     <span>تسجيل الخروج</span>
@@ -108,7 +108,7 @@ $sidebarItems = [
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="/student/settings/update" class="p-5 space-y-5">
+                    <form method="POST" action="<?php echo BASE_URL; ?>/student/settings/update" class="p-5 space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="full_name" class="block text-sm font-button text-charcoal mb-2">الاسم الكامل <span class="text-red-600">*</span></label>
@@ -181,7 +181,7 @@ $sidebarItems = [
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="/student/settings/password" class="p-5 space-y-5">
+                    <form method="POST" action="<?php echo BASE_URL; ?>/student/settings/password" class="p-5 space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="md:col-span-2">
                                 <label for="current_password" class="block text-sm font-button text-charcoal mb-2">كلمة المرور الحالية <span class="text-red-600">*</span></label>

@@ -16,10 +16,10 @@ require __DIR__ . '/layouts/head.php';
                 بمجرد الموافقة، يمكنك تسجيل الدخول واستخدام النظام بشكل طبيعي.
             </p>
             <div class="flex flex-wrap gap-4 pt-2">
-                <a href="/login" class="inline-flex items-center justify-center rounded-full bg-royal-indigo px-6 py-3 font-button text-on-primary hover:bg-primary transition-colors">
+                <a href="<?php echo BASE_URL; ?>/login" class="inline-flex items-center justify-center rounded-full bg-royal-indigo px-6 py-3 font-button text-on-primary hover:bg-primary transition-colors">
                     العودة لتسجيل الدخول
                 </a>
-                <a href="/" class="inline-flex items-center justify-center rounded-full border border-charcoal px-6 py-3 font-button text-charcoal hover:bg-surface-container transition-colors">
+                <a href="<?php echo BASE_URL; ?>/" class="inline-flex items-center justify-center rounded-full border border-charcoal px-6 py-3 font-button text-charcoal hover:bg-surface-container transition-colors">
                     الصفحة الرئيسية
                 </a>
             </div>

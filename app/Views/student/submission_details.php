@@ -10,7 +10,7 @@ $submissionId = (int) ($_GET['id'] ?? 0);
 
 if ($submissionId <= 0) {
     $_SESSION['submission_error'] = 'المعرف غير صالح.';
-    header('Location: /student/submissions');
+    header('Location: ' . BASE_URL . '/student/submissions');
     exit;
 }
 
@@ -27,13 +27,13 @@ $submission = $submissionResult->fetch_assoc();
 
 if (!$submission) {
     $_SESSION['submission_error'] = 'لم يتم العثور على البحث المطلوب.';
-    header('Location: /student/submissions');
+    header('Location: ' . BASE_URL . '/student/submissions');
     exit;
 }
 
 if ((int) $submission['student_id'] != (int) $studentId) {
     $_SESSION['submission_error'] = 'لا يمكنك الوصول إلى تفاصيل هذا البحث.';
-    header('Location: /student/submissions');
+    header('Location: ' . BASE_URL . '/student/submissions');
     exit;
 }
 
@@ -128,10 +128,10 @@ $timelineStatusMap = [
 $currentTimelineStage = $timelineStatusMap[$submission['status']] ?? 1;
 
 $sidebarItems = [
-    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => false],
-    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions', 'active' => true],
-    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create'],
-    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/student/settings'],
+    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => BASE_URL . '/student/dashboard', 'active' => false],
+    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => BASE_URL . '/student/submissions', 'active' => true],
+    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => BASE_URL . '/student/submission/create'],
+    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => BASE_URL . '/student/settings'],
 ];
 
 function formatDateTime($datetime) {
@@ -167,7 +167,7 @@ function formatDateTime($datetime) {
             </nav>
 
             <div class="p-4 mt-auto border-t border-slate-200">
-                <a href="/logout"
+                <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
                     <span>تسجيل الخروج</span>
@@ -182,7 +182,7 @@ function formatDateTime($datetime) {
                     <p class="text-xs text-slate-gray mb-1">تفاصيل البحث</p>
                     <h2 class="font-h1 text-2xl text-charcoal"><?= htmlspecialchars($submission['title'], ENT_QUOTES, 'UTF-8') ?></h2>
                 </div>
-                <a href="/student/submissions"
+                <a href="<?php echo BASE_URL; ?>/student/submissions"
                    class="inline-flex items-center gap-2 bg-slate-100 text-charcoal px-4 py-2.5 rounded-lg font-button text-sm hover:bg-slate-200 transition-colors">
                     <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                     العودة إلى أبحاثي
@@ -227,10 +227,18 @@ function formatDateTime($datetime) {
                         <h3 class="font-h1 text-lg text-charcoal">الحالة الحالية</h3>
                     </div>
                     <div class="p-5 space-y-5">
-                        <div>
+                        <div class="flex flex-wrap items-center gap-4">
                             <span class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-button <?= htmlspecialchars($statusInfo['color'], ENT_QUOTES, 'UTF-8') ?>">
                                 <?= htmlspecialchars($statusInfo['label'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
+
+                            <?php if (in_array($submission['status'], ['admin_reviewed', 'sample_sized'])): ?>
+                                <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $submission['id'] ?>" 
+                                   class="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full font-button text-sm hover:bg-orange-600 transition-colors shadow-md">
+                                    <span class="material-symbols-outlined">payments</span>
+                                    <?= $submission['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
+                                </a>
+                            <?php endif; ?>
                         </div>
                         <div class="flex justify-center">
                             <div class="relative max-w-[500px]">
@@ -294,7 +302,7 @@ function formatDateTime($datetime) {
                                     <?php foreach ($documents as $document): ?>
                                         <?php
                                             $documentType = $documentTypeMap[$document['document_type']] ?? $document['document_type'];
-                                            $downloadPath = '/storage/' . ltrim($document['file_path'], '/');
+                                            $downloadPath = BASE_URL . '/storage/' . ltrim($document['file_path'], '/');
                                         ?>
                                         <tr class="hover:bg-slate-50 transition-colors">
                                             <td class="px-5 py-4 text-sm text-charcoal"><?= htmlspecialchars($documentType, ENT_QUOTES, 'UTF-8') ?></td>

@@ -23,11 +23,11 @@ $currentUser = AuthMiddleware::user();
 <div class="flex items-center gap-4">
 <?php if ($currentUser): ?>
 <?php if (($currentUser['role'] ?? '') === 'admin'): ?>
-<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/admin/dashboard">
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/admin/dashboard">
                 لوحة الإدارة
             </a>
 <?php else: ?>
-<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/dashboard">
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/dashboard">
                 لوحة التحكم
             </a>
 <?php endif; ?>
@@ -36,10 +36,10 @@ $currentUser = AuthMiddleware::user();
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
 <input class="bg-surface-container-low border border-charcoal focus:border-2 focus:border-royal-indigo focus:ring-0 rounded-none py-2 pr-10 pl-4 w-48 text-body-sm transition-all placeholder:text-outline focus:w-64 font-body-sm" placeholder="بحث..." type="text"/>
 </div>
-<a class="hidden md:inline-flex items-center justify-center border border-charcoal bg-paper-white text-on-surface hover:bg-surface-container px-4 py-2 font-button transition-colors" href="/register">
+<a class="hidden md:inline-flex items-center justify-center border border-charcoal bg-paper-white text-on-surface hover:bg-surface-container px-4 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/register">
                 إنشاء حساب
             </a>
-<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="/login">
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/login">
                 تسجيل الدخول
             </a>
 <?php endif; ?>
@@ -61,7 +61,7 @@ $currentUser = AuthMiddleware::user();
                     منصة رقمية موحدة لتقديم، مراجعة، وإدارة مقترحات الأبحاث العلمية وفقاً لأعلى المعايير الأخلاقية والضوابط الأكاديمية العالمية.
                 </p>
 <div class="flex flex-wrap gap-4 mt-4">
-<a href="/login" class="bg-royal-indigo text-on-primary px-8 py-3 font-button hover:bg-primary transition-colors flex items-center gap-2 inline-flex">
+<a href="<?php echo BASE_URL; ?>/login" class="bg-royal-indigo text-on-primary px-8 py-3 font-button hover:bg-primary transition-colors flex items-center gap-2 inline-flex">
 <span>بدء تقديم طلب</span>
 <span class="material-symbols-outlined text-sm">arrow_back</span>
 </a>

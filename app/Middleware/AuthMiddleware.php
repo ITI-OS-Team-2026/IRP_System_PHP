@@ -9,8 +9,20 @@ class AuthMiddleware {
 
     public static function requireLogin() {
         if (!self::isAuthenticated()) {
-            header("Location: /login");
+            header("Location: " . BASE_URL . "/login");
             exit;
+        }
+
+        // Check if user is active (Status from session)
+        if (isset($_SESSION['user_is_active']) && !((bool)$_SESSION['user_is_active'])) {
+            // Check if we are not already on the pending page to avoid loops
+            $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $pendingPath = parse_url(BASE_URL . '/pending-approval', PHP_URL_PATH);
+            
+            if ($currentPath !== $pendingPath) {
+                header("Location: " . BASE_URL . "/pending-approval");
+                exit;
+            }
         }
     }
 

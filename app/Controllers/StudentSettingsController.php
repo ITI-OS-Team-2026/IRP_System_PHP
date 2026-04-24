@@ -25,7 +25,7 @@ class StudentSettingsController {
 
         if ($fullName === '' || $phoneNumber === '' || $department === '' || $specialty === '') {
             $_SESSION['settings_profile_error'] = 'يرجى تعبئة جميع الحقول المطلوبة';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
@@ -41,14 +41,14 @@ class StudentSettingsController {
 
         if ($stmt->errno !== 0) {
             $_SESSION['settings_profile_error'] = 'حدث خطأ أثناء تحديث البيانات';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
         $_SESSION['user_name'] = $fullName;
         $_SESSION['settings_profile_success'] = 'تم تحديث البيانات بنجاح';
 
-        header('Location: /student/settings');
+        header('Location: ' . BASE_URL . '/student/settings');
         exit;
     }
 
@@ -67,19 +67,19 @@ class StudentSettingsController {
 
         if ($currentPassword === '' || $newPassword === '' || $confirmPassword === '') {
             $_SESSION['settings_password_error'] = 'يرجى تعبئة جميع حقول كلمة المرور';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
         if (strlen($newPassword) < 8) {
             $_SESSION['settings_password_error'] = 'كلمة المرور الجديدة يجب ألا تقل عن 8 أحرف';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
         if ($newPassword !== $confirmPassword) {
             $_SESSION['settings_password_error'] = 'تأكيد كلمة المرور الجديدة غير متطابق';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
@@ -97,7 +97,7 @@ class StudentSettingsController {
 
         if (!$user || !password_verify($currentPassword, $user['password_hash'])) {
             $_SESSION['settings_password_error'] = 'كلمة المرور الحالية غير صحيحة';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
@@ -113,13 +113,13 @@ class StudentSettingsController {
 
         if ($updateStmt->errno !== 0) {
             $_SESSION['settings_password_error'] = 'حدث خطأ أثناء تغيير كلمة المرور';
-            header('Location: /student/settings');
+            header('Location: ' . BASE_URL . '/student/settings');
             exit;
         }
 
         $_SESSION['settings_password_success'] = 'تم تغيير كلمة المرور بنجاح';
 
-        header('Location: /student/settings');
+        header('Location: ' . BASE_URL . '/student/settings');
         exit;
     }
 }
