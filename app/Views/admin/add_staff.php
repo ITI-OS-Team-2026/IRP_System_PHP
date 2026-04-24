@@ -42,7 +42,7 @@ $addStaffOldInput = $addStaffOldInput ?? [];
 </div>
 </div>
 
-<div class="max-w-3xl bg-white border border-charcoal rounded-xl shadow-[0_2px_12px_rgba(15,23,42,0.05)] p-6 md:p-8">
+<div class="max-w-3xl mx-auto w-full bg-white border border-charcoal rounded-xl shadow-[0_2px_12px_rgba(15,23,42,0.05)] p-6 md:p-8">
 <form method="post" action="/admin/add-staff/store" class="space-y-5">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 <div class="space-y-2">
