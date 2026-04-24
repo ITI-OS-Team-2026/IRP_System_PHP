@@ -47,6 +47,9 @@ switch ($path) {
         } elseif ($role === 'sample_size_officer') {
             header('Location: ' . BASE_URL . '/officer/sample-size/queue');
             exit;
+        } elseif ($role === 'reviewer') {
+            header('Location: ' . BASE_URL . '/reviewer/dashboard');
+            exit;
         }
         require __DIR__ . '/../app/Views/dashboard.php';
         break;
@@ -110,6 +113,31 @@ switch ($path) {
         (new SampleSizeController())->store();
         break;
 
+    // Reviewer Routes
+    case '/reviewer/dashboard':
+        AuthMiddleware::requireRole('reviewer');
+        require __DIR__ . '/../app/Controllers/ReviewerController.php';
+        (new ReviewerController())->dashboard();
+        break;
+
+    case (preg_match('/^\/reviewer\/view\/(\d+)$/', $path, $matches) ? true : false):
+        AuthMiddleware::requireRole('reviewer');
+        require __DIR__ . '/../app/Controllers/ReviewerController.php';
+        (new ReviewerController())->viewSubmission($matches[1]);
+        break;
+
+    case '/reviewer/submit-evaluation':
+        AuthMiddleware::requireRole('reviewer');
+        require __DIR__ . '/../app/Controllers/ReviewerController.php';
+        (new ReviewerController())->submitEvaluation();
+        break;
+
+    case '/reviewer/history':
+        AuthMiddleware::requireRole('reviewer');
+        require __DIR__ . '/../app/Controllers/ReviewerController.php';
+        (new ReviewerController())->history();
+        break;
+
     case '/officer/sample-size/input':
         AuthMiddleware::requireRole('officer');
         require __DIR__ . '/../app/Controllers/SampleSizeController.php';
@@ -169,6 +197,13 @@ switch ($path) {
             $_GET['id'] = (int) $matches[1];
             require __DIR__ . '/../app/Controllers/PaymentController.php';
             (new PaymentController())->showPayment();
+            break;
+        }
+
+        if (preg_match('#^/student/submission/revision/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('student');
+            require __DIR__ . '/../app/Controllers/SubmissionController.php';
+            (new SubmissionController())->submitRevision((int) $matches[1]);
             break;
         }
 

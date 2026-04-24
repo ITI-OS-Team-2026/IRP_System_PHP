@@ -41,9 +41,27 @@ CREATE TABLE IF NOT EXISTS research_documents (
         'research_file'
     ) NOT NULL,
     file_path VARCHAR(500) NOT NULL,
+    version INT NOT NULL DEFAULT 1,
+    is_current TINYINT(1) NOT NULL DEFAULT 1,
+    revision_round_id INT NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS revision_rounds (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    submission_id INT NOT NULL,
+    student_id INT NOT NULL,
+    status ENUM('submitted', 'under_review', 'closed') DEFAULT 'submitted',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    submitted_at TIMESTAMP NULL,
+    FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+ALTER TABLE research_documents
+ADD CONSTRAINT fk_research_documents_revision_round
+FOREIGN KEY (revision_round_id) REFERENCES revision_rounds(id) ON DELETE SET NULL;
 
 CREATE TABLE IF NOT EXISTS payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
