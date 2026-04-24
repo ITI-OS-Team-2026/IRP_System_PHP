@@ -97,23 +97,15 @@ $initialPreviewPagination = $initialPreviewPagination ?? [
 </tbody>
 </table>
 
-<div class="mt-6 flex justify-between items-center border-t border-charcoal pt-4 px-4 pb-4">
-<span class="font-body-sm text-body-sm text-slate-gray">عرض <?= htmlspecialchars((string) $initialPreviewPagination['from'], ENT_QUOTES, 'UTF-8') ?> إلى <?= htmlspecialchars((string) $initialPreviewPagination['to'], ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $queueCount, ENT_QUOTES, 'UTF-8') ?> تقديمات جديدة</span>
-<div class="flex gap-2">
-<?php if ($initialPreviewPagination['hasPrevious']): ?>
-<a href="/admin/initial-preview-queue?page=<?= htmlspecialchars((string) $initialPreviewPagination['previousPage'], ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal px-3 py-1 text-charcoal bg-paper-white hover:bg-surface-dim font-body-sm text-body-sm">السابق</a>
-<?php else: ?>
-<span class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm">السابق</span>
-<?php endif; ?>
-
-<span class="border border-charcoal px-3 py-1 bg-royal-indigo text-on-primary font-body-sm text-body-sm font-bold"><?= htmlspecialchars((string) $initialPreviewPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?> / <?= htmlspecialchars((string) $initialPreviewPagination['lastPage'], ENT_QUOTES, 'UTF-8') ?></span>
-
-<?php if ($initialPreviewPagination['hasNext']): ?>
-<a href="/admin/initial-preview-queue?page=<?= htmlspecialchars((string) $initialPreviewPagination['nextPage'], ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal px-3 py-1 text-charcoal bg-paper-white hover:bg-surface-dim font-body-sm text-body-sm">التالي</a>
-<?php else: ?>
-<span class="border border-charcoal px-3 py-1 text-slate-gray bg-surface-dim cursor-not-allowed font-body-sm text-body-sm">التالي</span>
-<?php endif; ?>
-</div>
+<div class="mt-6 px-4 pb-4">
+<?php
+$pagerPagination = $initialPreviewPagination;
+$pagerTotal = $queueCount;
+$pagerBasePath = '/admin/initial-preview-queue';
+$pagerQuery = [];
+$pagerItemLabel = 'تقديمات جديدة';
+require __DIR__ . '/partials/pager.php';
+?>
 </div>
 </div>
 </section>

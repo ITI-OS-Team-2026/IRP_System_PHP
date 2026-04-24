@@ -113,26 +113,14 @@ $reviewerAssignmentPagination = $reviewerAssignmentPagination ?? [
 </table>
 </div>
 
-<div class="flex justify-between items-center mt-6 border-t border-charcoal pt-4">
-<span class="font-body-sm text-body-sm text-slate-gray">عرض <?= htmlspecialchars((string) $reviewerAssignmentPagination['from'], ENT_QUOTES, 'UTF-8') ?> إلى <?= htmlspecialchars((string) $reviewerAssignmentPagination['to'], ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $reviewerAssignmentTotal, ENT_QUOTES, 'UTF-8') ?> بحث</span>
-<div class="flex gap-2">
-<?php if ($reviewerAssignmentPagination['hasPrevious']): ?>
-<a href="/admin/reviewer-assignment?<?= htmlspecialchars(http_build_query(['q' => $searchQuery, 'page' => $reviewerAssignmentPagination['previousPage']]), ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">السابق</a>
-<?php else: ?>
-<span class="border border-charcoal bg-paper-white px-3 py-1 text-charcoal font-bold text-sm opacity-50 cursor-not-allowed">السابق</span>
-<?php endif; ?>
-
-<span class="border border-charcoal bg-royal-indigo text-on-primary px-3 py-1 font-bold text-sm">
-<?= htmlspecialchars((string) $reviewerAssignmentPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?> / <?= htmlspecialchars((string) $reviewerAssignmentPagination['lastPage'], ENT_QUOTES, 'UTF-8') ?>
-</span>
-
-<?php if ($reviewerAssignmentPagination['hasNext']): ?>
-<a href="/admin/reviewer-assignment?<?= htmlspecialchars(http_build_query(['q' => $searchQuery, 'page' => $reviewerAssignmentPagination['nextPage']]), ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">التالي</a>
-<?php else: ?>
-<span class="border border-charcoal bg-paper-white px-3 py-1 text-charcoal font-bold text-sm opacity-50 cursor-not-allowed">التالي</span>
-<?php endif; ?>
-</div>
-</div>
+<?php
+$pagerPagination = $reviewerAssignmentPagination;
+$pagerTotal = $reviewerAssignmentTotal;
+$pagerBasePath = '/admin/reviewer-assignment';
+$pagerQuery = $searchQuery !== '' ? ['q' => $searchQuery] : [];
+$pagerItemLabel = 'بحث';
+require __DIR__ . '/partials/pager.php';
+?>
 </section>
 </main>
 </div>
