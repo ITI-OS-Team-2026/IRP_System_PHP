@@ -55,6 +55,21 @@ switch ($path) {
         (new SubmissionController())->store();
         break;
 
+    case '/student/settings':
+        require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
+        (new StudentSettingsController())->show();
+        break;
+
+    case '/student/settings/update':
+        require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
+        (new StudentSettingsController())->updateProfile();
+        break;
+
+    case '/student/settings/password':
+        require __DIR__ . '/../app/Controllers/StudentSettingsController.php';
+        (new StudentSettingsController())->updatePassword();
+        break;
+
     case '/admin/dashboard':
         AuthMiddleware::requireRole('admin');
         require __DIR__ . '/../app/Views/admin/admin_dashboard.php';
