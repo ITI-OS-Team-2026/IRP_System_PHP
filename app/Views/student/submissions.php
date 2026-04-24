@@ -39,10 +39,10 @@ $statusMap = [
 ];
 
 $sidebarItems = [
-    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => '/student/dashboard', 'active' => false],
-    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => '/student/submissions', 'active' => true],
-    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => '/student/submission/create'],
-    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => '/student/settings'],
+    ['label' => 'لوحة التحكم', 'icon' => 'dashboard', 'href' => BASE_URL . '/student/dashboard', 'active' => false],
+    ['label' => 'أبحاثي', 'icon' => 'science', 'href' => BASE_URL . '/student/submissions', 'active' => true],
+    ['label' => 'تقديم بحث جديد', 'icon' => 'note_add', 'href' => BASE_URL . '/student/submission/create'],
+    ['label' => 'الإعدادات', 'icon' => 'settings', 'href' => BASE_URL . '/student/settings'],
 ];
 
 function formatDate($datetime) {
@@ -79,7 +79,7 @@ function formatDate($datetime) {
             </nav>
 
             <div class="p-4 mt-auto border-t border-slate-200">
-                <a href="/logout"
+                <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
                     <span>تسجيل الخروج</span>
@@ -95,7 +95,7 @@ function formatDate($datetime) {
                     <p class="text-sm text-slate-gray">أبحاثي</p>
                     <h2 class="font-h1 text-2xl text-charcoal">أبحاثي</h2>
                 </div>
-                <a href="/student/submission/create"
+                <a href="<?php echo BASE_URL; ?>/student/submission/create"
                    class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">note_add</span>
                     تقديم بحث جديد
@@ -126,7 +126,7 @@ function formatDate($datetime) {
                             <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">science</span>
                             <p class="text-slate-gray text-lg mb-2">لا توجد أبحاث حتى الآن</p>
                             <p class="text-sm text-slate-400 mb-6">ابدأ بتقديم أول بحث لك</p>
-                            <a href="/student/submission/create"
+                            <a href="<?php echo BASE_URL; ?>/student/submission/create"
                                class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">note_add</span>
                                 تقديم بحث جديد
@@ -170,7 +170,7 @@ function formatDate($datetime) {
                                             </td>
                                             <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                             <td class="px-5 py-4">
-                                                <a href="/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
                                                     <span class="material-symbols-outlined text-[16px]">visibility</span>
                                                     عرض التفاصيل
                                                 </a>
