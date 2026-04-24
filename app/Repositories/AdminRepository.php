@@ -15,7 +15,7 @@ class AdminRepository {
     }
 
     public function countSerialQueue() {
-        $sql = "SELECT COUNT(*) AS total FROM research_submissions WHERE status = 'admin_reviewed'";
+        $sql = "SELECT COUNT(*) AS total FROM research_submissions WHERE status = 'submitted' AND serial_number IS NULL";
         return (int) $this->fetchOne($sql)['total'];
     }
 
@@ -136,6 +136,73 @@ class AdminRepository {
         $stmt->execute();
 
         return $stmt->insert_id;
+    }
+
+    public function getInitialPreviewQueueSubmissions($limit = 25) {
+        $limit = (int) $limit;
+        $sql = "SELECT
+                    rs.id,
+                    rs.title,
+                    rs.created_at,
+                    u.full_name,
+                    u.department,
+                    u.specialty
+                FROM research_submissions rs
+                INNER JOIN users u ON u.id = rs.student_id
+                WHERE rs.status = 'submitted' AND rs.serial_number IS NULL
+                ORDER BY rs.created_at ASC
+                LIMIT $limit";
+
+        $result = $this->db->query($sql);
+        if (!$result) {
+            throw new Exception('Failed to fetch initial preview queue: ' . $this->db->error);
+        }
+
+        $items = [];
+        while ($row = $result->fetch_assoc()) {
+            $items[] = $row;
+        }
+
+        return $items;
+    }
+
+    public function serialNumberExists($serialNumber) {
+        $stmt = $this->db->prepare("SELECT id FROM research_submissions WHERE serial_number = ? LIMIT 1");
+        $stmt->bind_param('s', $serialNumber);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return (bool) $result->fetch_assoc();
+    }
+
+    public function getMaxSerialSequenceByYear($year) {
+        $prefix = 'IRB-' . $year . '-%';
+        $stmt = $this->db->prepare(
+            "SELECT MAX(CAST(SUBSTRING_INDEX(serial_number, '-', -1) AS UNSIGNED)) AS max_seq
+             FROM research_submissions
+             WHERE serial_number LIKE ?"
+        );
+        $stmt->bind_param('s', $prefix);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return (int) ($row['max_seq'] ?? 0);
+    }
+
+    public function assignSerialNumberToSubmission($submissionId, $serialNumber) {
+        $submissionId = (int) $submissionId;
+        $stmt = $this->db->prepare(
+            "UPDATE research_submissions
+             SET serial_number = ?, status = 'admin_reviewed'
+             WHERE id = ? AND status = 'submitted' AND serial_number IS NULL
+             LIMIT 1"
+        );
+        $stmt->bind_param('si', $serialNumber, $submissionId);
+        $stmt->execute();
+
+        return $stmt->affected_rows > 0;
     }
 
     private function fetchOne($sql) {

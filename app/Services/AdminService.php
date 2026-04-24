@@ -115,6 +115,56 @@ class AdminService {
         );
     }
 
+    public function getInitialPreviewQueueData() {
+        $rows = $this->adminRepository->getInitialPreviewQueueSubmissions(25);
+
+        $items = [];
+        foreach ($rows as $row) {
+            $items[] = [
+                'id' => (int) $row['id'],
+                'researcher_name' => (string) $row['full_name'],
+                'researcher_department' => $this->buildDepartmentLabel($row),
+                'title' => (string) $row['title'],
+                'created_at' => $this->formatDate($row['created_at'] ?? null),
+            ];
+        }
+
+        return [
+            'queueCount' => count($items),
+            'queueItems' => $items,
+        ];
+    }
+
+    public function assignInitialPreviewSerialNumber($submissionId, $serialInput, $adminUserId = null) {
+        $submissionId = (int) $submissionId;
+        if ($submissionId <= 0) {
+            throw new Exception('معرف الطلب غير صالح.');
+        }
+
+        $serialNumber = $this->normalizeSerialNumber($serialInput);
+        if ($serialNumber === '') {
+            $serialNumber = $this->generateUniqueSerialNumber();
+        }
+
+        if ($this->adminRepository->serialNumberExists($serialNumber)) {
+            throw new Exception('الرقم التسلسلي مستخدم بالفعل. يرجى إدخال رقم مختلف.');
+        }
+
+        $updated = $this->adminRepository->assignSerialNumberToSubmission($submissionId, $serialNumber);
+        if (!$updated) {
+            throw new Exception('تعذر تحديث الطلب. ربما تم تحديثه مسبقاً بواسطة مسؤول آخر.');
+        }
+
+        $this->adminRepository->logAction(
+            'serial_number_assigned',
+            'تم إصدار رقم تسلسلي للطلب: ' . $serialNumber,
+            $adminUserId !== null ? (int) $adminUserId : null,
+            $submissionId
+        );
+
+        return $serialNumber;
+    }
+
     private function buildDepartmentLabel(array $user) {
         $department = trim((string) ($user['department'] ?? ''));
         $specialty = trim((string) ($user['specialty'] ?? ''));
@@ -166,6 +216,34 @@ class AdminService {
         }
 
         return date('Y-m-d', strtotime($timestamp));
+    }
+
+    private function normalizeSerialNumber($serialInput) {
+        $serial = strtoupper(trim((string) $serialInput));
+        if ($serial === '') {
+            return '';
+        }
+
+        if (!preg_match('/^IRB-\d{4}-\d{4}$/', $serial)) {
+            throw new Exception('صيغة الرقم التسلسلي غير صحيحة. استخدم الصيغة: IRB-YYYY-0001');
+        }
+
+        return $serial;
+    }
+
+    private function generateUniqueSerialNumber() {
+        $year = date('Y');
+        $sequence = $this->adminRepository->getMaxSerialSequenceByYear($year) + 1;
+
+        while ($sequence < 999999) {
+            $candidate = 'IRB-' . $year . '-' . str_pad((string) $sequence, 4, '0', STR_PAD_LEFT);
+            if (!$this->adminRepository->serialNumberExists($candidate)) {
+                return $candidate;
+            }
+            $sequence++;
+        }
+
+        throw new Exception('تعذر إنشاء رقم تسلسلي فريد. يرجى المحاولة لاحقاً.');
     }
 
     private function mapActivityLabel($action) {

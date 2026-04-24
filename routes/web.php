@@ -89,7 +89,13 @@ switch ($path) {
 
     case '/admin/initial-preview-queue':
         AuthMiddleware::requireRole('admin');
-        require __DIR__ . '/../app/Views/admin/initial_preview_queue.php';
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->initialPreviewQueue();
+        break;
+
+    case '/admin/initial-preview-queue/assign-serial':
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->assignInitialPreviewSerial();
         break;
 
     case '/admin/reviewer-assignment':

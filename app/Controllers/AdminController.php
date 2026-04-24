@@ -55,4 +55,44 @@ class AdminController {
         header('Location: /admin/user-activation');
         exit;
     }
+
+    public function initialPreviewQueue() {
+        AuthMiddleware::requireRole('admin');
+        $queueData = $this->adminService->getInitialPreviewQueueData();
+
+        $queueCount = $queueData['queueCount'];
+        $queueItems = $queueData['queueItems'];
+
+        $serialSuccessMessage = $_SESSION['admin_serial_success'] ?? null;
+        $serialErrorMessage = $_SESSION['admin_serial_error'] ?? null;
+        unset($_SESSION['admin_serial_success'], $_SESSION['admin_serial_error']);
+
+        require __DIR__ . '/../Views/admin/initial_preview_queue.php';
+    }
+
+    public function assignInitialPreviewSerial() {
+        AuthMiddleware::requireRole('admin');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            die('Method not allowed');
+        }
+
+        $submissionId = (int) ($_POST['submission_id'] ?? 0);
+        $serialInput = $_POST['serial_number'] ?? '';
+
+        try {
+            $serialNumber = $this->adminService->assignInitialPreviewSerialNumber(
+                $submissionId,
+                $serialInput,
+                isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null
+            );
+            $_SESSION['admin_serial_success'] = 'تم حفظ الرقم التسلسلي بنجاح: ' . $serialNumber;
+        } catch (Throwable $e) {
+            $_SESSION['admin_serial_error'] = $e->getMessage();
+        }
+
+        header('Location: /admin/initial-preview-queue');
+        exit;
+    }
 }
