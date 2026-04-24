@@ -205,8 +205,9 @@ class AdminRepository {
         return $stmt->affected_rows > 0;
     }
 
-    public function getReviewerAssignmentSubmissions($search = '', $limit = 30) {
+    public function getReviewerAssignmentSubmissions($search = '', $limit = 30, $offset = 0) {
         $limit = (int) $limit;
+        $offset = (int) $offset;
         $search = trim((string) $search);
 
         $where = "rs.status = 'fully_paid' AND rs.serial_number IS NOT NULL";
@@ -236,7 +237,7 @@ class AdminRepository {
                 LEFT JOIN users ru ON ru.id = rv.reviewer_id
                 WHERE $where
                 ORDER BY rs.created_at DESC
-                LIMIT $limit";
+                LIMIT $limit OFFSET $offset";
 
         $stmt = $this->db->prepare($sql);
         if ($types !== '') {
@@ -285,6 +286,18 @@ class AdminRepository {
         $row = $result->fetch_assoc();
 
         return (int) ($row['total'] ?? 0);
+    }
+
+    public function getAssignedReviewerIdForSubmission($submissionId) {
+        $submissionId = (int) $submissionId;
+        $stmt = $this->db->prepare("SELECT reviewer_id FROM reviews WHERE submission_id = ? LIMIT 1");
+        $stmt->bind_param('i', $submissionId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row ? (int) $row['reviewer_id'] : null;
     }
 
     public function getReviewers() {

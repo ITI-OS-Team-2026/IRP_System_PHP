@@ -165,10 +165,17 @@ class AdminService {
         return $serialNumber;
     }
 
-    public function getReviewerAssignmentData($search = '') {
+    public function getReviewerAssignmentData($search = '', $page = 1, $perPage = 10) {
         $search = trim((string) $search);
-        $submissions = $this->adminRepository->getReviewerAssignmentSubmissions($search, 30);
+
+        $perPage = max(1, min(50, (int) $perPage));
+        $requestedPage = max(1, (int) $page);
         $total = $this->adminRepository->countReviewerAssignmentSubmissions($search);
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $currentPage = min($requestedPage, $lastPage);
+        $offset = ($currentPage - 1) * $perPage;
+
+        $submissions = $this->adminRepository->getReviewerAssignmentSubmissions($search, $perPage, $offset);
         $reviewers = $this->adminRepository->getReviewers();
 
         $normalizedSubmissions = [];
@@ -197,6 +204,17 @@ class AdminService {
             'totalCount' => $total,
             'submissions' => $normalizedSubmissions,
             'reviewers' => $normalizedReviewers,
+            'pagination' => [
+                'currentPage' => $currentPage,
+                'perPage' => $perPage,
+                'lastPage' => $lastPage,
+                'from' => $total > 0 ? $offset + 1 : 0,
+                'to' => min($offset + count($normalizedSubmissions), $total),
+                'hasPrevious' => $currentPage > 1,
+                'hasNext' => $currentPage < $lastPage,
+                'previousPage' => max(1, $currentPage - 1),
+                'nextPage' => min($lastPage, $currentPage + 1),
+            ],
         ];
     }
 
@@ -214,6 +232,11 @@ class AdminService {
 
         if (!$this->adminRepository->reviewerExists($reviewerId)) {
             throw new Exception('المراجع المختار غير متاح.');
+        }
+
+        $assignedReviewerId = $this->adminRepository->getAssignedReviewerIdForSubmission($submissionId);
+        if ($assignedReviewerId !== null && $assignedReviewerId === $reviewerId) {
+            throw new Exception('هذا المراجع معين بالفعل لهذا البحث.');
         }
 
         $mode = $this->adminRepository->upsertReviewerAssignment($submissionId, $reviewerId);

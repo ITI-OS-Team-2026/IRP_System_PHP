@@ -100,12 +100,14 @@ class AdminController {
         AuthMiddleware::requireRole('admin');
 
         $search = trim((string) ($_GET['q'] ?? ''));
-        $data = $this->adminService->getReviewerAssignmentData($search);
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $data = $this->adminService->getReviewerAssignmentData($search, $page, 10);
 
         $searchQuery = $data['search'];
         $reviewerAssignmentTotal = $data['totalCount'];
         $reviewerAssignmentRows = $data['submissions'];
         $reviewerOptions = $data['reviewers'];
+        $reviewerAssignmentPagination = $data['pagination'];
 
         $reviewerAssignmentSuccess = $_SESSION['admin_reviewer_assignment_success'] ?? null;
         $reviewerAssignmentError = $_SESSION['admin_reviewer_assignment_error'] ?? null;
@@ -141,8 +143,18 @@ class AdminController {
 
         $redirect = '/admin/reviewer-assignment';
         $q = trim((string) ($_POST['q'] ?? ''));
+        $page = max(1, (int) ($_POST['page'] ?? 1));
+
+        $queryParams = [];
         if ($q !== '') {
-            $redirect .= '?q=' . urlencode($q);
+            $queryParams['q'] = $q;
+        }
+        if ($page > 1) {
+            $queryParams['page'] = $page;
+        }
+
+        if (!empty($queryParams)) {
+            $redirect .= '?' . http_build_query($queryParams);
         }
 
         header('Location: ' . $redirect);

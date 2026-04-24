@@ -12,6 +12,17 @@ $reviewerAssignmentRows = $reviewerAssignmentRows ?? [];
 $reviewerOptions = $reviewerOptions ?? [];
 $reviewerAssignmentSuccess = $reviewerAssignmentSuccess ?? null;
 $reviewerAssignmentError = $reviewerAssignmentError ?? null;
+$reviewerAssignmentPagination = $reviewerAssignmentPagination ?? [
+	'currentPage' => 1,
+	'perPage' => 10,
+	'lastPage' => 1,
+	'from' => 0,
+	'to' => 0,
+	'hasPrevious' => false,
+	'hasNext' => false,
+	'previousPage' => 1,
+	'nextPage' => 1,
+];
 ?>
 
 <body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
@@ -72,6 +83,7 @@ $reviewerAssignmentError = $reviewerAssignmentError ?? null;
 <form method="post" action="/admin/reviewer-assignment/save" class="flex items-center gap-3">
 <input type="hidden" name="submission_id" value="<?= htmlspecialchars((string) $row['id'], ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="q" value="<?= htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') ?>"/>
+<input type="hidden" name="page" value="<?= htmlspecialchars((string) $reviewerAssignmentPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
 <div class="relative flex-1">
 <select name="reviewer_id" class="w-full appearance-none bg-paper-white border border-charcoal focus:border-royal-indigo focus:border-2 focus:ring-0 py-2 pl-8 pr-3 font-body-sm text-body-sm outline-none cursor-pointer" required>
 <option value="" <?= $row['reviewer_id'] === null ? 'selected' : '' ?> disabled>اختر مراجعاً...</option>
@@ -102,13 +114,23 @@ $reviewerAssignmentError = $reviewerAssignmentError ?? null;
 </div>
 
 <div class="flex justify-between items-center mt-6 border-t border-charcoal pt-4">
-<span class="font-body-sm text-body-sm text-slate-gray">عرض 1 إلى <?= htmlspecialchars((string) count($reviewerAssignmentRows), ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $reviewerAssignmentTotal, ENT_QUOTES, 'UTF-8') ?> بحث</span>
+<span class="font-body-sm text-body-sm text-slate-gray">عرض <?= htmlspecialchars((string) $reviewerAssignmentPagination['from'], ENT_QUOTES, 'UTF-8') ?> إلى <?= htmlspecialchars((string) $reviewerAssignmentPagination['to'], ENT_QUOTES, 'UTF-8') ?> من أصل <?= htmlspecialchars((string) $reviewerAssignmentTotal, ENT_QUOTES, 'UTF-8') ?> بحث</span>
 <div class="flex gap-2">
-<button class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed" disabled>السابق</button>
-<button class="border border-charcoal bg-royal-indigo text-on-primary px-3 py-1 font-bold text-sm">1</button>
-<button class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">2</button>
-<button class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">3</button>
-<button class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">التالي</button>
+<?php if ($reviewerAssignmentPagination['hasPrevious']): ?>
+<a href="/admin/reviewer-assignment?<?= htmlspecialchars(http_build_query(['q' => $searchQuery, 'page' => $reviewerAssignmentPagination['previousPage']]), ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">السابق</a>
+<?php else: ?>
+<span class="border border-charcoal bg-paper-white px-3 py-1 text-charcoal font-bold text-sm opacity-50 cursor-not-allowed">السابق</span>
+<?php endif; ?>
+
+<span class="border border-charcoal bg-royal-indigo text-on-primary px-3 py-1 font-bold text-sm">
+<?= htmlspecialchars((string) $reviewerAssignmentPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?> / <?= htmlspecialchars((string) $reviewerAssignmentPagination['lastPage'], ENT_QUOTES, 'UTF-8') ?>
+</span>
+
+<?php if ($reviewerAssignmentPagination['hasNext']): ?>
+<a href="/admin/reviewer-assignment?<?= htmlspecialchars(http_build_query(['q' => $searchQuery, 'page' => $reviewerAssignmentPagination['nextPage']]), ENT_QUOTES, 'UTF-8') ?>" class="border border-charcoal bg-paper-white px-3 py-1 hover:bg-surface-dim transition-colors text-charcoal font-bold text-sm">التالي</a>
+<?php else: ?>
+<span class="border border-charcoal bg-paper-white px-3 py-1 text-charcoal font-bold text-sm opacity-50 cursor-not-allowed">التالي</span>
+<?php endif; ?>
 </div>
 </div>
 </section>
