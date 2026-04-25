@@ -426,6 +426,7 @@ class AdminRepository {
     public function upsertReviewerAssignment($submissionId, $reviewerId) {
         $submissionId = (int) $submissionId;
         $reviewerId = (int) $reviewerId;
+        $mode = 'created';
 
         $stmt = $this->db->prepare("SELECT id FROM reviews WHERE submission_id = ? LIMIT 1");
         $stmt->bind_param('i', $submissionId);
@@ -442,18 +443,22 @@ class AdminRepository {
             );
             $update->bind_param('ii', $reviewerId, $reviewId);
             $update->execute();
-
-            return 'updated';
+            $mode = 'updated';
+        } else {
+            $insert = $this->db->prepare(
+                "INSERT INTO reviews (submission_id, reviewer_id, review_status)
+                 VALUES (?, ?, 'pending')"
+            );
+            $insert->bind_param('ii', $submissionId, $reviewerId);
+            $insert->execute();
         }
 
-        $insert = $this->db->prepare(
-            "INSERT INTO reviews (submission_id, reviewer_id, review_status)
-             VALUES (?, ?, 'pending')"
-        );
-        $insert->bind_param('ii', $submissionId, $reviewerId);
-        $insert->execute();
+        // Assignment marks the submission as actively under review.
+        $updateSubmission = $this->db->prepare("UPDATE research_submissions SET status = 'under_review' WHERE id = ? LIMIT 1");
+        $updateSubmission->bind_param('i', $submissionId);
+        $updateSubmission->execute();
 
-        return 'created';
+        return $mode;
     }
 
     private function fetchOne($sql) {

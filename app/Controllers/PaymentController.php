@@ -95,23 +95,13 @@ class PaymentController {
             $payStmt->bind_param('isds', $id, $paymentType, $amount, $receiptUrl);
             $payStmt->execute();
             
-            // 2. Update Research Status
-            $newStatus = ($paymentType === 'initial') ? 'initial_paid' : 'under_review';
+            // 2. Update research status based on payment stage.
+            $newStatus = ($paymentType === 'initial') ? 'initial_paid' : 'fully_paid';
             $updateStmt = $db->prepare("UPDATE research_submissions SET status = ? WHERE id = ?");
             $updateStmt->bind_param('si', $newStatus, $id);
             $updateStmt->execute();
-
-            // 3. Automatic Reviewer Assignment (If fully paid/sample_sized)
-            if ($paymentType === 'sample_size') {
-                $revQuery = $db->query("SELECT id FROM users WHERE role = 'reviewer' AND is_active = 1");
-                $reviewStmt = $db->prepare("INSERT INTO reviews (submission_id, reviewer_id, review_status) VALUES (?, ?, 'pending')");
-                while ($reviewer = $revQuery->fetch_assoc()) {
-                    $reviewStmt->bind_param('ii', $id, $reviewer['id']);
-                    $reviewStmt->execute();
-                }
-            }
             
-            // 4. Log Action
+            // 3. Log Action
             $logAction = 'payment_confirmed';
             $details = "تم تأكيد دفع " . ($paymentType === 'initial' ? 'الرسوم الأولية' : 'رسوم العينة') . " بمبلغ " . $amount . " ج.م";
             $logStmt = $db->prepare("INSERT INTO system_logs (user_id, submission_id, action, details) 
