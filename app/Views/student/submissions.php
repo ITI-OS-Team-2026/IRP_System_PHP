@@ -7,6 +7,8 @@ $db = Database::getConnection();
 
 $studentId = (int) $_SESSION['user_id'];
 $errorMessage = '';
+$hasCertificatesTableResult = $db->query("SHOW TABLES LIKE 'certificates'");
+$hasCertificatesTable = $hasCertificatesTableResult instanceof mysqli_result && $hasCertificatesTableResult->num_rows > 0;
 
 if (isset($_SESSION['submission_error'])) {
     $errorMessage = $_SESSION['submission_error'];
@@ -14,12 +16,24 @@ if (isset($_SESSION['submission_error'])) {
 }
 
 // Fetch all submissions for this student
-$submissionsResult = $db->query(
-    "SELECT id, title, principal_investigator, serial_number, status, created_at
-     FROM research_submissions
-     WHERE student_id = $studentId
-     ORDER BY created_at DESC"
-);
+if ($hasCertificatesTable) {
+    $submissionsResult = $db->query(
+        "SELECT rs.id, rs.title, rs.principal_investigator, rs.serial_number, rs.status, rs.created_at,
+                c.certificate_number
+         FROM research_submissions rs
+         LEFT JOIN certificates c ON c.submission_id = rs.id
+         WHERE rs.student_id = $studentId
+         ORDER BY rs.created_at DESC"
+    );
+} else {
+    $submissionsResult = $db->query(
+        "SELECT rs.id, rs.title, rs.principal_investigator, rs.serial_number, rs.status, rs.created_at,
+                NULL AS certificate_number
+         FROM research_submissions rs
+         WHERE rs.student_id = $studentId
+         ORDER BY rs.created_at DESC"
+    );
+}
 
 $submissions = [];
 while ($row = $submissionsResult->fetch_assoc()) {
@@ -181,6 +195,15 @@ function formatDate($datetime) {
                                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-orange-500 text-white rounded text-xs font-button hover:bg-orange-600 transition-colors w-fit">
                                                             <span class="material-symbols-outlined text-[14px]">payments</span>
                                                             <?= $sub['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
+                                                        </a>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($sub['status'] === 'approved' && !empty($sub['certificate_number'])): ?>
+                                                        <a href="<?php echo BASE_URL; ?>/certificate/download/<?= (int) $sub['id'] ?>"
+                                                           target="_blank"
+                                                           class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded text-xs font-button hover:bg-green-700 transition-colors w-fit">
+                                                            <span class="material-symbols-outlined text-[14px]">workspace_premium</span>
+                                                            تحميل الشهادة
                                                         </a>
                                                     <?php endif; ?>
                                                 </div>
