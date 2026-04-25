@@ -1,5 +1,4 @@
 RewriteEngine On
-RewriteBase /ITI/IRP_System_PHP/public/
 
 # Redirect all requests to index.php if the file/dir doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
