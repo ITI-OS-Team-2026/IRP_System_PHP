@@ -69,8 +69,14 @@ CREATE TABLE IF NOT EXISTS payments (
     payment_type ENUM('initial', 'sample_size') NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    paymob_order_id BIGINT NULL,
+    paymob_transaction_id BIGINT NULL,
+    payment_method VARCHAR(50) NULL,
+    failure_reason VARCHAR(500) NULL,
     receipt_url VARCHAR(500),
     transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_paymob_order_id (paymob_order_id),
+    INDEX idx_paymob_transaction_id (paymob_transaction_id),
     FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE
 );
 
