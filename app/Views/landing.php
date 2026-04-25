@@ -101,6 +101,116 @@ if ($currentUser) {
 <div class="absolute inset-0 border-[0.5px] border-charcoal opacity-20 m-12 pointer-events-none"></div>
 </div>
 </section>
+<!-- Added Sections -->
+<section class="flex flex-col gap-8 border-b border-outline-variant pb-section-stack">
+<div class="flex justify-between items-end border-b border-charcoal pb-4">
+<h2 class="font-h1 text-charcoal">كيف تسير العملية؟</h2>
+<a class="font-button text-royal-indigo hover:underline" href="#">عرض المسار الكامل</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="border border-charcoal bg-paper-white p-5">
+<p class="font-numeral text-2xl text-royal-indigo">01</p>
+<h3 class="font-h1 text-charcoal mt-2 mb-1">إنشاء الحساب</h3>
+<p class="font-body-sm text-on-surface-variant">تسجيل الباحث وتفعيل الحساب.</p>
+</div>
+<div class="border border-charcoal bg-paper-white p-5">
+<p class="font-numeral text-2xl text-royal-indigo">02</p>
+<h3 class="font-h1 text-charcoal mt-2 mb-1">رفع المستندات</h3>
+<p class="font-body-sm text-on-surface-variant">إرفاق النماذج المطلوبة والتأكد من اكتمالها.</p>
+</div>
+<div class="border border-charcoal bg-paper-white p-5">
+<p class="font-numeral text-2xl text-royal-indigo">03</p>
+<h3 class="font-h1 text-charcoal mt-2 mb-1">المراجعة الأخلاقية</h3>
+<p class="font-body-sm text-on-surface-variant">تقييم البحث من المراجعين واللجنة المختصة.</p>
+</div>
+<div class="border border-charcoal bg-paper-white p-5">
+<p class="font-numeral text-2xl text-royal-indigo">04</p>
+<h3 class="font-h1 text-charcoal mt-2 mb-1">القرار النهائي</h3>
+<p class="font-body-sm text-on-surface-variant">اعتماد، طلب تعديل، أو إصدار الشهادة الرقمية.</p>
+</div>
+</div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-outline-variant pb-section-stack">
+<div class="border border-charcoal bg-paper-white p-6">
+<h2 class="font-h1 text-charcoal mb-4">قائمة المستندات الأساسية</h2>
+<ul class="space-y-3 font-body-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-royal-indigo text-sm">check_circle</span> بروتوكول البحث (Protocol)</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-royal-indigo text-sm">check_circle</span> نموذج طلب المراجعة</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-royal-indigo text-sm">check_circle</span> تعارض المصالح</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-royal-indigo text-sm">check_circle</span> موافقة الباحث الرئيسي</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-royal-indigo text-sm">check_circle</span> نماذج موافقة المشاركين (حسب نوع البحث)</li>
+</ul>
+<a href="<?php echo BASE_URL; ?>/register" class="inline-flex mt-5 border border-charcoal bg-cool-slate text-charcoal px-5 py-2 font-button hover:bg-surface-container-low transition-colors">ابدأ التجهيز الآن</a>
+</div>
+<div class="border border-charcoal bg-cool-slate p-6">
+<h2 class="font-h1 text-charcoal mb-4">الامتثال والمعايير</h2>
+<p class="font-body-sm text-on-surface-variant mb-4">جميع إجراءات المنصة مبنية على مبادئ النزاهة البحثية وحماية المشاركين والشفافية في التقييم.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-body-sm">
+<div class="border border-charcoal bg-paper-white px-4 py-3">الموافقة المستنيرة</div>
+<div class="border border-charcoal bg-paper-white px-4 py-3">سرية البيانات</div>
+<div class="border border-charcoal bg-paper-white px-4 py-3">تقييم المخاطر</div>
+<div class="border border-charcoal bg-paper-white px-4 py-3">المساءلة المؤسسية</div>
+</div>
+</div>
+</section>
+
+<section class="border-b border-outline-variant pb-section-stack">
+<div class="flex justify-between items-end border-b border-charcoal pb-4 mb-6">
+<h2 class="font-h1 text-charcoal">آراء وتجارب الباحثين</h2>
+<a class="font-button text-royal-indigo hover:underline" href="#">عرض المزيد</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<article class="border border-charcoal bg-paper-white p-5">
+<p class="font-body-sm text-on-surface-variant">"خطوات واضحة وسريعة، وتمكنت من تتبع حالة الطلب بسهولة حتى الاعتماد النهائي."</p>
+<p class="font-button text-charcoal mt-4">د. سارة محمود</p>
+<p class="text-xs text-slate-gray">كلية الطب</p>
+</article>
+<article class="border border-charcoal bg-paper-white p-5">
+<p class="font-body-sm text-on-surface-variant">"إدارة المراجعات والتعديلات أصبحت أكثر تنظيمًا، خصوصًا مع السجل الكامل لكل نسخة."</p>
+<p class="font-button text-charcoal mt-4">د. أحمد ياسر</p>
+<p class="text-xs text-slate-gray">كلية الصيدلة</p>
+</article>
+<article class="border border-charcoal bg-paper-white p-5">
+<p class="font-body-sm text-on-surface-variant">"التواصل مع اللجنة وتحديثات الحالة الفورية خففت وقت الانتظار بشكل كبير."</p>
+<p class="font-button text-charcoal mt-4">د. منى فوزي</p>
+<p class="text-xs text-slate-gray">كلية التمريض</p>
+</article>
+</div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-outline-variant pb-section-stack">
+<div class="border border-charcoal bg-paper-white p-6">
+<h2 class="font-h1 text-charcoal mb-4">الأسئلة الشائعة</h2>
+<div class="space-y-3">
+<details class="border border-outline-variant p-4">
+<summary class="font-button text-charcoal cursor-pointer">كم تستغرق المراجعة عادة؟</summary>
+<p class="font-body-sm text-on-surface-variant mt-2">تختلف المدة حسب نوع البحث واكتمال المستندات، وغالبًا تبدأ المراجعة فور استيفاء الرسوم والمتطلبات.</p>
+</details>
+<details class="border border-outline-variant p-4">
+<summary class="font-button text-charcoal cursor-pointer">هل يمكن تعديل الملفات بعد طلب التعديل؟</summary>
+<p class="font-body-sm text-on-surface-variant mt-2">نعم، يمكنك رفع نسخة تعديل جديدة وسيتم تحويل الطلب تلقائيًا إلى دورة مراجعة جديدة.</p>
+</details>
+<details class="border border-outline-variant p-4">
+<summary class="font-button text-charcoal cursor-pointer">ما هي المستندات الإلزامية؟</summary>
+<p class="font-body-sm text-on-surface-variant mt-2">يعتمد ذلك على نوع الدراسة، لكن القائمة الأساسية موضحة في قسم المستندات أعلى الصفحة.</p>
+</details>
+</div>
+</div>
+<div class="border border-charcoal bg-cool-slate p-6">
+<h2 class="font-h1 text-charcoal mb-4">الدعم والتواصل</h2>
+<p class="font-body-sm text-on-surface-variant mb-5">فريق الدعم متاح لمساعدتك في التسجيل، رفع الملفات، ومتابعة حالة الطلب.</p>
+<div class="space-y-3 font-body-sm text-charcoal">
+<p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">mail</span> irb-support@university.edu</p>
+<p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">call</span> +20 100 000 0000</p>
+<p class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">schedule</span> الأحد - الخميس | 9:00 ص - 3:00 م</p>
+</div>
+<div class="mt-5 flex flex-wrap gap-3">
+<a href="<?php echo BASE_URL; ?>/login" class="bg-royal-indigo text-on-primary px-5 py-2 font-button hover:bg-primary transition-colors inline-flex">تسجيل الدخول</a>
+<a href="<?php echo BASE_URL; ?>/register" class="border border-charcoal bg-paper-white text-charcoal px-5 py-2 font-button hover:bg-surface-container-low transition-colors inline-flex">إنشاء حساب</a>
+</div>
+</div>
+</section>
 <!-- Workflow Section (Bento Grid Style) -->
 <section class="flex flex-col gap-8">
 <div class="flex justify-between items-end border-b border-charcoal pb-4">
