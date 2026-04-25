@@ -59,9 +59,8 @@ $userActivationPagination = $userActivationPagination ?? [
 <tr>
 <th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal">الاسم</th>
 <th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal">الكلية/القسم</th>
-<th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal">المستندات</th>
 <th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal">تاريخ التسجيل</th>
-<th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal">الحالة</th>
+<th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal w-36 text-center">بطاقة</th>
 <th class="py-4 px-6 font-button text-button text-charcoal border-b border-charcoal w-40 text-center">الإجراءات</th>
 </tr>
 </thead>
@@ -70,12 +69,18 @@ $userActivationPagination = $userActivationPagination ?? [
 <tr class="border-b border-charcoal hover:bg-surface-bright transition-colors duration-150">
 <td class="py-5 px-6 font-body-lg text-body-lg"><?= htmlspecialchars($user['full_name'], ENT_QUOTES, 'UTF-8') ?></td>
 <td class="py-5 px-6"><?= htmlspecialchars($user['department'], ENT_QUOTES, 'UTF-8') ?></td>
-<td class="py-5 px-6">
-<div class="text-sm text-charcoal"><?= htmlspecialchars((string) $user['document_count'], ENT_QUOTES, 'UTF-8') ?> مستندات</div>
-<div class="text-xs text-slate-gray mt-1"><?= htmlspecialchars((string) $user['submission_count'], ENT_QUOTES, 'UTF-8') ?> تقديمات مرتبطة</div>
-</td>
 <td class="py-5 px-6 font-numeral text-numeral text-slate-gray"><?= htmlspecialchars($user['created_at'], ENT_QUOTES, 'UTF-8') ?></td>
-<td class="py-5 px-6"><span class="inline-block px-3 py-1 text-[11px] font-bold tracking-widest border border-charcoal text-charcoal bg-paper-white"><?= htmlspecialchars($user['status_label'], ENT_QUOTES, 'UTF-8') ?></span></td>
+<td class="py-5 px-6 text-center">
+<button
+	type="button"
+	class="js-open-id-modal bg-paper-white text-charcoal font-button text-button px-4 py-2 border border-charcoal hover:bg-surface-bright transition-colors"
+	data-student-name="<?= htmlspecialchars((string) $user['full_name'], ENT_QUOTES, 'UTF-8') ?>"
+	data-front-path="<?= htmlspecialchars((string) ($user['id_front_path'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+	data-back-path="<?= htmlspecialchars((string) ($user['id_back_path'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+>
+عرض البطاقة
+</button>
+</td>
 <td class="py-5 px-6 text-center">
 <form method="post" action="/admin/user-activation/activate">
 <input type="hidden" name="user_id" value="<?= htmlspecialchars((string) $user['id'], ENT_QUOTES, 'UTF-8') ?>"/>
@@ -88,6 +93,30 @@ $userActivationPagination = $userActivationPagination ?? [
 <?php endforeach; ?>
 </tbody>
 </table>
+</div>
+
+<div id="idCardModal" class="fixed inset-0 z-50 hidden" aria-hidden="true">
+<div class="absolute inset-0 bg-black/60"></div>
+<div class="relative max-w-5xl mx-auto mt-8 md:mt-16 bg-white border border-charcoal shadow-xl">
+<div class="flex items-center justify-between px-5 py-4 border-b border-charcoal">
+<h3 id="idCardModalTitle" class="font-display-lg text-display-lg text-charcoal">بطاقة الهوية</h3>
+<button id="closeIdCardModal" type="button" class="text-charcoal hover:text-royal-indigo" aria-label="إغلاق">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="border border-charcoal p-3 bg-surface-bright">
+<p class="font-body-sm text-body-sm text-charcoal mb-2">وجه البطاقة</p>
+<img id="idCardFrontImage" src="" alt="وجه البطاقة" class="w-full h-[320px] object-contain bg-white border border-charcoal" />
+<p id="idCardFrontFallback" class="hidden text-sm text-slate-gray mt-2">لا توجد صورة لوجه البطاقة.</p>
+</div>
+<div class="border border-charcoal p-3 bg-surface-bright">
+<p class="font-body-sm text-body-sm text-charcoal mb-2">ظهر البطاقة</p>
+<img id="idCardBackImage" src="" alt="ظهر البطاقة" class="w-full h-[320px] object-contain bg-white border border-charcoal" />
+<p id="idCardBackFallback" class="hidden text-sm text-slate-gray mt-2">لا توجد صورة لظهر البطاقة.</p>
+</div>
+</div>
+</div>
 </div>
 
 <div class="mt-6 pt-4 border-t border-charcoal text-left">
@@ -108,4 +137,62 @@ require __DIR__ . '/partials/pager.php';
 </section>
 </main>
 </div>
+<script>
+(() => {
+	const modal = document.getElementById('idCardModal');
+	const title = document.getElementById('idCardModalTitle');
+	const closeButton = document.getElementById('closeIdCardModal');
+	const frontImage = document.getElementById('idCardFrontImage');
+	const backImage = document.getElementById('idCardBackImage');
+	const frontFallback = document.getElementById('idCardFrontFallback');
+	const backFallback = document.getElementById('idCardBackFallback');
+
+	const hideModal = () => {
+		modal.classList.add('hidden');
+		modal.setAttribute('aria-hidden', 'true');
+		title.textContent = 'بطاقة الهوية';
+		frontImage.src = '';
+		backImage.src = '';
+	};
+
+	const setImage = (imageElement, fallbackElement, pathValue) => {
+		const path = String(pathValue || '').trim();
+		if (path === '') {
+			imageElement.classList.add('hidden');
+			fallbackElement.classList.remove('hidden');
+			return;
+		}
+
+		imageElement.classList.remove('hidden');
+		fallbackElement.classList.add('hidden');
+		imageElement.src = path;
+	};
+
+	document.querySelectorAll('.js-open-id-modal').forEach((button) => {
+		button.addEventListener('click', () => {
+			const studentName = button.dataset.studentName || 'الطالب';
+			title.textContent = 'بطاقة الهوية - ' + studentName;
+
+			setImage(frontImage, frontFallback, button.dataset.frontPath);
+			setImage(backImage, backFallback, button.dataset.backPath);
+
+			modal.classList.remove('hidden');
+			modal.setAttribute('aria-hidden', 'false');
+		});
+	});
+
+	closeButton.addEventListener('click', hideModal);
+	modal.addEventListener('click', (event) => {
+		if (event.target === modal || event.target === modal.firstElementChild) {
+			hideModal();
+		}
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+			hideModal();
+		}
+	});
+})();
+</script>
 </body>

@@ -48,17 +48,17 @@ $addStaffOldInput = $addStaffOldInput ?? [];
 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">الاسم الكامل</label>
-<input name="full_name" value="<?= htmlspecialchars((string) ($addStaffOldInput['full_name'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="text" required />
+<input name="full_name" value="<?= htmlspecialchars((string) ($addStaffOldInput['full_name'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" placeholder="الاسم الكامل" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="text" required />
 </div>
 
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">البريد الإلكتروني</label>
-<input name="email" value="<?= htmlspecialchars((string) ($addStaffOldInput['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="email" required />
+<input name="email" value="<?= htmlspecialchars((string) ($addStaffOldInput['email'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" placeholder="البريد الإلكتروني" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="email" required />
 </div>
 
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">رقم الهاتف</label>
-<input name="phone_number" value="<?= htmlspecialchars((string) ($addStaffOldInput['phone_number'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="text" required />
+<input name="phone_number" value="<?= htmlspecialchars((string) ($addStaffOldInput['phone_number'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" placeholder="رقم الهاتف" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="text" required />
 </div>
 
 <div class="space-y-2">
@@ -74,8 +74,8 @@ $addStaffOldInput = $addStaffOldInput ?? [];
 
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">كلمة المرور</label>
-<input name="password" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required />
-<p class="text-xs text-slate-gray">سيتم تفعيل الحساب مباشرة بعد إنشائه. يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
+<input name="password" placeholder="كلمة المرور" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required />
+<p class="text-xs text-slate-gray"> يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
 </div>
 
 <div class="flex items-center justify-between gap-4 pt-2">

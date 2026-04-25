@@ -90,6 +90,8 @@ class AdminRepository {
                     u.full_name,
                     u.department,
                     u.specialty,
+                    u.id_front_path,
+                    u.id_back_path,
                     u.created_at,
                     u.is_active,
                     (

@@ -103,6 +103,8 @@ class AdminService {
                 'full_name' => $user['full_name'],
                 'department' => $this->buildDepartmentLabel($user),
                 'created_at' => $this->formatDate($user['created_at'] ?? null),
+                'id_front_path' => (string) ($user['id_front_path'] ?? ''),
+                'id_back_path' => (string) ($user['id_back_path'] ?? ''),
                 'submission_count' => (int) ($user['submission_count'] ?? 0),
                 'document_count' => (int) ($user['document_count'] ?? 0),
                 'status_label' => $this->buildActivationStatusLabel($user),
