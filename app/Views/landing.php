@@ -5,6 +5,47 @@
 $pageTitle = 'نظام إدارة أخلاقيات البحث العلمي | Scholarly Slate IRB';
 require __DIR__ . '/layouts/head.php';
 $currentUser = AuthMiddleware::user();
+
+$dashboardByRole = [
+    'admin' => [
+        'href' => BASE_URL . '/admin/dashboard',
+        'label' => 'لوحة الإدارة',
+    ],
+    'student' => [
+        'href' => BASE_URL . '/student/dashboard',
+        'label' => 'لوحة الباحث',
+    ],
+    'sample_size_officer' => [
+        'href' => BASE_URL . '/officer/sample-size/queue',
+        'label' => 'لوحة مسؤول حجم العينة',
+    ],
+    'reviewer' => [
+        'href' => BASE_URL . '/reviewer/dashboard',
+        'label' => 'لوحة المراجع',
+    ],
+    'manager' => [
+        'href' => BASE_URL . '/committee/dashboard',
+        'label' => 'لوحة اللجنة',
+    ],
+];
+
+$currentRole = (string) ($currentUser['role'] ?? '');
+$dashboardTarget = $dashboardByRole[$currentRole] ?? [
+    'href' => BASE_URL . '/dashboard',
+    'label' => 'لوحة التحكم',
+];
+
+$heroPrimaryCta = [
+    'href' => BASE_URL . '/login',
+    'label' => 'بدء تقديم طلب',
+];
+
+if ($currentUser) {
+    $heroPrimaryCta = [
+        'href' => $dashboardTarget['href'],
+        'label' => 'الانتقال إلى ' . $dashboardTarget['label'],
+    ];
+}
 ?>
 </head>
 <body class="bg-paper-white text-on-background min-h-screen flex flex-col font-body-lg">
@@ -22,15 +63,9 @@ $currentUser = AuthMiddleware::user();
 </div>
 <div class="flex items-center gap-4">
 <?php if ($currentUser): ?>
-<?php if (($currentUser['role'] ?? '') === 'admin'): ?>
-<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/admin/dashboard">
-                لوحة الإدارة
+<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo htmlspecialchars($dashboardTarget['href'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars($dashboardTarget['label'], ENT_QUOTES, 'UTF-8'); ?>
             </a>
-<?php else: ?>
-<a class="inline-flex items-center justify-center bg-royal-indigo text-on-primary hover:bg-primary-container px-5 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/dashboard">
-                لوحة التحكم
-            </a>
-<?php endif; ?>
 <?php else: ?>
 <div class="hidden md:flex relative mr-4">
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
@@ -61,8 +96,8 @@ $currentUser = AuthMiddleware::user();
                     منصة رقمية موحدة لتقديم، مراجعة، وإدارة مقترحات الأبحاث العلمية وفقاً لأعلى المعايير الأخلاقية والضوابط الأكاديمية العالمية.
                 </p>
 <div class="flex flex-wrap gap-4 mt-4">
-<a href="<?php echo BASE_URL; ?>/login" class="bg-royal-indigo text-on-primary px-8 py-3 font-button hover:bg-primary transition-colors flex items-center gap-2 inline-flex">
-<span>بدء تقديم طلب</span>
+<a href="<?php echo htmlspecialchars($heroPrimaryCta['href'], ENT_QUOTES, 'UTF-8'); ?>" class="bg-royal-indigo text-on-primary px-8 py-3 font-button hover:bg-primary transition-colors flex items-center gap-2 inline-flex">
+<span><?php echo htmlspecialchars($heroPrimaryCta['label'], ENT_QUOTES, 'UTF-8'); ?></span>
 <span class="material-symbols-outlined text-sm">arrow_back</span>
 </a>
 <button class="border border-charcoal bg-paper-white text-charcoal px-8 py-3 font-button hover:bg-surface-container-low transition-colors">
