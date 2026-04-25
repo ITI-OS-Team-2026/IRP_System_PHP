@@ -79,6 +79,7 @@ $initialPreviewPagination = $initialPreviewPagination ?? [
 <form method="post" action="/admin/initial-preview-queue/assign-serial" class="flex flex-col gap-2">
 <input type="hidden" name="submission_id" value="<?= htmlspecialchars((string) $item['id'], ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="page" value="<?= htmlspecialchars((string) $initialPreviewPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
+<input type="hidden" name="_csrf" value="<?= htmlspecialchars((string) ($csrfToken ?? ''), ENT_QUOTES, 'UTF-8') ?>"/>
 <label class="font-body-sm text-body-sm text-on-surface">أدخل الرقم التسلسلي (اختياري)</label>
 <div class="flex items-center gap-3">
 <input name="serial_number" class="flex-1 border border-charcoal bg-paper-white px-3 py-2 font-numeral text-numeral text-on-surface focus:outline-none focus:border-royal-indigo focus:border-2 transition-all" placeholder="IRB-<?= date('Y') ?>-0001" type="text"/>

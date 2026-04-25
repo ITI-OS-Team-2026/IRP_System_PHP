@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../Services/AdminService.php';
+require __DIR__ . '/../Helpers/CsrfHelper.php';
 
 class AdminController {
     private $adminService;
@@ -24,6 +25,7 @@ class AdminController {
         AuthMiddleware::requireRole('admin');
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $activationData = $this->adminService->getUserActivationData($page, 10);
+        $csrfToken = CsrfHelper::token();
 
         $pendingCount = $activationData['pendingCount'];
         $pendingUsers = $activationData['pendingUsers'];
@@ -46,9 +48,19 @@ class AdminController {
 
         $userId = (int) ($_POST['user_id'] ?? 0);
         $page = max(1, (int) ($_POST['page'] ?? 1));
+        if (!$this->validateAdminCsrf()) {
+            $_SESSION['admin_user_activation_error'] = 'جلسة النموذج غير صالحة. يرجى إعادة المحاولة.';
+            $redirect = BASE_URL . '/admin/user-activation';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
+            exit;
+        }
+
         if ($userId <= 0) {
             $_SESSION['admin_user_activation_error'] = 'معرف المستخدم غير صالح';
-            $redirect = '/admin/user-activation';
+            $redirect = BASE_URL . '/admin/user-activation';
             if ($page > 1) {
                 $redirect .= '?page=' . $page;
             }
@@ -63,7 +75,7 @@ class AdminController {
             $_SESSION['admin_user_activation_error'] = $e->getMessage();
         }
 
-        $redirect = '/admin/user-activation';
+        $redirect = BASE_URL . '/admin/user-activation';
         if ($page > 1) {
             $redirect .= '?page=' . $page;
         }
@@ -76,6 +88,7 @@ class AdminController {
         AuthMiddleware::requireRole('admin');
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $queueData = $this->adminService->getInitialPreviewQueueData($page, 10);
+        $csrfToken = CsrfHelper::token();
 
         $queueCount = $queueData['queueCount'];
         $queueItems = $queueData['queueItems'];
@@ -100,6 +113,16 @@ class AdminController {
         $serialInput = $_POST['serial_number'] ?? '';
         $page = max(1, (int) ($_POST['page'] ?? 1));
 
+        if (!$this->validateAdminCsrf()) {
+            $_SESSION['admin_serial_error'] = 'جلسة النموذج غير صالحة. يرجى إعادة المحاولة.';
+            $redirect = BASE_URL . '/admin/initial-preview-queue';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
+            exit;
+        }
+
         try {
             $serialNumber = $this->adminService->assignInitialPreviewSerialNumber(
                 $submissionId,
@@ -111,7 +134,7 @@ class AdminController {
             $_SESSION['admin_serial_error'] = $e->getMessage();
         }
 
-        $redirect = '/admin/initial-preview-queue';
+        $redirect = BASE_URL . '/admin/initial-preview-queue';
         if ($page > 1) {
             $redirect .= '?page=' . $page;
         }
@@ -126,6 +149,7 @@ class AdminController {
         $search = trim((string) ($_GET['q'] ?? ''));
         $page = max(1, (int) ($_GET['page'] ?? 1));
         $data = $this->adminService->getReviewerAssignmentData($search, $page, 10);
+        $csrfToken = CsrfHelper::token();
 
         $searchQuery = $data['search'];
         $reviewerAssignmentTotal = $data['totalCount'];
@@ -145,6 +169,7 @@ class AdminController {
 
         $data = $this->adminService->getAddStaffData();
         $staffRoleOptions = $data['staffRoleOptions'];
+        $csrfToken = CsrfHelper::token();
 
         $addStaffSuccessMessage = $_SESSION['admin_add_staff_success'] ?? null;
         $addStaffErrorMessage = $_SESSION['admin_add_staff_error'] ?? null;
@@ -161,6 +186,12 @@ class AdminController {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             die('Method not allowed');
+        }
+
+        if (!$this->validateAdminCsrf()) {
+            $_SESSION['admin_add_staff_error'] = 'جلسة النموذج غير صالحة. يرجى إعادة المحاولة.';
+            header('Location: ' . BASE_URL . '/admin/add-staff');
+            exit;
         }
 
         $payload = [
@@ -186,7 +217,7 @@ class AdminController {
             $_SESSION['admin_add_staff_error'] = $e->getMessage();
         }
 
-        header('Location: /admin/add-staff');
+        header('Location: ' . BASE_URL . '/admin/add-staff');
         exit;
     }
 
@@ -200,6 +231,27 @@ class AdminController {
 
         $submissionId = (int) ($_POST['submission_id'] ?? 0);
         $reviewerId = (int) ($_POST['reviewer_id'] ?? 0);
+
+        if (!$this->validateAdminCsrf()) {
+            $_SESSION['admin_reviewer_assignment_error'] = 'جلسة النموذج غير صالحة. يرجى إعادة المحاولة.';
+            $redirect = BASE_URL . '/admin/reviewer-assignment';
+            $q = trim((string) ($_POST['q'] ?? ''));
+            $page = max(1, (int) ($_POST['page'] ?? 1));
+
+            $queryParams = [];
+            if ($q !== '') {
+                $queryParams['q'] = $q;
+            }
+            if ($page > 1) {
+                $queryParams['page'] = $page;
+            }
+            if (!empty($queryParams)) {
+                $redirect .= '?' . http_build_query($queryParams);
+            }
+
+            header('Location: ' . $redirect);
+            exit;
+        }
 
         try {
             $mode = $this->adminService->assignReviewerToSubmission(
@@ -215,7 +267,7 @@ class AdminController {
             $_SESSION['admin_reviewer_assignment_error'] = $e->getMessage();
         }
 
-        $redirect = '/admin/reviewer-assignment';
+        $redirect = BASE_URL . '/admin/reviewer-assignment';
         $q = trim((string) ($_POST['q'] ?? ''));
         $page = max(1, (int) ($_POST['page'] ?? 1));
 
@@ -233,5 +285,15 @@ class AdminController {
 
         header('Location: ' . $redirect);
         exit;
+    }
+
+    private function validateAdminCsrf() {
+        $token = $_POST['_csrf'] ?? '';
+        if (!CsrfHelper::validate($token)) {
+            return false;
+        }
+
+        CsrfHelper::rotate();
+        return true;
     }
 }

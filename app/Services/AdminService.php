@@ -322,8 +322,9 @@ class AdminService {
     }
 
     public function createStaffAccount(array $data, $adminUserId = null) {
-        $fullName = trim((string) ($data['full_name'] ?? ''));
-        $email = trim((string) ($data['email'] ?? ''));
+        $fullName = preg_replace('/\s+/u', ' ', trim((string) ($data['full_name'] ?? '')));
+        $emailRaw = trim((string) ($data['email'] ?? ''));
+        $email = function_exists('mb_strtolower') ? mb_strtolower($emailRaw, 'UTF-8') : strtolower($emailRaw);
         $phoneNumber = trim((string) ($data['phone_number'] ?? ''));
         $password = (string) ($data['password'] ?? '');
         $role = trim((string) ($data['role'] ?? ''));
@@ -340,12 +341,16 @@ class AdminService {
             throw new Exception('رقم الهاتف مطلوب.');
         }
 
-        if (strlen($password) < 8) {
-            throw new Exception('كلمة المرور يجب ألا تقل عن 8 أحرف.');
+        if (!$this->isStrongPassword($password)) {
+            throw new Exception('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.');
         }
 
         if (!array_key_exists($role, $this->staffRoleOptions)) {
             throw new Exception('الوظيفة المختارة غير صالحة.');
+        }
+
+        if ($this->adminRepository->findUserByFullName($fullName)) {
+            throw new Exception('الاسم الكامل مستخدم بالفعل.');
         }
 
         if ($this->adminRepository->findUserByEmail($email)) {
@@ -534,5 +539,16 @@ class AdminService {
         $baseUrl = rtrim($baseUrl, '/');
 
         return $baseUrl === '' ? '/login' : $baseUrl . '/login';
+    }
+
+    private function isStrongPassword($password) {
+        if (strlen($password) < 8) {
+            return false;
+        }
+
+        return preg_match('/[A-Z]/', $password)
+            && preg_match('/[a-z]/', $password)
+            && preg_match('/[0-9]/', $password)
+            && preg_match('/[^A-Za-z0-9]/', $password);
     }
 }

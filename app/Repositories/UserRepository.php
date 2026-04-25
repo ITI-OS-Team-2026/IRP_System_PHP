@@ -10,10 +10,27 @@ class UserRepository {
     }
 
     public function findByEmail($email) {
-        $email = $this->db->real_escape_string($email);
-        $sql = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-        $result = $this->db->query($sql);
-        return $result->fetch_assoc();
+        $email = $this->toLower(trim((string) $email));
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1");
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result ? $result->fetch_assoc() : null;
+    }
+
+    public function findByFullName($fullName) {
+        $normalized = $this->normalizeFullName($fullName);
+        if ($normalized === '') {
+            return null;
+        }
+
+        $stmt = $this->db->prepare("SELECT id, full_name, email, role FROM users WHERE LOWER(TRIM(full_name)) = ? LIMIT 1");
+        $stmt->bind_param('s', $normalized);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result ? $result->fetch_assoc() : null;
     }
 
     public function create($data) {
@@ -49,5 +66,16 @@ class UserRepository {
         $sql = "SELECT * FROM users WHERE id = $id LIMIT 1";
         $result = $this->db->query($sql);
         return $result->fetch_assoc();
+    }
+
+    private function normalizeFullName($fullName) {
+        $fullName = preg_replace('/\s+/u', ' ', trim((string) $fullName));
+        return $this->toLower($fullName);
+    }
+
+    private function toLower($value) {
+        return function_exists('mb_strtolower')
+            ? mb_strtolower($value, 'UTF-8')
+            : strtolower($value);
     }
 }

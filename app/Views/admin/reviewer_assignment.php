@@ -84,6 +84,7 @@ $reviewerAssignmentPagination = $reviewerAssignmentPagination ?? [
 <input type="hidden" name="submission_id" value="<?= htmlspecialchars((string) $row['id'], ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="q" value="<?= htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="page" value="<?= htmlspecialchars((string) $reviewerAssignmentPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
+<input type="hidden" name="_csrf" value="<?= htmlspecialchars((string) ($csrfToken ?? ''), ENT_QUOTES, 'UTF-8') ?>"/>
 <div class="relative flex-1">
 <select name="reviewer_id" class="w-full appearance-none bg-paper-white border border-charcoal focus:border-royal-indigo focus:border-2 focus:ring-0 py-2 pl-8 pr-3 font-body-sm text-body-sm outline-none cursor-pointer" required>
 <option value="" <?= $row['reviewer_id'] === null ? 'selected' : '' ?> disabled>اختر مراجعاً...</option>

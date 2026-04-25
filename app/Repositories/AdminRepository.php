@@ -145,10 +145,31 @@ class AdminRepository {
     }
 
     public function findUserByEmail($email) {
-        $email = $this->db->real_escape_string($email);
-        $sql = "SELECT id, email, role FROM users WHERE email = '$email' LIMIT 1";
-        $result = $this->db->query($sql);
+        $email = function_exists('mb_strtolower')
+            ? mb_strtolower(trim((string) $email), 'UTF-8')
+            : strtolower(trim((string) $email));
+        $stmt = $this->db->prepare("SELECT id, full_name, email, role FROM users WHERE LOWER(email) = ? LIMIT 1");
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
 
+        $result = $stmt->get_result();
+        return $result ? $result->fetch_assoc() : null;
+    }
+
+    public function findUserByFullName($fullName) {
+        $normalizedInput = preg_replace('/\s+/u', ' ', trim((string) $fullName));
+        $normalized = function_exists('mb_strtolower')
+            ? mb_strtolower($normalizedInput, 'UTF-8')
+            : strtolower($normalizedInput);
+        if ($normalized === '') {
+            return null;
+        }
+
+        $stmt = $this->db->prepare("SELECT id, full_name, email, role FROM users WHERE LOWER(TRIM(full_name)) = ? LIMIT 1");
+        $stmt->bind_param('s', $normalized);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
         return $result ? $result->fetch_assoc() : null;
     }
 

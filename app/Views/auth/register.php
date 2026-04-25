@@ -120,7 +120,8 @@
 
                     <div class="flex flex-col gap-1 md:col-span-2">
                         <label class="text-sm font-bold text-charcoal" for="password">كلمة المرور</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="password" name="password" placeholder="••••••••" type="password" required/>
+                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="password" name="password" placeholder="••••••••" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required/>
+                        <p class="text-xs text-slate-gray">يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
                     </div>
                 </div>
 
@@ -161,6 +162,13 @@
         const nameParts = formData.get('full_name').trim().split(/\s+/);
         if (nameParts.length < 4) {
             showToast('الاسم يجب أن يكون رباعياً على الأقل', 'error');
+            return;
+        }
+
+        const password = String(formData.get('password') || '');
+        const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+        if (!strongPasswordPattern.test(password)) {
+            showToast('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص', 'error');
             return;
         }
 

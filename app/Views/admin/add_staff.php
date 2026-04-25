@@ -44,6 +44,7 @@ $addStaffOldInput = $addStaffOldInput ?? [];
 
 <div class="max-w-3xl mx-auto w-full bg-white border border-charcoal rounded-xl shadow-[0_2px_12px_rgba(15,23,42,0.05)] p-6 md:p-8">
 <form method="post" action="/admin/add-staff/store" class="space-y-5">
+<input type="hidden" name="_csrf" value="<?= htmlspecialchars((string) ($csrfToken ?? ''), ENT_QUOTES, 'UTF-8') ?>"/>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">الاسم الكامل</label>
@@ -73,8 +74,8 @@ $addStaffOldInput = $addStaffOldInput ?? [];
 
 <div class="space-y-2">
 <label class="font-body-sm text-body-sm text-on-surface">كلمة المرور</label>
-<input name="password" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="password" minlength="8" required />
-<p class="text-xs text-slate-gray">سيتم تفعيل الحساب مباشرة بعد إنشائه، ويمكن للموظف تسجيل الدخول فوراً.</p>
+<input name="password" class="w-full border border-charcoal bg-paper-white px-4 py-3 outline-none focus:border-royal-indigo focus:border-2 transition-all" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required />
+<p class="text-xs text-slate-gray">سيتم تفعيل الحساب مباشرة بعد إنشائه. يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
 </div>
 
 <div class="flex items-center justify-between gap-4 pt-2">
