@@ -50,6 +50,9 @@ switch ($path) {
         } elseif ($role === 'reviewer') {
             header('Location: ' . BASE_URL . '/reviewer/dashboard');
             exit;
+        } elseif ($role === 'manager') {
+            header('Location: ' . BASE_URL . '/committee/certificates');
+            exit;
         }
         require __DIR__ . '/../app/Views/dashboard.php';
         break;
@@ -136,6 +139,25 @@ switch ($path) {
         AuthMiddleware::requireRole('reviewer');
         require __DIR__ . '/../app/Controllers/ReviewerController.php';
         (new ReviewerController())->history();
+        break;
+
+    // Committee Manager Routes
+    case '/committee/dashboard':
+        AuthMiddleware::requireRole('manager');
+        require __DIR__ . '/../app/Controllers/CommitteeController.php';
+        (new CommitteeController())->dashboard();
+        break;
+
+    case '/committee/approvals':
+        AuthMiddleware::requireRole('manager');
+        require __DIR__ . '/../app/Controllers/CommitteeController.php';
+        (new CommitteeController())->approvals();
+        break;
+
+    case '/committee/certificates':
+        AuthMiddleware::requireRole('manager');
+        require __DIR__ . '/../app/Controllers/CommitteeController.php';
+        (new CommitteeController())->certificates();
         break;
 
     case '/officer/sample-size/input':
@@ -254,6 +276,27 @@ switch ($path) {
             AuthMiddleware::requireRole('student');
             require __DIR__ . '/../app/Controllers/SubmissionController.php';
             (new SubmissionController())->submitRevision((int) $matches[1]);
+            break;
+        }
+
+        if (preg_match('#^/committee/certificate/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('manager');
+            require __DIR__ . '/../app/Controllers/CommitteeController.php';
+            (new CommitteeController())->certificate((int) $matches[1]);
+            break;
+        }
+
+        if (preg_match('#^/committee/certificates/delete/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('manager');
+            require __DIR__ . '/../app/Controllers/CommitteeController.php';
+            (new CommitteeController())->deleteCertificate((int) $matches[1]);
+            break;
+        }
+
+        if (preg_match('#^/certificate/download/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole(['manager', 'student']);
+            require __DIR__ . '/../app/Controllers/CommitteeController.php';
+            (new CommitteeController())->downloadCertificate((int) $matches[1]);
             break;
         }
 
