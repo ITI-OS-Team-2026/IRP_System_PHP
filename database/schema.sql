@@ -96,3 +96,13 @@ CREATE TABLE IF NOT EXISTS system_logs (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
     FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS certificates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    submission_id INT NOT NULL UNIQUE,
+    certificate_number VARCHAR(100) NOT NULL UNIQUE,
+    issued_by INT NOT NULL,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (submission_id) REFERENCES research_submissions(id) ON DELETE CASCADE,
+    FOREIGN KEY (issued_by) REFERENCES users(id) ON DELETE CASCADE
+);
