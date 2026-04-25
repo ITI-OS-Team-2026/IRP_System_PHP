@@ -58,15 +58,15 @@ while ($row = $logsResult->fetch_assoc()) {
 }
 
 $statusMap = [
-    'submitted'          => ['label' => 'تم التقديم',        'color' => 'bg-blue-100 text-blue-800'],
-    'admin_reviewed'     => ['label' => 'تمت المراجعة',      'color' => 'bg-indigo-100 text-indigo-800'],
-    'initial_paid'       => ['label' => 'تم الدفع الأولي',   'color' => 'bg-cyan-100 text-cyan-800'],
-    'sample_sized'       => ['label' => 'تم حساب العينة',    'color' => 'bg-purple-100 text-purple-800'],
-    'fully_paid'         => ['label' => 'تم الدفع الكامل',   'color' => 'bg-teal-100 text-teal-800'],
-    'under_review'       => ['label' => 'قيد المراجعة',      'color' => 'bg-yellow-100 text-yellow-800'],
-    'revision_requested' => ['label' => 'مطلوب تعديل',       'color' => 'bg-orange-100 text-orange-800'],
-    'approved'           => ['label' => 'تمت الموافقة',      'color' => 'bg-green-100 text-green-800'],
-    'rejected'           => ['label' => 'مرفوض',             'color' => 'bg-red-100 text-red-800'],
+    'submitted'          => ['label' => 'تم التقديم',             'color' => 'bg-blue-100 text-blue-800'],
+    'admin_reviewed'     => ['label' => 'تمت مراجعة الإدارة',     'color' => 'bg-indigo-100 text-indigo-800'],
+    'initial_paid'       => ['label' => 'تم سداد الرسوم الأولية', 'color' => 'bg-cyan-100 text-cyan-800'],
+    'sample_sized'       => ['label' => 'تم حساب حجم العينة',     'color' => 'bg-purple-100 text-purple-800'],
+    'fully_paid'         => ['label' => 'تم السداد بالكامل',      'color' => 'bg-teal-100 text-teal-800'],
+    'under_review'       => ['label' => 'قيد المراجعة',           'color' => 'bg-yellow-100 text-yellow-800'],
+    'revision_requested' => ['label' => 'مطلوب تعديل',            'color' => 'bg-orange-100 text-orange-800'],
+    'approved'           => ['label' => 'تمت الموافقة',           'color' => 'bg-green-100 text-green-800'],
+    'rejected'           => ['label' => 'مرفوض',                  'color' => 'bg-red-100 text-red-800'],
 ];
 
 $actionLabels = [
@@ -268,7 +268,8 @@ function timeAgo($datetime) {
                                                         </a>
                                                         
                                                         <?php if (in_array($sub['status'], ['admin_reviewed', 'sample_sized'])): ?>
-                                                            <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $sub['id'] ?>" 
+                                                            <?php $paymentType = $sub['status'] === 'admin_reviewed' ? 'initial' : 'sample_size'; ?>
+                                                            <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $sub['id'] ?>?type=<?= $paymentType ?>" 
                                                                class="inline-flex items-center gap-1 px-3 py-1.5 bg-orange-500 text-white rounded text-xs font-button hover:bg-orange-600 transition-colors w-fit">
                                                                 <span class="material-symbols-outlined text-[14px]">payments</span>
                                                                 <?= $sub['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
