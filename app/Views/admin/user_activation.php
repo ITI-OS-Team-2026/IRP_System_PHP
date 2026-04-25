@@ -81,13 +81,16 @@ $userActivationPagination = $userActivationPagination ?? [
 عرض البطاقة
 </button>
 </td>
-<td class="py-5 px-6 text-center">
-<form method="post" action="/admin/user-activation/activate">
+<td class="py-5 px-6 text-center align-middle">
+<div class="flex flex-col gap-2 w-full">
+<form method="post" action="/admin/user-activation/activate" class="w-full">
 <input type="hidden" name="user_id" value="<?= htmlspecialchars((string) $user['id'], ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="page" value="<?= htmlspecialchars((string) $userActivationPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
 <input type="hidden" name="_csrf" value="<?= htmlspecialchars((string) ($csrfToken ?? ''), ENT_QUOTES, 'UTF-8') ?>"/>
-<button class="bg-royal-indigo text-on-primary font-button text-button px-6 py-2 w-full hover:bg-primary transition-colors border border-royal-indigo shadow-none" type="submit">تنشيط</button>
+<button class="bg-royal-indigo text-on-primary font-button text-button px-4 py-2 w-full hover:bg-primary transition-colors border border-royal-indigo shadow-none" type="submit">تنشيط</button>
 </form>
+<button type="button" class="js-open-refuse-modal bg-white text-crimson font-button text-button px-4 py-2 w-full hover:bg-red-50 transition-colors border border-crimson shadow-none text-center" data-user-id="<?= htmlspecialchars((string) $user['id'], ENT_QUOTES, 'UTF-8') ?>" data-student-name="<?= htmlspecialchars((string) $user['full_name'], ENT_QUOTES, 'UTF-8') ?>">رفض</button>
+</div>
 </td>
 </tr>
 <?php endforeach; ?>
@@ -115,6 +118,33 @@ $userActivationPagination = $userActivationPagination ?? [
 <img id="idCardBackImage" src="" alt="ظهر البطاقة" class="w-full h-[320px] object-contain bg-white border border-charcoal" />
 <p id="idCardBackFallback" class="hidden text-sm text-slate-gray mt-2">لا توجد صورة لظهر البطاقة.</p>
 </div>
+</div>
+</div>
+</div>
+
+<div id="refuseModal" class="fixed inset-0 z-50 hidden" aria-hidden="true">
+<div class="absolute inset-0 bg-black/60"></div>
+<div class="relative max-w-lg mx-auto mt-16 bg-white border border-charcoal shadow-xl">
+<div class="flex items-center justify-between px-5 py-4 border-b border-charcoal">
+<h3 id="refuseModalTitle" class="font-display-lg text-display-lg text-charcoal">رفض طلب تسجيل</h3>
+<button id="closeRefuseModal" type="button" class="text-charcoal hover:text-crimson" aria-label="إغلاق">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-5">
+<form method="post" action="/admin/user-activation/refuse">
+<input type="hidden" name="user_id" id="refuseUserId" value=""/>
+<input type="hidden" name="page" value="<?= htmlspecialchars((string) $userActivationPagination['currentPage'], ENT_QUOTES, 'UTF-8') ?>"/>
+<input type="hidden" name="_csrf" value="<?= htmlspecialchars((string) ($csrfToken ?? ''), ENT_QUOTES, 'UTF-8') ?>"/>
+<div class="mb-4">
+<label for="reason_for_refusal" class="block font-body-sm text-body-sm text-charcoal mb-2">سبب الرفض (سيتم إرساله بالبريد الإلكتروني للباحث):</label>
+<textarea id="reason_for_refusal" name="reason_for_refusal" rows="4" class="w-full border border-charcoal p-3 font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-royal-indigo bg-surface-bright" required placeholder="يرجى توضيح سبب رفض قبول طلب التسجيل، مثل: صورة الهوية غير واضحة..."></textarea>
+</div>
+<div class="flex justify-end gap-3 mt-6">
+<button type="button" id="cancelRefuseModal" class="px-6 py-2 border border-charcoal text-charcoal bg-white hover:bg-surface-bright font-button text-button transition-colors">إلغاء</button>
+<button type="submit" class="px-6 py-2 border border-crimson text-white bg-crimson hover:bg-red-700 font-button text-button transition-colors">تأكيد الرفض</button>
+</div>
+</form>
 </div>
 </div>
 </div>
@@ -191,6 +221,45 @@ require __DIR__ . '/partials/pager.php';
 	document.addEventListener('keydown', (event) => {
 		if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
 			hideModal();
+		}
+	});
+
+	const refuseModal = document.getElementById('refuseModal');
+	const refuseTitle = document.getElementById('refuseModalTitle');
+	const closeRefuseButton = document.getElementById('closeRefuseModal');
+	const cancelRefuseButton = document.getElementById('cancelRefuseModal');
+	const refuseUserIdInput = document.getElementById('refuseUserId');
+	const reasonInput = document.getElementById('reason_for_refusal');
+
+	const hideRefuseModal = () => {
+		refuseModal.classList.add('hidden');
+		refuseModal.setAttribute('aria-hidden', 'true');
+		reasonInput.value = '';
+	};
+
+	document.querySelectorAll('.js-open-refuse-modal').forEach((button) => {
+		button.addEventListener('click', () => {
+			const studentName = button.dataset.studentName || 'الطالب';
+			refuseTitle.textContent = 'رفض طلب تسجيل - ' + studentName;
+			refuseUserIdInput.value = button.dataset.userId;
+
+			refuseModal.classList.remove('hidden');
+			refuseModal.setAttribute('aria-hidden', 'false');
+		});
+	});
+
+	closeRefuseButton.addEventListener('click', hideRefuseModal);
+	cancelRefuseButton.addEventListener('click', hideRefuseModal);
+
+	refuseModal.addEventListener('click', (event) => {
+		if (event.target === refuseModal || event.target === refuseModal.firstElementChild) {
+			hideRefuseModal();
+		}
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape' && !refuseModal.classList.contains('hidden')) {
+			hideRefuseModal();
 		}
 	});
 })();

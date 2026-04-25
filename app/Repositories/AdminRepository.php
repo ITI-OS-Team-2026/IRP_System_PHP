@@ -136,6 +136,15 @@ class AdminRepository {
         return $stmt->affected_rows > 0;
     }
 
+    public function deleteStudentUser($userId) {
+        $userId = (int) $userId;
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ? AND role = 'student' LIMIT 1");
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+
+        return $stmt->affected_rows > 0;
+    }
+
     public function logAction($action, $details, $userId = null, $submissionId = null) {
         $stmt = $this->db->prepare("INSERT INTO system_logs (user_id, submission_id, action, details) VALUES (?, ?, ?, ?)");
         $userId = $userId !== null ? (int) $userId : null;

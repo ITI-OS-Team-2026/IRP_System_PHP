@@ -124,6 +124,17 @@ class MailService {
                 $body = 'تم إنشاء حسابك الوظيفي بنجاح' . ($roleLabel !== '' ? ' بوصفه ' . $roleLabel : '') . '. يمكنك الآن استخدام بيانات الدخول المرسلة إليك للوصول إلى النظام.';
                 break;
 
+            case 'user_refused':
+                $subject = 'حالة طلب التسجيل في ' . $appName;
+                $headline = 'الاعتذار عن قبول طلب التسجيل';
+                $reason = trim((string) ($data['reason'] ?? ''));
+                $body = 'نعتذر عن عدم إمكانية قبول طلب تسجيلك في الوقت الحالي.';
+                if ($reason !== '') {
+                    $body .= '<br><br><strong>سبب الرفض:</strong><br>' . nl2br(htmlspecialchars($reason, ENT_QUOTES, 'UTF-8'));
+                }
+                $body .= '<br><br>يرجى النقر على الرابط أدناه للتسجيل مرة أخرى وإرفاق المستندات الصحيحة.';
+                break;
+
             default:
                 throw new Exception('Unknown mail template: ' . $templateKey);
         }

@@ -84,6 +84,64 @@ class AdminController {
         exit;
     }
 
+    public function refuseUser() {
+        AuthMiddleware::requireRole('admin');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            die('Method not allowed');
+        }
+
+        $userId = (int) ($_POST['user_id'] ?? 0);
+        $reason = trim((string) ($_POST['reason_for_refusal'] ?? ''));
+        $page = max(1, (int) ($_POST['page'] ?? 1));
+
+        if (!$this->validateAdminCsrf()) {
+            $_SESSION['admin_user_activation_error'] = 'جلسة النموذج غير صالحة. يرجى إعادة المحاولة.';
+            $redirect = BASE_URL . '/admin/user-activation';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
+            exit;
+        }
+
+        if ($userId <= 0) {
+            $_SESSION['admin_user_activation_error'] = 'معرف المستخدم غير صالح';
+            $redirect = BASE_URL . '/admin/user-activation';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
+            exit;
+        }
+
+        if ($reason === '') {
+            $_SESSION['admin_user_activation_error'] = 'يرجى كتابة سبب الرفض.';
+            $redirect = BASE_URL . '/admin/user-activation';
+            if ($page > 1) {
+                $redirect .= '?page=' . $page;
+            }
+            header('Location: ' . $redirect);
+            exit;
+        }
+
+        try {
+            $this->adminService->refuseUser($userId, $reason);
+            $_SESSION['admin_user_activation_success'] = 'تم رفض الحساب وحذفه بنجاح. تم إرسال رسالة بريد إلكتروني للباحث.';
+        } catch (Throwable $e) {
+            $_SESSION['admin_user_activation_error'] = $e->getMessage();
+        }
+
+        $redirect = BASE_URL . '/admin/user-activation';
+        if ($page > 1) {
+            $redirect .= '?page=' . $page;
+        }
+
+        header('Location: ' . $redirect);
+        exit;
+    }
+
     public function initialPreviewQueue() {
         AuthMiddleware::requireRole('admin');
         $page = max(1, (int) ($_GET['page'] ?? 1));

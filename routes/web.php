@@ -183,6 +183,11 @@ switch ($path) {
         (new AdminController())->activateUser();
         break;
 
+    case '/admin/user-activation/refuse':
+        require __DIR__ . '/../app/Controllers/AdminController.php';
+        (new AdminController())->refuseUser();
+        break;
+
     case '/admin/initial-preview-queue':
         AuthMiddleware::requireRole('admin');
         require __DIR__ . '/../app/Controllers/AdminController.php';

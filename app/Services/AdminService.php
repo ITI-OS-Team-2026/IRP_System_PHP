@@ -161,6 +161,38 @@ class AdminService {
         }
     }
 
+    public function refuseUser($userId, $reason) {
+        $user = $this->adminRepository->findUserById($userId);
+        if (!$user || ($user['role'] ?? '') !== 'student') {
+            throw new Exception('لم يتم العثور على الحساب المطلوب رفضه.');
+        }
+
+        $deleted = $this->adminRepository->deleteStudentUser($userId);
+
+        if (!$deleted) {
+            throw new Exception('لم يتم العثور على الحساب المطلوب رفضه أو تم حذفه مسبقاً.');
+        }
+
+        $this->adminRepository->logAction(
+            'user_refused',
+            'تم رفض وحذف حساب الباحث رقم ' . (int) $userId,
+            isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : null,
+            null
+        );
+
+        try {
+            $this->mailService->sendTemplate('user_refused', [
+                'email' => (string) ($user['email'] ?? ''),
+                'name' => (string) ($user['full_name'] ?? ''),
+            ], [
+                'login_url' => $this->buildLoginUrl() !== '/login' ? str_replace('/login', '/register', $this->buildLoginUrl()) : '/register',
+                'reason' => $reason
+            ]);
+        } catch (Throwable $mailException) {
+            error_log('Refusal email failed for user ' . (int) $userId . ': ' . $mailException->getMessage());
+        }
+    }
+
     public function getInitialPreviewQueueData($page = 1, $perPage = 10) {
         $perPage = max(1, min(50, (int) $perPage));
         $requestedPage = max(1, (int) $page);
