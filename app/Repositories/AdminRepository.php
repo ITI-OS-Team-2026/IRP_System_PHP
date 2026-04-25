@@ -152,6 +152,16 @@ class AdminRepository {
         return $result ? $result->fetch_assoc() : null;
     }
 
+    public function findUserById($userId) {
+        $userId = (int) $userId;
+        $stmt = $this->db->prepare("SELECT id, full_name, email, role, is_active FROM users WHERE id = ? LIMIT 1");
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result ? $result->fetch_assoc() : null;
+    }
+
     public function createStaffUser($fullName, $email, $phoneNumber, $password, $role) {
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 

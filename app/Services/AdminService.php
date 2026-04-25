@@ -1,9 +1,11 @@
 <?php
 
 require __DIR__ . '/../Repositories/AdminRepository.php';
+require __DIR__ . '/MailService.php';
 
 class AdminService {
     private $adminRepository;
+    private $mailService;
 
     private $staffRoleOptions = [
         'reviewer' => 'مراجع',
@@ -13,6 +15,7 @@ class AdminService {
 
     public function __construct() {
         $this->adminRepository = new AdminRepository();
+        $this->mailService = new MailService();
     }
 
     public function getDashboardData() {
@@ -126,6 +129,11 @@ class AdminService {
     }
 
     public function activateUser($userId) {
+        $user = $this->adminRepository->findUserById($userId);
+        if (!$user || ($user['role'] ?? '') !== 'student') {
+            throw new Exception('لم يتم العثور على الحساب المطلوب تنشيطه.');
+        }
+
         $activated = $this->adminRepository->activateStudentUser($userId);
 
         if (!$activated) {
@@ -138,6 +146,17 @@ class AdminService {
             (int) $userId,
             null
         );
+
+        try {
+            $this->mailService->sendTemplate('user_activated', [
+                'email' => (string) ($user['email'] ?? ''),
+                'name' => (string) ($user['full_name'] ?? ''),
+            ], [
+                'login_url' => $this->buildLoginUrl(),
+            ]);
+        } catch (Throwable $mailException) {
+            error_log('Activation email failed for user ' . (int) $userId . ': ' . $mailException->getMessage());
+        }
     }
 
     public function getInitialPreviewQueueData($page = 1, $perPage = 10) {
@@ -342,6 +361,18 @@ class AdminService {
             null
         );
 
+        try {
+            $this->mailService->sendTemplate('staff_account_created', [
+                'email' => $email,
+                'name' => $fullName,
+            ], [
+                'login_url' => $this->buildLoginUrl(),
+                'role_label' => $this->staffRoleOptions[$role] ?? $role,
+            ]);
+        } catch (Throwable $mailException) {
+            error_log('Staff account email failed for ' . $email . ': ' . $mailException->getMessage());
+        }
+
         return $userId;
     }
 
@@ -496,5 +527,12 @@ class AdminService {
         $whole = max((int) $whole, 1);
         $part = (int) $part;
         return (int) round(($part / $whole) * 100) . '%';
+    }
+
+    private function buildLoginUrl() {
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+        $baseUrl = rtrim($baseUrl, '/');
+
+        return $baseUrl === '' ? '/login' : $baseUrl . '/login';
     }
 }

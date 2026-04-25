@@ -14,5 +14,10 @@ if (file_exists($envPath)) {
     }
 }
 
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require $autoloadPath;
+}
+
 require __DIR__ . '/../app/Middleware/AuthMiddleware.php';
 require __DIR__ . '/../routes/web.php';
