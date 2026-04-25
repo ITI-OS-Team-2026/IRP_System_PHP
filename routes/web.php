@@ -227,10 +227,18 @@ switch ($path) {
         break;
 
     case '/login':
+        if (AuthMiddleware::isAuthenticated()) {
+            header('Location: ' . BASE_URL . '/dashboard');
+            exit;
+        }
         require __DIR__ . '/../app/Views/auth/login.php';
         break;
         
     case '/register':
+        if (AuthMiddleware::isAuthenticated()) {
+            header('Location: ' . BASE_URL . '/dashboard');
+            exit;
+        }
         require __DIR__ . '/../app/Views/auth/register.php';
         break;
 

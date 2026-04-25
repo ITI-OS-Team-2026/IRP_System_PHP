@@ -50,16 +50,9 @@ if ($currentUser) {
 </head>
 <body class="bg-paper-white text-on-background min-h-screen flex flex-col font-body-lg">
 <!-- TopNavBar -->
-<header class="bg-slate-50 dark:bg-slate-950 docked full-width top-0 border-b-2 border-slate-900 dark:border-slate-100 flex justify-between items-center max-w-[1200px] mx-auto px-8 h-20 rtl">
+<header class="bg-slate-50 dark:bg-slate-950 docked full-width top-0 border-b-2 border-slate-900 dark:border-slate-100 flex justify-between items-center w-full px-8 h-20 rtl">
 <div class="flex items-center gap-8">
 <a class="text-xl font-black text-[#312E81] dark:text-indigo-300 uppercase font-h1" href="#">نظام أخلاقيات البحث العلمي</a>
-<nav class="hidden md:flex gap-6">
-<a class="text-[#312E81] dark:text-indigo-400 border-b-2 border-[#312E81] dark:border-indigo-400 pb-1 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 opacity-80 font-body-lg" href="#">الرئيسية</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-[#312E81] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 font-body-lg" href="#">المبادئ التوجيهية</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-[#312E81] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 font-body-lg" href="#">اللوائح</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-[#312E81] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 font-body-lg" href="#">النماذج</a>
-<a class="text-slate-600 dark:text-slate-400 hover:text-[#312E81] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 font-body-lg" href="#">تواصل معنا</a>
-</nav>
 </div>
 <div class="flex items-center gap-4">
 <?php if ($currentUser): ?>
@@ -67,10 +60,6 @@ if ($currentUser) {
                 <?php echo htmlspecialchars($dashboardTarget['label'], ENT_QUOTES, 'UTF-8'); ?>
             </a>
 <?php else: ?>
-<div class="hidden md:flex relative mr-4">
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-<input class="bg-surface-container-low border border-charcoal focus:border-2 focus:border-royal-indigo focus:ring-0 rounded-none py-2 pr-10 pl-4 w-48 text-body-sm transition-all placeholder:text-outline focus:w-64 font-body-sm" placeholder="بحث..." type="text"/>
-</div>
 <a class="hidden md:inline-flex items-center justify-center border border-charcoal bg-paper-white text-on-surface hover:bg-surface-container px-4 py-2 font-button transition-colors" href="<?php echo BASE_URL; ?>/register">
                 إنشاء حساب
             </a>
