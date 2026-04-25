@@ -1,232 +1,288 @@
-<html dir="rtl" lang="ar"><head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>شهادة اعتماد IRB - IRB-CERT-2026-0001</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>شهادة اعتماد نهائي - IRB</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
-        
-        body { 
-            font-family: 'Tajawal', sans-serif; 
-            margin: 0; 
-            background: #f0f4f8;
+        @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&display=swap');
+
+        :root {
+            --brand: #1a146b;
+            --gold: #b89146;
+            --ink: #1f2937;
+            --muted: #6b7280;
+            --paper: #ffffff;
+            --bg: #eef2f8;
         }
-        
-        .certificate-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: #fff;
-            border: 10px solid #1e3a8a;
-            padding: 50px;
-            position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-        
-        .certificate-header {
-            text-align: center;
-            border-bottom: 3px solid #1e3a8a;
-            padding-bottom: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .certificate-header h1 {
-            font-family: 'Amiri', serif;
-            font-size: 42px;
-            color: #1e3a8a;
+        * { box-sizing: border-box; }
+        body {
             margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "Times New Roman", "Georgia", serif;
+        }
+        .page-wrap {
+            min-height: 100vh;
+            padding: 28px 16px;
+            display: grid;
+            place-items: center;
+        }
+        .certificate {
+            width: 210mm;
+            min-height: 297mm;
+            background: var(--paper);
+            border: 2px solid var(--brand);
+            outline: 8px solid rgba(26, 20, 107, 0.08);
+            outline-offset: -18px;
+            position: relative;
+            padding: 22mm 20mm 20mm;
+        }
+        .certificate::before,
+        .certificate::after {
+            content: "";
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--gold);
+        }
+        .certificate::before {
+            top: 12px;
+            right: 12px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+        .certificate::after {
+            bottom: 12px;
+            left: 12px;
+            border-right: 0;
+            border-top: 0;
+        }
+        .top {
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10mm;
+            margin-bottom: 10mm;
+        }
+        .org-ar {
+            margin: 0;
+            font-size: 20px;
+            color: var(--brand);
             font-weight: 700;
         }
-        
-        .certificate-header h2 {
-            font-size: 24px;
-            color: #374151;
-            margin: 10px 0 0 0;
-            font-weight: 500;
+        .org-en {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-        
-        .certificate-content {
-            line-height: 2.2;
+        .title-ar {
+            margin: 20px 0 6px;
+            color: var(--brand);
+            font-size: 35px;
+            font-weight: 700;
+        }
+        .title-en {
+            margin: 0;
+            color: #374151;
             font-size: 18px;
+            letter-spacing: 0.6px;
         }
-        
-        .certificate-content p {
-            margin: 15px 0;
+        .cert-no {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 14px;
         }
-        
-        .certificate-content .label {
+        .statement {
+            text-align: center;
+            line-height: 1.9;
+            font-size: 19px;
+            margin: 0 0 10mm;
+        }
+        .statement strong {
+            color: var(--brand);
+            border-bottom: 1px solid #cbd5e1;
+            padding: 0 2px;
+        }
+        .details {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6mm;
+            font-size: 15px;
+        }
+        .details td {
+            border: 1px solid #d1d5db;
+            padding: 10px 12px;
+            vertical-align: top;
+        }
+        .details .label {
+            width: 30%;
             font-weight: 700;
-            color: #1e3a8a;
-            display: inline-block;
-            min-width: 180px;
+            color: #111827;
+            background: #f8fafc;
         }
-        
-        .certificate-content .value {
-            color: #374151;
+        .details .value {
+            width: 70%;
+            color: #1f2937;
         }
-        
-        .certificate-footer {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 2px solid #e5e7eb;
+
+        .official-marks {
+            margin-top: 14mm;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            gap: 16px;
+            align-items: flex-end;
         }
-        
-        .certificate-footer .seal {
-            width: 120px;
-            height: 120px;
-            border: 4px solid #1e3a8a;
+        .seal-print {
+            width: 135px;
+            height: 135px;
+            border: 3px solid rgba(26, 20, 107, 0.32);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            place-items: center;
+            color: rgba(26, 20, 107, 0.72);
+            font-size: 12px;
             text-align: center;
-            color: #1e3a8a;
+            line-height: 1.5;
             font-weight: 700;
-            font-size: 14px;
-            flex-direction: column;
+            transform: rotate(-14deg);
+            position: relative;
         }
-        
-        .certificate-footer .seal span {
-            font-size: 10px;
-            margin-top: 5px;
+        .seal-print::before {
+            content: "";
+            position: absolute;
+            inset: 9px;
+            border: 1.5px solid rgba(26, 20, 107, 0.4);
+            border-radius: 50%;
         }
-        
+        .signature-block {
+            text-align: center;
+            min-width: 260px;
+        }
+        .signature-script {
+            font-family: "Aref Ruqaa Ink", "Times New Roman", serif;
+            font-size: 40px;
+            color: rgba(10, 25, 88, 0.9);
+            margin-bottom: 4px;
+            line-height: 1;
+            transform: rotate(-7deg);
+            letter-spacing: 0.3px;
+            text-shadow: 0.2px 0.2px 0 rgba(10, 25, 88, 0.55);
+        }
+        .signature-line {
+            border-top: 1px solid #111827;
+            margin-bottom: 6px;
+            width: 100%;
+        }
+        .signature-name {
+            font-weight: 700;
+            color: #111827;
+            font-size: 15px;
+        }
+        .signature-role {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
         .print-actions {
             text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 10px;
+            margin-top: 14px;
         }
-        
         .print-actions button {
-            background: #1e3a8a;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-family: 'Tajawal', sans-serif;
+            border: 0;
+            background: var(--brand);
+            color: #fff;
+            padding: 12px 22px;
+            font-size: 14px;
             border-radius: 8px;
             cursor: pointer;
-            margin: 0 10px;
-            transition: all 0.3s ease;
         }
-        
         .print-actions button:hover {
-            background: #1e40af;
-            transform: translateY(-2px);
+            background: #241c7d;
         }
-        
-        .print-actions .secondary {
-            background: #64748b;
+
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
         }
-        
-        .print-actions .secondary:hover {
-            background: #475569;
-        }
-        
         @media print {
             body { background: #fff; }
-            .certificate-container { 
-                border-width: 5px; 
-                margin: 0; 
-                box-shadow: none;
+            .page-wrap { padding: 0; min-height: auto; }
+            .certificate {
+                width: auto;
+                min-height: auto;
+                outline: none;
+                border: 2px solid var(--brand);
+                page-break-inside: avoid;
             }
+            .official-marks { display: flex; }
             .print-actions { display: none; }
-            .no-print { display: none; }
         }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mt-8{margin-top:2rem}.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.px-8{padding-left:2rem;padding-right:2rem}.py-4{padding-top:1rem;padding-bottom:1rem}.text-center{text-align:center}.align-middle{vertical-align:middle}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.italic{font-style:italic}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:text-indigo-900:hover{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}</style></head>
+</head>
 <body>
-    <!-- Navigation Bar (hidden on print) -->
-    <nav class="no-print bg-white shadow-md py-4 px-8 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <span class="material-symbols-outlined text-3xl text-indigo-900">verified_user</span>
-            <span class="font-bold text-xl text-indigo-900">نظام اعتماد الأبحاث</span>
-        </div>
-        <a href="/ITI/IRP_System_PHP/public/committee/dashboard" class="flex items-center gap-2 text-slate-600 hover:text-indigo-900">
-            <span class="material-symbols-outlined">arrow_back</span>
-            العودة للوحة التحكم
-        </a>
-    </nav>
+    <div class="page-wrap">
+        <section class="certificate">
+            <header class="top">
+                <p class="org-ar">اللجنة المؤسسية لأخلاقيات البحث العلمي (IRB)</p>
+                <p class="org-en">Institutional Review Board</p>
+                <h1 class="title-ar">شهادة اعتماد نهائي</h1>
+                <p class="title-en">Certificate of Final Ethical Approval</p>
+                <div class="cert-no">
+                    رقم الشهادة: <?= htmlspecialchars($certificate['certificate_number'], ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            </header>
 
-    <div class="certificate-container">
-        <div class="certificate-header">
-            <h1>Institutional Review Board</h1>
-            <h2>شهادة الاعتماد الأخلاقي</h2>
-        </div>
+            <p class="statement">
+                تشهد لجنة أخلاقيات البحث العلمي بأن هذا المقترح البحثي قد استوفى متطلبات
+                <strong>الاعتماد النهائي</strong> وفق اللوائح المؤسسية المعتمدة.
+            </p>
 
-        <div class="certificate-content">
-            <p>بسم الله الرحمن الرحيم</p>
-            
-            <p>تقرر لجنة اعتماد الأبحاث المؤسسية بأن البحث العلمي المقدم أدناه قد استوفى جميع المعايير الأخلاقية المعتمدة:</p>
-            
-            <p>
-                <span class="label">رقم الشهادة:</span>
-                <span class="value font-bold text-indigo-900">IRB-CERT-2026-0001</span>
-            </p>
-            
-            <p>
-                <span class="label">تاريخ الإصدار:</span>
-                <span class="value">2026/04/25</span>
-            </p>
-            
-            <p>
-                <span class="label">الرقم التسلسلي للبحث:</span>
-                <span class="value">211241</span>
-            </p>
-            
-            <p>
-                <span class="label">عنوان البحث:</span>
-                <span class="value font-medium">شسيشسي</span>
-            </p>
-            
-            <p>
-                <span class="label">اسم الباحث:</span>
-                <span class="value">احمد كمال الاحمدي محمد</span>
-            </p>
-            
-            <p>
-                <span class="label">الباحث الرئيسي:</span>
-                <span class="value">شسشسيس</span>
-            </p>
-            
-            <p>
-                <span class="label">القسم / التخصص:</span>
-                <span class="value">فلاح / عيان</span>
-            </p>
-            
-            <p class="mt-8 text-center text-slate-600 italic">
-                certify that the above research proposal has received final IRB approval in accordance with institutional regulations and ethical standards.
-            </p>
-        </div>
+            <table class="details">
+                <tr>
+                    <td class="label">تاريخ الإصدار</td>
+                    <td class="value"><?= htmlspecialchars(date('Y/m/d', strtotime($certificate['issued_at'])), ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <td class="label">الرقم التسلسلي للبحث</td>
+                    <td class="value"><?= htmlspecialchars($certificate['serial_number'] ?: ('SUB-' . (int) $certificate['id']), ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <td class="label">عنوان البحث</td>
+                    <td class="value"><?= htmlspecialchars($certificate['title'], ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <td class="label">اسم الباحث</td>
+                    <td class="value"><?= htmlspecialchars($certificate['student_name'], ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <td class="label">الباحث الرئيسي</td>
+                    <td class="value"><?= htmlspecialchars($certificate['principal_investigator'], ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+                <tr>
+                    <td class="label">القسم / التخصص</td>
+                    <td class="value"><?= htmlspecialchars(($certificate['department'] ?: '-') . ' / ' . ($certificate['specialty'] ?: '-'), ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+            </table>
 
-        <div class="certificate-footer">
-            <div class="text-sm text-slate-500">
-                <p>IRB Office - Institutional Review Board</p>
-                <p>Digital Certificate - Certificate of Ethical Approval</p>
-            </div>
-            <div class="seal">
-                <span class="material-symbols-outlined text-3xl">verified</span>
-                <span>معتمد</span>
-            </div>
-        </div>
+            <footer class="official-marks">
+                <div class="seal-print">
+                    ختم اللجنة<br/>IRB<br/>Approved
+                </div>
+                <div class="signature-block">
+                    <div class="signature-script">أيمن شلبي</div>
+                    <div class="signature-line"></div>
+                    <div class="signature-name">مدير لجنة الاعتماد</div>
+                    <div class="signature-role">Institutional Review Board Manager</div>
+                </div>
+            </footer>
+        </section>
     </div>
 
     <div class="print-actions">
-        <button onclick="window.print()">
-            <span class="material-symbols-outlined align-middle">print</span>
-            طباعة الشهادة
-        </button>
-        <button class="secondary" onclick="window.history.back()">
-            <span class="material-symbols-outlined align-middle">arrow_back</span>
-            رجوع
-        </button>
+        <button onclick="window.print()">طباعة / حفظ PDF</button>
     </div>
-
-
-</body></html>
+</body>
+</html>
