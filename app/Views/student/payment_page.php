@@ -1,4 +1,9 @@
 <?php
+/**
+ * @deprecated This view is no longer used by any route.
+ * Payment flow is handled by payment_initiate.php via /payment/initiate.
+ * Kept for reference only.
+ */
 $pageTitle = 'بوابة الدفع الإلكتروني - IRB Portal';
 ?>
 <!DOCTYPE html>

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../Repositories/PaymentRepository.php';
+require_once __DIR__ . '/../Repositories/NotificationRepository.php';
 require_once __DIR__ . '/../Services/PaymentService.php';
 require_once __DIR__ . '/../Helpers/PaymentHelpers.php';
 
@@ -9,11 +10,62 @@ class PaymentController {
     private $db;
     private $repository;
     private $service;
+    private $notificationRepo;
 
     public function __construct() {
         $this->db = Database::getConnection();
         $this->repository = new PaymentRepository($this->db);
-        $this->service = new PaymentService($this->repository);
+        $this->service   = new PaymentService($this->repository);
+        $this->notificationRepo = new NotificationRepository($this->db);
+    }
+
+    /**
+     * Create a payment_success notification for the student.
+     * Called ONLY when status transitions from non-completed → completed.
+     * Catches its own exceptions so it never disrupts the payment flow.
+     *
+     * @param array  $payment  Row from getPaymentByPaymobOrderId / getPaymentById
+     * @param string $logFile  Optional path for debug log
+     */
+    private function _createPaymentNotification(array $payment, string $logFile = ''): void {
+        try {
+            $paymentType  = $payment['payment_type'] ?? 'initial';
+            $serialNumber = $payment['serial_number'] ?? '';
+
+            if ($paymentType === 'sample_size') {
+                $msg = 'تم سداد رسوم حجم العينة بنجاح';
+            } else {
+                $msg = 'تم سداد رسوم التقديم بنجاح';
+            }
+
+            if (!empty($serialNumber)) {
+                $msg .= ' للبحث رقم ' . $serialNumber;
+            }
+
+            $this->notificationRepo->create([
+                'user_id'    => (int) ($payment['student_id'] ?? 0),
+                'type'       => 'payment_success',
+                'message'    => $msg,
+                'related_id' => (int) ($payment['submission_id'] ?? 0),
+            ]);
+
+            if ($logFile) {
+                file_put_contents(
+                    $logFile,
+                    '[' . date('Y-m-d H:i:s') . "] Notification created for user {$payment['student_id']}\n",
+                    FILE_APPEND | LOCK_EX
+                );
+            }
+        } catch (Exception $e) {
+            error_log('PaymentController: notification creation failed: ' . $e->getMessage());
+            if ($logFile) {
+                file_put_contents(
+                    $logFile,
+                    '[' . date('Y-m-d H:i:s') . '] Notification failed: ' . $e->getMessage() . "\n",
+                    FILE_APPEND | LOCK_EX
+                );
+            }
+        }
     }
 
     public function initiate() {
@@ -262,10 +314,16 @@ class PaymentController {
                 $payment = $this->repository->getPaymentByPaymobOrderId($orderId);
                 if ($payment) {
                     if ($success) {
+                        // Guard: only notify + mark completed if not already completed (idempotency)
+                        $wasAlreadyCompleted = ($payment['payment_status'] ?? '') === 'completed';
                         $this->repository->markPaymentCompleted((int) $payment['id'], $transactionId);
                         $newStatus = ($payment['payment_type'] === 'sample_size') ? 'fully_paid' : 'initial_paid';
                         $this->repository->updateSubmissionStatus((int) $payment['submission_id'], $newStatus);
-                        file_put_contents($logFile, "[Callback] Payment {$payment['id']} marked COMPLETED, submission marked completed\n", FILE_APPEND | LOCK_EX);
+                        file_put_contents($logFile, "[Callback] Payment {$payment['id']} marked COMPLETED, submission marked {$newStatus}\n", FILE_APPEND | LOCK_EX);
+                        // Create notification only on first completion (prevents duplicates from webhook+callback)
+                        if (!$wasAlreadyCompleted) {
+                            $this->_createPaymentNotification($payment, $logFile);
+                        }
                     } else {
                         $failureReason = $_POST['data_message'] ?? $_GET['data_message'] ?? 'فشل الدفع (callback)';
                         $this->repository->markPaymentFailed((int) $payment['id'], $failureReason, $transactionId);
@@ -359,7 +417,9 @@ class PaymentController {
                         $this->repository->markPaymentCompleted((int) $payment['id'], $transactionId);
                         $newStatus = ($payment['payment_type'] === 'sample_size') ? 'fully_paid' : 'initial_paid';
                         $this->repository->updateSubmissionStatus((int) $payment['submission_id'], $newStatus);
-                        file_put_contents($logFile, "[Return] Payment {$payment['id']} marked COMPLETED, submission marked completed\n", FILE_APPEND | LOCK_EX);
+                        file_put_contents($logFile, "[Return] Payment {$payment['id']} marked COMPLETED, submission marked {$newStatus}\n", FILE_APPEND | LOCK_EX);
+                        // $dbStatus was not 'completed' (that branch was handled above), so this is a fresh completion
+                        $this->_createPaymentNotification($payment, $logFile);
                     } elseif (!$pending) {
                         $failureReason = $_GET['data_message'] ?? $_POST['data_message'] ?? 'فشل الدفع';
                         $this->repository->markPaymentFailed((int) $payment['id'], $failureReason, $transactionId);
@@ -411,7 +471,7 @@ class PaymentController {
 
 
             // Always fetch fresh from DB — never rely on session/cache for status
-            $payment = $this->repository->getPaymentById($paymentId);
+            $payment = $this->repository->getPaymentWithSubmission($paymentId);
 
             if (!$payment) {
                 throw new Exception('\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u0639\u062b\u0648\u0631 \u0639\u0644\u0649 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u062f\u0641\u0639\u0629');
@@ -442,7 +502,7 @@ class PaymentController {
                 throw new Exception('معرف الدفعة غير صالح');
             }
 
-            $payment = $this->repository->getPaymentById($paymentId);
+            $payment = $this->repository->getPaymentWithSubmission($paymentId);
 
             if (!$payment) {
                 throw new Exception('لم يتم العثور على بيانات الدفعة');
@@ -463,6 +523,7 @@ class PaymentController {
             $amount = PaymentHelpers::formatAmount($payment['amount']);
             $date = PaymentHelpers::formatDate($payment['transaction_date'] ?? $payment['created_at'] ?? '');
             $title = htmlspecialchars($payment['title'] ?? '', ENT_QUOTES, 'UTF-8');
+            $serialNumber = htmlspecialchars($payment['serial_number'] ?? '', ENT_QUOTES, 'UTF-8');
             $txnId = $payment['paymob_transaction_id'] ?? '';
             $orderId = $payment['paymob_order_id'] ?? '';
 
@@ -485,6 +546,10 @@ class PaymentController {
                     <tr style="border-bottom: 1px solid #e2e8f0;">
                         <td style="padding: 12px 8px; color: #64748b;">نوع الدفع</td>
                         <td style="padding: 12px 8px; font-weight: bold; color: #1e293b;">' . $paymentTypeLabel . '</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 12px 8px; color: #64748b;">الرقم التسلسلي</td>
+                        <td style="padding: 12px 8px; font-weight: bold; color: #1e293b;">' . $serialNumber . '</td>
                     </tr>
                     <tr style="border-bottom: 1px solid #e2e8f0;">
                         <td style="padding: 12px 8px; color: #64748b;">الحالة</td>

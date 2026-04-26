@@ -127,6 +127,18 @@ $failureReason = trim((string) ($payment['failure_reason'] ?? ''));
                                 </div>
 
                                 <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                                    <span class="text-slate-gray">نوع الدفع</span>
+                                    <span class="font-button text-charcoal"><?= ($payment['payment_type'] ?? '') === 'sample_size' ? 'رسوم حجم العينة' : 'رسوم التقديم' ?></span>
+                                </div>
+
+                                <?php if (!empty($payment['serial_number'])): ?>
+                                <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                                    <span class="text-slate-gray">الرقم التسلسلي</span>
+                                    <span class="font-button text-charcoal"><?= htmlspecialchars($payment['serial_number'], ENT_QUOTES, 'UTF-8') ?></span>
+                                </div>
+                                <?php endif; ?>
+
+                                <div class="flex justify-between items-center pb-4 border-b border-slate-100">
                                     <span class="text-slate-gray">الحالة</span>
                                     <span class="px-3 py-1 rounded-full text-sm font-button <?= htmlspecialchars($badgeClass, ENT_QUOTES, 'UTF-8') ?>">
                                         <?= htmlspecialchars($statusLabel, ENT_QUOTES, 'UTF-8') ?>

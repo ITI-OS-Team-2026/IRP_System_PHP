@@ -95,9 +95,27 @@ class PaymentRepository {
 
     public function getPaymentById($paymentId) {
         $stmt = $this->prepare(
-            "SELECT p.*, rs.title, rs.student_id, rs.status
+            "SELECT p.*, rs.title, rs.student_id, rs.status, rs.serial_number
              FROM payments p
              LEFT JOIN research_submissions rs ON p.submission_id = rs.id
+             WHERE p.id = ?
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $paymentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    /**
+     * Fetch payment with full submission details (serial_number, title, status).
+     * Safe read-only enhancement for receipt display (UI + PDF).
+     */
+    public function getPaymentWithSubmission($paymentId) {
+        $stmt = $this->prepare(
+            "SELECT p.*, rs.serial_number, rs.title, rs.student_id, rs.status
+             FROM payments p
+             JOIN research_submissions rs ON rs.id = p.submission_id
              WHERE p.id = ?
              LIMIT 1"
         );
@@ -129,7 +147,7 @@ class PaymentRepository {
 
     public function getPaymentByPaymobOrderId($paymobOrderId) {
         $stmt = $this->prepare(
-            "SELECT p.*, rs.student_id, rs.title, rs.status
+            "SELECT p.*, rs.student_id, rs.title, rs.status, rs.serial_number
              FROM payments p
              LEFT JOIN research_submissions rs ON p.submission_id = rs.id
              WHERE p.paymob_order_id = ?
