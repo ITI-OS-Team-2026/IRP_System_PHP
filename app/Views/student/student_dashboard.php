@@ -57,6 +57,10 @@ while ($row = $logsResult->fetch_assoc()) {
     $notifications[] = $row;
 }
 
+require_once __DIR__ . '/../../Repositories/NotificationRepository.php';
+$notificationRepo = new NotificationRepository($db);
+$latestNotification = $notificationRepo->getLatestByUser($studentId);
+
 $statusMap = [
     'submitted'          => ['label' => 'تم التقديم',             'color' => 'bg-blue-100 text-blue-800'],
     'admin_reviewed'     => ['label' => 'تمت مراجعة الإدارة',     'color' => 'bg-indigo-100 text-indigo-800'],
@@ -395,30 +399,29 @@ function timeAgo($datetime) {
                             <span class="material-symbols-outlined text-slate-gray text-[20px]">notifications</span>
                         </div>
 
-                        <?php if (empty($notifications)): ?>
+                        <?php if ($latestNotification): ?>
+                            <div class="px-5 py-4">
+                                <div class="notification-item flex items-start gap-3" title="<?= htmlspecialchars($latestNotification['message'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <span class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1.5 text-xs font-button text-on-primary shrink-0">
+                                        <?= htmlspecialchars(mb_substr($actionLabels[$latestNotification['type']] ?? 'إشعار', 0, 20, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
+                                    </span>
+                                    <div class="flex-1 text-right">
+                                        <p class="notification-text text-sm leading-7 text-charcoal">
+                                            <?= htmlspecialchars($latestNotification['message'], ENT_QUOTES, 'UTF-8') ?>
+                                        </p>
+                                        <p class="text-xs text-slate-400 mt-1"><?= timeAgo($latestNotification['created_at']) ?></p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+                                    <a href="#" onclick="openNotificationsDropdown(event)" class="view-all-notifications text-sm font-button text-primary hover:underline">
+                                        عرض كل الإشعارات
+                                    </a>
+                                </div>
+                            </div>
+                        <?php else: ?>
                             <div class="p-6 text-center">
                                 <span class="material-symbols-outlined text-4xl text-slate-300 mb-2 block">notifications_off</span>
                                 <p class="text-sm text-slate-gray">لا توجد إشعارات حالياً</p>
-                            </div>
-                        <?php else: ?>
-                            <div class="divide-y divide-slate-200">
-                                <?php foreach ($notifications as $notif): ?>
-                                    <?php
-                                        $actionLabel = $actionLabels[$notif['action']] ?? $notif['action'];
-                                    ?>
-                                    <div class="px-5 py-4 flex items-start gap-3">
-                                        <span class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1.5 text-xs font-button text-on-primary shrink-0">
-                                            <?= htmlspecialchars(mb_substr($actionLabel, 0, 20, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
-                                        </span>
-                                        <div class="flex-1 text-right">
-                                            <p class="text-sm leading-7 text-charcoal"><?= htmlspecialchars($notif['details'] ?? $notif['action'], ENT_QUOTES, 'UTF-8') ?></p>
-                                            <?php if ($notif['submission_title']): ?>
-                                                <p class="text-xs text-slate-gray mt-0.5"><?= htmlspecialchars($notif['submission_title'], ENT_QUOTES, 'UTF-8') ?></p>
-                                            <?php endif; ?>
-                                            <p class="text-xs text-slate-400 mt-1"><?= timeAgo($notif['created_at']) ?></p>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -428,6 +431,12 @@ function timeAgo($datetime) {
     </div>
 
 <style>
+.notification-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 @keyframes notifFadeIn {
     from { opacity: 0; transform: translateY(-6px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0)   scale(1);    }
@@ -512,6 +521,26 @@ function timeAgo($datetime) {
         });
     }
 })();
+
+window.openNotificationsDropdown = function (e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    const bell = document.getElementById('notif-bell-btn');
+
+    if (!bell) {
+        console.error('Notification bell not found');
+        return;
+    }
+
+    // Scroll to navbar
+    bell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Trigger existing dropdown logic
+    bell.click();
+};
 </script>
 </body>
 </html>
