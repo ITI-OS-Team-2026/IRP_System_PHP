@@ -50,6 +50,35 @@ class NotificationRepository {
     }
 
     /**
+     * Check if an identical notification was recently created to prevent duplicates.
+     * Uses a stable key logic (user + type + event/status + submission) via static cache
+     * and a strict DB throttle on type + submission, completely ignoring unreliable message text.
+     */
+    private static $throttleCache = [];
+
+    public function existsRecent(int $userId, string $type, string $eventOrStatus, ?int $relatedId, int $minutes = 5): bool {
+        $stableKey = "{$userId}_{$type}_{$eventOrStatus}_{$relatedId}";
+        if (isset(self::$throttleCache[$stableKey])) {
+            return true;
+        }
+        self::$throttleCache[$stableKey] = true;
+
+        $stmt = $this->db->prepare(
+            "SELECT id FROM system_logs 
+             WHERE user_id = ? 
+               AND action = ? 
+               AND (submission_id = ? OR (submission_id IS NULL AND ? IS NULL))
+               AND created_at >= NOW() - INTERVAL ? MINUTE 
+             LIMIT 1"
+        );
+        $stmt->bind_param('issii', $userId, $type, $relatedId, $relatedId, $minutes);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        return (bool) $result->fetch_assoc();
+    }
+
+    /**
      * Fetch recent notifications for a user.
      *
      * Since system_logs lacks an is_read column, all recent entries
