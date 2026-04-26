@@ -82,6 +82,9 @@ $actionLabels = [
     'research_approved'    => 'تمت الموافقة على البحث',
     'research_rejected'    => 'تم رفض البحث',
     'certificate_issued'   => 'تم إصدار الشهادة',
+    'submission_status'    => 'تحديث حالة البحث',
+    'submission_event'     => 'إشعار حول البحث',
+    'payment_failed'       => 'فشل عملية الدفع',
 ];
 
 // Unread count: notifications created after the last time the bell was dismissed.

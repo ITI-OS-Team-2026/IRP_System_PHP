@@ -168,10 +168,18 @@ class ReviewerController {
             $updateReview->bind_param('ssi', $revStatus, $reviewerNotes, $reviewId);
             $updateReview->execute();
             
+            $statusStmt = $db->prepare("SELECT status FROM research_submissions WHERE id = ?");
+            $statusStmt->bind_param('i', $submissionId);
+            $statusStmt->execute();
+            $oldStatus = $statusStmt->get_result()->fetch_assoc()['status'] ?? '';
+
             // 3. Update main research_submissions status
             $updateSub = $db->prepare("UPDATE research_submissions SET status = ? WHERE id = ?");
             $updateSub->bind_param('si', $subStatus, $submissionId);
             $updateSub->execute();
+            
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($db, $submissionId, $oldStatus, $subStatus);
             
             $db->commit();
             $_SESSION['review_success'] = 'تم تسجيل قرارك بنجاح. شكراً لك.';

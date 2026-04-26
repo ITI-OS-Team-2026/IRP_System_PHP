@@ -280,7 +280,12 @@ class AdminRepository {
         $stmt->bind_param('si', $serialNumber, $submissionId);
         $stmt->execute();
 
-        return $stmt->affected_rows > 0;
+        $success = $stmt->affected_rows > 0;
+        if ($success) {
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($this->db, $submissionId, 'submitted', 'admin_reviewed');
+        }
+        return $success;
     }
 
     public function getReviewerAssignmentSubmissions($search = '', $limit = 30, $offset = 0) {
@@ -427,6 +432,11 @@ class AdminRepository {
         $submissionId = (int) $submissionId;
         $reviewerId = (int) $reviewerId;
 
+        $statusStmt = $this->db->prepare("SELECT status FROM research_submissions WHERE id = ? LIMIT 1");
+        $statusStmt->bind_param('i', $submissionId);
+        $statusStmt->execute();
+        $oldStatus = $statusStmt->get_result()->fetch_assoc()['status'] ?? '';
+
         $stmt = $this->db->prepare("SELECT id FROM reviews WHERE submission_id = ? LIMIT 1");
         $stmt->bind_param('i', $submissionId);
         $stmt->execute();
@@ -450,6 +460,8 @@ class AdminRepository {
             $updateStatus->bind_param('i', $submissionId);
             $updateStatus->execute();
 
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($this->db, $submissionId, $oldStatus, 'under_review', 'review_started');
             return 'updated';
         }
 
@@ -467,6 +479,8 @@ class AdminRepository {
         $updateStatus->bind_param('i', $submissionId);
         $updateStatus->execute();
 
+        require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+        NotificationHelper::handleStatusChange($this->db, $submissionId, $oldStatus, 'under_review', 'review_started');
         return 'created';
     }
 

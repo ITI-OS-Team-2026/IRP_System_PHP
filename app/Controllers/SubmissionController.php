@@ -325,9 +325,17 @@ class SubmissionController {
             }
 
             // 4. Update submission status to under_review
+            $statusStmt = $db->prepare("SELECT status FROM research_submissions WHERE id = ?");
+            $statusStmt->bind_param('i', $submissionId);
+            $statusStmt->execute();
+            $oldStatus = $statusStmt->get_result()->fetch_assoc()['status'] ?? '';
+
             $stmt = $db->prepare("UPDATE research_submissions SET status = 'under_review' WHERE id = ?");
             $stmt->bind_param('i', $submissionId);
             $stmt->execute();
+
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($db, $submissionId, $oldStatus, 'under_review', 'revision_submitted');
 
             // 5. Reset review status to pending
             $stmt = $db->prepare("UPDATE reviews SET review_status = 'pending' WHERE submission_id = ?");

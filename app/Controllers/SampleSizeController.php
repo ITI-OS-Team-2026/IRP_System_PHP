@@ -141,6 +141,9 @@ class SampleSizeController {
                 throw new Exception("فشل في تحديث بيانات البحث. قد يكون البحث قد تمت معالجته بالفعل.");
             }
             
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($db, $id, 'initial_paid', 'sample_sized');
+            
             // Log the action
             $officerId = $_SESSION['user_id'];
             $logStmt = $db->prepare("INSERT INTO system_logs (user_id, submission_id, action, details) 

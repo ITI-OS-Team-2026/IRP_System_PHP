@@ -91,6 +91,17 @@ class PaymentRepository {
         if ($stmt->errno !== 0) {
             throw new Exception('فشل تحديث حالة فشل الدفع: ' . $stmt->error);
         }
+
+        // Trigger optional payment failure notification
+        $subStmt = $this->prepare("SELECT submission_id FROM payments WHERE id = ? LIMIT 1");
+        $subStmt->bind_param('i', $paymentId);
+        $subStmt->execute();
+        $subRow = $subStmt->get_result()->fetch_assoc();
+
+        if ($subRow && !empty($subRow['submission_id'])) {
+            require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+            NotificationHelper::handleStatusChange($this->db, $subRow['submission_id'], null, null, 'payment_failed');
+        }
     }
 
     public function getPaymentById($paymentId) {
@@ -173,6 +184,11 @@ class PaymentRepository {
     }
 
     public function updateSubmissionStatus($submissionId, $newStatus) {
+        $statusStmt = $this->prepare("SELECT status FROM research_submissions WHERE id = ? LIMIT 1");
+        $statusStmt->bind_param('i', $submissionId);
+        $statusStmt->execute();
+        $oldStatus = $statusStmt->get_result()->fetch_assoc()['status'] ?? '';
+
         $stmt = $this->prepare(
             "UPDATE research_submissions
              SET status = ?, updated_at = NOW()
@@ -184,6 +200,9 @@ class PaymentRepository {
         if ($stmt->errno !== 0) {
             throw new Exception('فشل تحديث حالة البحث: ' . $stmt->error);
         }
+
+        require_once __DIR__ . '/../Helpers/NotificationHelper.php';
+        NotificationHelper::handleStatusChange($this->db, $submissionId, $oldStatus, $newStatus);
     }
 
     public function getSubmissionById($submissionId) {
