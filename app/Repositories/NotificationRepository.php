@@ -112,6 +112,30 @@ class NotificationRepository {
     }
 
     /**
+     * Fetch only the single latest notification for a user.
+     */
+    public function getLatestByUser(int $userId): ?array {
+        $stmt = $this->db->prepare(
+            "SELECT sl.id,
+                    sl.action AS type,
+                    sl.details AS message,
+                    sl.created_at,
+                    sl.submission_id AS related_id,
+                    rs.title AS related_title
+             FROM system_logs sl
+             LEFT JOIN research_submissions rs ON rs.id = sl.submission_id
+             WHERE sl.user_id = ?
+             ORDER BY sl.created_at DESC
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        return $result->fetch_assoc() ?: null;
+    }
+
+    /**
      * Count unread (recent) notifications for a user.
      */
     public function countUnread(int $userId): int {
