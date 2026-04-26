@@ -10,3 +10,13 @@ public/uploads/*
 !storage/receipts/.gitkeep
 !public/uploads/.gitkeep
 storage/submissions/
+storage/tmp/
+
+# Paymob Configuration
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Logs
+*.log

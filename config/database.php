@@ -9,12 +9,12 @@ class Database {
      */
     public static function getConnection() {
         if (self::$connection === null) {
-            $host = $_ENV['DB_HOST'] ?? 'localhost';
-            $port = $_ENV['DB_PORT'] ?? 3306;
-            $db   = $_ENV['DB_DATABASE'] ?? 'defaultdb';
-            $user = $_ENV['DB_USERNAME'] ?? 'root';
-            $pass = $_ENV['DB_PASSWORD'] ?? '';
-            $sslMode = $_ENV['DB_SSL_MODE'] ?? 'REQUIRED';
+            $host = ($_ENV['DB_HOST'] ?? getenv('DB_HOST')) ?: 'localhost';
+            $port = ($_ENV['DB_PORT'] ?? getenv('DB_PORT')) ?: 3306;
+            $db   = ($_ENV['DB_DATABASE'] ?? getenv('DB_DATABASE')) ?: 'defaultdb';
+            $user = ($_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME')) ?: 'root';
+            $pass = ($_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD')) ?: '';
+            $sslMode = ($_ENV['DB_SSL_MODE'] ?? getenv('DB_SSL_MODE')) ?: 'REQUIRED';
 
             // Initialize MySQLi
             $mysqli = mysqli_init();
@@ -33,6 +33,12 @@ class Database {
             }
 
             // Establish the connection
+            // For local development, use regular connection (no SSL flag)
+            $flags = 0;
+            if (strtoupper($sslMode) === 'REQUIRED' && $host !== 'localhost' && $host !== '127.0.0.1') {
+                $flags = MYSQLI_CLIENT_SSL;
+            }
+
             $success = $mysqli->real_connect(
                 $host,
                 $user,
@@ -40,7 +46,7 @@ class Database {
                 $db,
                 (int)$port,
                 null,
-                MYSQLI_CLIENT_SSL
+                $flags
             );
 
             if (!$success) {

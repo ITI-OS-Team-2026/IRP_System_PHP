@@ -1,4 +1,9 @@
 <?php
+/**
+ * @deprecated This view is no longer used by any route.
+ * Payment flow is handled by payment_initiate.php via /payment/initiate.
+ * Kept for reference only.
+ */
 $pageTitle = 'بوابة الدفع الإلكتروني - IRB Portal';
 ?>
 <!DOCTYPE html>
@@ -41,18 +46,18 @@ $pageTitle = 'بوابة الدفع الإلكتروني - IRB Portal';
                                     <span class="material-symbols-outlined text-royal-indigo text-3xl ml-3">contactless</span>
                                     <div class="flex-1">
                                         <span class="block font-bold text-charcoal">بطاقة بنكية</span>
-                                        <span class="text-xs text-slate-gray">Visa / MasterCard</span>
+                                        <span class="text-xs text-slate-gray">Visa / MasterCard / Meeza</span>
                                     </div>
                                     <span class="material-symbols-outlined text-royal-indigo">check_circle</span>
                                 </label>
 
-                                <!-- Fawry Option -->
-                                <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-royal-indigo transition-all">
-                                    <input type="radio" name="method" value="fawry" class="hidden">
-                                    <span class="material-symbols-outlined text-orange-500 text-3xl ml-3">qr_code_2</span>
+                                <!-- Wallet Option -->
+                                <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-royal-indigo transition-all" id="walletLabel">
+                                    <input type="radio" name="method" value="wallet" class="hidden" id="walletRadio">
+                                    <span class="material-symbols-outlined text-emerald-500 text-3xl ml-3">smartphone</span>
                                     <div class="flex-1">
-                                        <span class="block font-bold text-charcoal">فوري</span>
-                                        <span class="text-xs text-slate-gray">كود دفع فوري</span>
+                                        <span class="block font-bold text-charcoal">محفظة إلكترونية</span>
+                                        <span class="text-xs text-slate-gray">فودافون كاش / اتصالات كاش</span>
                                     </div>
                                 </label>
                             </div>
@@ -75,7 +80,9 @@ $pageTitle = 'بوابة الدفع الإلكتروني - IRB Portal';
                                 </div>
                             </div>
 
-                            <button type="submit" class="w-full mt-8 bg-royal-indigo text-white font-button py-4 rounded-xl hover:bg-primary transition-all shadow-lg flex items-center justify-center gap-2 text-lg">
+                            <button type="submit" id="payBtn"
+                                class="w-full mt-8 bg-royal-indigo text-white font-button py-4 rounded-xl hover:bg-primary transition-all shadow-lg flex items-center justify-center gap-2 text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                                onclick="this.disabled=true; this.innerHTML='<span class=\'material-symbols-outlined animate-spin\'>progress_activity</span> جارٍ التحويل إلى بوابة الدفع...'; this.form.submit();">
                                 <span class="material-symbols-outlined">shield_with_heart</span>
                                 تأكيد دفع <?= number_format($amount, 2) ?> ج.م
                             </button>

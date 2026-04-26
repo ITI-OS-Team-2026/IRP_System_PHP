@@ -8,14 +8,28 @@
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 $scriptName = $_SERVER['SCRIPT_NAME']; // e.g., /ITI/IRP_System_PHP/public/index.php
 
-// 2. Calculate the Base Path (e.g., /ITI/IRP_System_PHP/public)
-$basePath = str_replace('/index.php', '', $scriptName);
+// 2. Calculate the internal base path from script name (used for route extraction)
+$internalBasePath = str_replace('/index.php', '', $scriptName);
+if ($internalBasePath === '/') $internalBasePath = '';
+
+// 3. Determine the public-facing base URL
+$appBaseUrl = getenv('BASE_URL') ?: getenv('APP_BASE_URL');
+if ($appBaseUrl !== false && $appBaseUrl !== '') {
+    $basePath = rtrim($appBaseUrl, '/');
+} else {
+    $basePath = $internalBasePath;
+}
 if ($basePath === '/') $basePath = '';
 
-// 3. Extract the virtual path (remove base path from URI)
+// Ensure BASE_URL is always an absolute path (starts with /) unless it's empty or already starts with http
+if ($basePath !== '' && strpos($basePath, '/') !== 0 && strpos($basePath, 'http') !== 0) {
+    $basePath = '/' . $basePath;
+}
+
+// 4. Extract the virtual path (remove internal base path from URI)
 $path = $requestUri;
-if (!empty($basePath) && strpos($requestUri, $basePath) === 0) {
-    $path = substr($requestUri, strlen($basePath));
+if (!empty($internalBasePath) && strpos($requestUri, $internalBasePath) === 0) {
+    $path = substr($requestUri, strlen($internalBasePath));
 }
 
 // Strip out query parameters
@@ -77,10 +91,51 @@ switch ($path) {
         (new SubmissionController())->store();
         break;
 
+    // Paymob Payment Routes
+    case '/payment/initiate':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->initiate();
+        break;
+
+    case '/payment/store':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->store();
+        break;
+
     case '/student/payment/process':
         AuthMiddleware::requireRole('student');
         require __DIR__ . '/../app/Controllers/PaymentController.php';
-        (new PaymentController())->process();
+        (new PaymentController())->store();
+        break;
+
+    case '/payment/webhook':
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->webhook();
+        break;
+
+    case '/payment/callback':
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->callback();
+        break;
+
+    case '/payment/receipt':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->receipt();
+        break;
+
+    case '/receipt':
+    case '/receipt.php':
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->paymobReturn();
+        break;
+
+    case '/receipt/download':
+        AuthMiddleware::requireRole('student');
+        require __DIR__ . '/../app/Controllers/PaymentController.php';
+        (new PaymentController())->downloadReceipt();
         break;
 
     case '/student/settings':
@@ -259,6 +314,15 @@ switch ($path) {
         (new AuthController())->logout();
         break;
 
+    case '/api/notifications/mark-read':
+        // Lightweight endpoint: record "last seen" timestamp in session so the
+        // unread badge resets on next page load. No DB write — no schema change.
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $_SESSION['notif_last_seen'] = date('Y-m-d H:i:s');
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => true]);
+        exit;
+
     default:
         // Dynamic routes (e.g. submissions/123)
         if (preg_match('#^/student/submissions/(\d+)$#', $path, $matches)) {
@@ -269,19 +333,18 @@ switch ($path) {
             break;
         }
 
+        if (preg_match('#^/student/payment/(\d+)$#', $path, $matches)) {
+            AuthMiddleware::requireRole('student');
+            $typeParam = isset($_GET['type']) ? '&type=' . urlencode($_GET['type']) : '';
+            header('Location: ' . BASE_URL . '/payment/initiate?submission_id=' . (int) $matches[1] . $typeParam);
+            exit;
+        }
+
         if (preg_match('#^/officer/sample-size/input/(\d+)$#', $path, $matches)) {
             AuthMiddleware::requireRole('sample_size_officer');
             $_GET['id'] = (int) $matches[1];
             require __DIR__ . '/../app/Controllers/SampleSizeController.php';
             (new SampleSizeController())->inputForm();
-            break;
-        }
-
-        if (preg_match('#^/student/payment/(\d+)$#', $path, $matches)) {
-            AuthMiddleware::requireRole('student');
-            $_GET['id'] = (int) $matches[1];
-            require __DIR__ . '/../app/Controllers/PaymentController.php';
-            (new PaymentController())->showPayment();
             break;
         }
 

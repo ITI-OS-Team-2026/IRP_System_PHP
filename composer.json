@@ -1,5 +1,24 @@
 {
-  "require": {
-    "phpmailer/phpmailer": "^6.9"
-  }
+    "name": "irb/irp-system",
+    "description": "IRB Institutional Review Board System",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "ext-mysqli": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "mpdf/mpdf": "^8.2",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "classmap": [
+            "app/"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
 }
+

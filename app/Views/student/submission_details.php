@@ -68,14 +68,36 @@ while ($row = $reviewsResult->fetch_assoc()) {
     $reviews[] = $row;
 }
 
+$paymentStmt = $db->prepare(
+    "SELECT *
+     FROM payments
+     WHERE submission_id = ?
+     ORDER BY id DESC
+     LIMIT 1"
+);
+$paymentStmt->bind_param('i', $submissionId);
+$paymentStmt->execute();
+$paymentResult = $paymentStmt->get_result();
+$latestPayment = $paymentResult->fetch_assoc();
+
+// Debug (Temporary)
+// var_dump($latestPayment); exit;
+
+$paymentTypeLabel = null;
+if ($latestPayment && isset($latestPayment['payment_type'])) {
+    $paymentTypeLabel = $latestPayment['payment_type'] === 'sample_size'
+        ? 'رسوم حجم العينة'
+        : 'رسوم التقديم';
+}
+
 $statusMap = [
     'submitted' => ['label' => 'تم التقديم', 'color' => 'bg-blue-100 text-blue-800'],
-    'admin_reviewed' => ['label' => 'تمت المراجعة', 'color' => 'bg-yellow-100 text-yellow-800'],
-    'initial_paid' => ['label' => 'تم الدفع الأولي', 'color' => 'bg-yellow-100 text-yellow-800'],
-    'sample_sized' => ['label' => 'تم حساب العينة', 'color' => 'bg-yellow-100 text-yellow-800'],
-    'fully_paid' => ['label' => 'تم الدفع الكامل', 'color' => 'bg-yellow-100 text-yellow-800'],
-    'under_review' => ['label' => 'قيد المراجعة', 'color' => 'bg-orange-100 text-orange-800'],
-    'revision_requested' => ['label' => 'مطلوب تعديل', 'color' => 'bg-red-100 text-red-800'],
+    'admin_reviewed' => ['label' => 'تمت مراجعة الإدارة', 'color' => 'bg-indigo-100 text-indigo-800'],
+    'initial_paid' => ['label' => 'تم سداد الرسوم الأولية', 'color' => 'bg-cyan-100 text-cyan-800'],
+    'sample_sized' => ['label' => 'تم حساب حجم العينة', 'color' => 'bg-purple-100 text-purple-800'],
+    'fully_paid' => ['label' => 'تم السداد بالكامل', 'color' => 'bg-teal-100 text-teal-800'],
+    'under_review' => ['label' => 'قيد المراجعة', 'color' => 'bg-yellow-100 text-yellow-800'],
+    'revision_requested' => ['label' => 'مطلوب تعديل', 'color' => 'bg-orange-100 text-orange-800'],
     'approved' => ['label' => 'تمت الموافقة', 'color' => 'bg-green-100 text-green-800'],
     'rejected' => ['label' => 'مرفوض', 'color' => 'bg-red-100 text-red-800'],
 ];
@@ -120,15 +142,15 @@ $timelineStages = [
 ];
 
 $timelineStatusMap = [
-    'submitted' => 1,
-    'admin_reviewed' => 2,
-    'initial_paid' => 3,
-    'sample_sized' => 4,
-    'fully_paid' => 5,
-    'under_review' => 6,
-    'revision_requested' => 6,
-    'approved' => 9,
-    'rejected' => 6,
+    'submitted' => 2,          // submitted → waiting for admin review (step 2)
+    'admin_reviewed' => 3,     // admin reviewed → waiting for first payment (step 3)
+    'initial_paid' => 4,       // paid → waiting for sample size calculation (step 4)
+    'sample_sized' => 5,       // sample sized → waiting for second payment (step 5)
+    'fully_paid' => 6,         // fully paid → waiting for reviewer review (step 6)
+    'under_review' => 7,       // under review → waiting for notifications (step 7)
+    'revision_requested' => 6, // revision requested → back to review stage
+    'approved' => 9,           // approved → certificate stage
+    'rejected' => 6,           // rejected → stays at review stage
 ];
 
 $currentTimelineStage = $timelineStatusMap[$submission['status']] ?? 1;
@@ -251,9 +273,15 @@ function formatDateTime($datetime) {
                             <span class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-button <?= htmlspecialchars($statusInfo['color'], ENT_QUOTES, 'UTF-8') ?>">
                                 <?= htmlspecialchars($statusInfo['label'], ENT_QUOTES, 'UTF-8') ?>
                             </span>
+                            <?php if (!empty($paymentTypeLabel)): ?>
+                                <div class="mt-2 text-sm text-gray-600">
+                                    نوع الدفع: <?= htmlspecialchars($paymentTypeLabel) ?>
+                                </div>
+                            <?php endif; ?>
 
                             <?php if (in_array($submission['status'], ['admin_reviewed', 'sample_sized'])): ?>
-                                <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $submission['id'] ?>" 
+                                <?php $paymentType = $submission['status'] === 'admin_reviewed' ? 'initial' : 'sample_size'; ?>
+                                <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $submission['id'] ?>?type=<?= $paymentType ?>" 
                                    class="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full font-button text-sm hover:bg-orange-600 transition-colors shadow-md">
                                     <span class="material-symbols-outlined">payments</span>
                                     <?= $submission['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>

@@ -58,30 +58,43 @@ while ($row = $logsResult->fetch_assoc()) {
 }
 
 $statusMap = [
-    'submitted'          => ['label' => 'تم التقديم',        'color' => 'bg-blue-100 text-blue-800'],
-    'admin_reviewed'     => ['label' => 'تمت المراجعة',      'color' => 'bg-indigo-100 text-indigo-800'],
-    'initial_paid'       => ['label' => 'تم الدفع الأولي',   'color' => 'bg-cyan-100 text-cyan-800'],
-    'sample_sized'       => ['label' => 'تم حساب العينة',    'color' => 'bg-purple-100 text-purple-800'],
-    'fully_paid'         => ['label' => 'تم الدفع الكامل',   'color' => 'bg-teal-100 text-teal-800'],
-    'under_review'       => ['label' => 'قيد المراجعة',      'color' => 'bg-yellow-100 text-yellow-800'],
-    'revision_requested' => ['label' => 'مطلوب تعديل',       'color' => 'bg-orange-100 text-orange-800'],
-    'approved'           => ['label' => 'تمت الموافقة',      'color' => 'bg-green-100 text-green-800'],
-    'rejected'           => ['label' => 'مرفوض',             'color' => 'bg-red-100 text-red-800'],
+    'submitted'          => ['label' => 'تم التقديم',             'color' => 'bg-blue-100 text-blue-800'],
+    'admin_reviewed'     => ['label' => 'تمت مراجعة الإدارة',     'color' => 'bg-indigo-100 text-indigo-800'],
+    'initial_paid'       => ['label' => 'تم سداد الرسوم الأولية', 'color' => 'bg-cyan-100 text-cyan-800'],
+    'sample_sized'       => ['label' => 'تم حساب حجم العينة',     'color' => 'bg-purple-100 text-purple-800'],
+    'fully_paid'         => ['label' => 'تم السداد بالكامل',      'color' => 'bg-teal-100 text-teal-800'],
+    'under_review'       => ['label' => 'قيد المراجعة',           'color' => 'bg-yellow-100 text-yellow-800'],
+    'revision_requested' => ['label' => 'مطلوب تعديل',            'color' => 'bg-orange-100 text-orange-800'],
+    'approved'           => ['label' => 'تمت الموافقة',           'color' => 'bg-green-100 text-green-800'],
+    'rejected'           => ['label' => 'مرفوض',                  'color' => 'bg-red-100 text-red-800'],
 ];
 
 $actionLabels = [
-    'research_submitted' => 'تم تقديم البحث',
-    'status_updated' => 'تم تحديث الحالة',
-    'admin_reviewed' => 'تمت مراجعة البحث من الإدارة',
+    'research_submitted'   => 'تم تقديم البحث',
+    'status_updated'       => 'تم تحديث الحالة',
+    'admin_reviewed'       => 'تمت مراجعة البحث من الإدارة',
     'serial_number_issued' => 'تم إصدار الرقم التسلسلي',
-    'payment_confirmed' => 'تم تأكيد الدفع',
+    'payment_confirmed'    => 'تم تأكيد الدفع',
+    'payment_success'      => 'تم الدفع بنجاح',
     'sample_size_recorded' => 'تم تسجيل حجم العينة',
-    'reviewer_assigned' => 'تم تعيين مراجع',
-    'revision_requested' => 'مطلوب تعديل على البحث',
-    'research_approved' => 'تمت الموافقة على البحث',
-    'research_rejected' => 'تم رفض البحث',
-    'certificate_issued' => 'تم إصدار الشهادة',
+    'reviewer_assigned'    => 'تم تعيين مراجع',
+    'revision_requested'   => 'مطلوب تعديل على البحث',
+    'research_approved'    => 'تمت الموافقة على البحث',
+    'research_rejected'    => 'تم رفض البحث',
+    'certificate_issued'   => 'تم إصدار الشهادة',
 ];
+
+// Unread count: notifications created after the last time the bell was dismissed.
+// Stored in session to survive page refreshes; JS updates it on bell click.
+$notifLastSeen = $_SESSION['notif_last_seen'] ?? null;
+$unreadCount = 0;
+if (!empty($notifications)) {
+    foreach ($notifications as $n) {
+        if ($notifLastSeen === null || strtotime($n['created_at']) > strtotime($notifLastSeen)) {
+            $unreadCount++;
+        }
+    }
+}
 
 $summaryCards = [
     [
@@ -183,12 +196,90 @@ function timeAgo($datetime) {
                         <span class="material-symbols-outlined text-[18px]">note_add</span>
                         تقديم بحث جديد
                     </a>
-                    <button class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200 relative" type="button">
-                        <span class="material-symbols-outlined text-[20px]">notifications</span>
-                        <?php if (count($notifications) > 0): ?>
-                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"><?= count($notifications) ?></span>
-                        <?php endif; ?>
-                    </button>
+
+                    <!-- ═══ Notification Bell ═══ -->
+                    <div class="relative" id="notif-wrapper">
+                        <button id="notif-bell-btn"
+                                type="button"
+                                aria-label="الإشعارات"
+                                aria-expanded="false"
+                                aria-controls="notif-dropdown"
+                                class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200 relative hover:bg-slate-200 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">notifications</span>
+                            <?php if ($unreadCount > 0): ?>
+                            <span id="notif-badge"
+                                  class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center pointer-events-none">
+                                <?= $unreadCount ?>
+                            </span>
+                            <?php else: ?>
+                            <span id="notif-badge"
+                                  class="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full items-center justify-center pointer-events-none hidden">
+                                0
+                            </span>
+                            <?php endif; ?>
+                        </button>
+
+                        <!-- Notification Dropdown -->
+                        <div id="notif-dropdown"
+                             role="dialog"
+                             aria-label="الإشعارات"
+                             class="hidden absolute left-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 overflow-hidden origin-top-right"
+                             style="animation: notifFadeIn 0.15s ease;">
+
+                            <!-- Header -->
+                            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                                <span class="font-bold text-charcoal text-sm">الإشعارات</span>
+                                <button id="notif-mark-read-btn"
+                                        type="button"
+                                        class="text-xs text-primary hover:underline transition-colors">
+                                    تحديد الكل كمقروء
+                                </button>
+                            </div>
+
+                            <!-- List -->
+                            <div class="divide-y divide-slate-100 max-h-72 overflow-y-auto" id="notif-list">
+                                <?php if (empty($notifications)): ?>
+                                    <div class="p-6 text-center">
+                                        <span class="material-symbols-outlined text-4xl text-slate-300 mb-2 block">notifications_off</span>
+                                        <p class="text-sm text-slate-gray">لا توجد إشعارات حالياً</p>
+                                    </div>
+                                <?php else: ?>
+                                    <?php foreach ($notifications as $notif): ?>
+                                        <?php
+                                            $nAction      = $notif['action'] ?? '';
+                                            $nLabel       = $actionLabels[$nAction] ?? $nAction;
+                                            $isPaymentN   = str_starts_with($nAction, 'payment');
+                                            $dotClass     = $isPaymentN ? 'bg-emerald-500' : 'bg-primary';
+                                            $iconBg       = $isPaymentN ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-primary';
+                                            $nIcon        = $isPaymentN ? 'payments' : 'notifications';
+                                        ?>
+                                        <div class="notif-item px-4 py-3 hover:bg-slate-50 transition-colors cursor-default"
+                                             data-time="<?= htmlspecialchars($notif['created_at'], ENT_QUOTES, 'UTF-8') ?>">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-8 h-8 rounded-full <?= $iconBg ?> flex items-center justify-center shrink-0 mt-0.5">
+                                                    <span class="material-symbols-outlined text-[15px]"><?= $nIcon ?></span>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-xs font-bold text-charcoal leading-5"><?= htmlspecialchars($nLabel, ENT_QUOTES, 'UTF-8') ?></p>
+                                                    <p class="text-xs text-slate-gray mt-0.5 leading-5"><?= htmlspecialchars($notif['details'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                                                    <?php if (!empty($notif['submission_title'])): ?>
+                                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate"><?= htmlspecialchars($notif['submission_title'], ENT_QUOTES, 'UTF-8') ?></p>
+                                                    <?php endif; ?>
+                                                    <p class="text-[10px] text-slate-400 mt-1"><?= timeAgo($notif['created_at']) ?></p>
+                                                </div>
+                                                <span class="notif-unread-dot w-2 h-2 rounded-full <?= $dotClass ?> shrink-0 mt-2 transition-opacity"></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="px-4 py-2.5 border-t border-slate-200 bg-slate-50 text-center">
+                                <span class="text-xs text-slate-400">آخر <?= count($notifications) ?> إشعارات</span>
+                            </div>
+                        </div><!-- /notif-dropdown -->
+                    </div><!-- /notif-wrapper -->
                 </div>
             </header>
 
@@ -268,7 +359,8 @@ function timeAgo($datetime) {
                                                         </a>
                                                         
                                                         <?php if (in_array($sub['status'], ['admin_reviewed', 'sample_sized'])): ?>
-                                                            <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $sub['id'] ?>" 
+                                                            <?php $paymentType = $sub['status'] === 'admin_reviewed' ? 'initial' : 'sample_size'; ?>
+                                                            <a href="<?php echo BASE_URL; ?>/student/payment/<?= (int) $sub['id'] ?>?type=<?= $paymentType ?>" 
                                                                class="inline-flex items-center gap-1 px-3 py-1.5 bg-orange-500 text-white rounded text-xs font-button hover:bg-orange-600 transition-colors w-fit">
                                                                 <span class="material-symbols-outlined text-[14px]">payments</span>
                                                                 <?= $sub['status'] === 'admin_reviewed' ? 'سداد الرسوم الأولية' : 'سداد رسوم العينة' ?>
@@ -331,5 +423,93 @@ function timeAgo($datetime) {
             </section>
         </main>
     </div>
+
+<style>
+@keyframes notifFadeIn {
+    from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+#notif-dropdown:not(.hidden) {
+    animation: notifFadeIn 0.15s ease forwards;
+}
+</style>
+
+<script>
+(function () {
+    'use strict';
+
+    const bellBtn     = document.getElementById('notif-bell-btn');
+    const dropdown    = document.getElementById('notif-dropdown');
+    const badge       = document.getElementById('notif-badge');
+    const markReadBtn = document.getElementById('notif-mark-read-btn');
+    const BASE_URL    = '<?= rtrim(BASE_URL, '/') ?>';
+
+    if (!bellBtn || !dropdown) return;
+
+    /* ── Toggle dropdown ────────────────────────────────────── */
+    bellBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isOpen = !dropdown.classList.contains('hidden');
+
+        if (isOpen) {
+            closeDropdown();
+        } else {
+            openDropdown();
+        }
+    });
+
+    function openDropdown() {
+        dropdown.classList.remove('hidden');
+        bellBtn.setAttribute('aria-expanded', 'true');
+        // Persist last-seen on server so badge resets on next page load
+        fetch(BASE_URL + '/api/notifications/mark-read', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).catch(function () { /* non-critical */ });
+    }
+
+    function closeDropdown() {
+        dropdown.classList.add('hidden');
+        bellBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    /* ── Close on outside click ─────────────────────────────── */
+    document.addEventListener('click', function (e) {
+        if (!dropdown.classList.contains('hidden') &&
+            !dropdown.contains(e.target) &&
+            !bellBtn.contains(e.target)) {
+            closeDropdown();
+        }
+    });
+
+    /* ── Close on Escape ────────────────────────────────────── */
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeDropdown();
+    });
+
+    /* ── Mark all as read (client-side dots + badge) ────────── */
+    if (markReadBtn) {
+        markReadBtn.addEventListener('click', function () {
+            // Hide all unread indicator dots
+            document.querySelectorAll('.notif-unread-dot').forEach(function (dot) {
+                dot.classList.add('opacity-0');
+            });
+            // Hide the badge
+            if (badge) {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+            }
+            // Persist on server
+            fetch(BASE_URL + '/api/notifications/mark-read', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).catch(function () { /* non-critical */ });
+        });
+    }
+})();
+</script>
 </body>
 </html>
+

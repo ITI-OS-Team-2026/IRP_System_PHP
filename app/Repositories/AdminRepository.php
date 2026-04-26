@@ -20,7 +20,7 @@ class AdminRepository {
     }
 
     public function countReadyForReviewerAssignment() {
-        $sql = "SELECT COUNT(*) AS total FROM research_submissions WHERE status = 'fully_paid' AND serial_number IS NOT NULL";
+        $sql = "SELECT COUNT(*) AS total FROM research_submissions WHERE status IN ('fully_paid', 'under_review') AND serial_number IS NOT NULL";
         return (int) $this->fetchOne($sql)['total'];
     }
 
@@ -288,7 +288,7 @@ class AdminRepository {
         $offset = (int) $offset;
         $search = trim((string) $search);
 
-        $where = "rs.status = 'fully_paid' AND rs.serial_number IS NOT NULL";
+        $where = "rs.status IN ('fully_paid', 'under_review') AND rs.serial_number IS NOT NULL";
         $types = '';
         $params = [];
 
@@ -336,7 +336,7 @@ class AdminRepository {
     public function countReviewerAssignmentSubmissions($search = '') {
         $search = trim((string) $search);
 
-        $where = "rs.status = 'fully_paid' AND rs.serial_number IS NOT NULL";
+        $where = "rs.status IN ('fully_paid', 'under_review') AND rs.serial_number IS NOT NULL";
         $types = '';
         $params = [];
 
@@ -401,7 +401,7 @@ class AdminRepository {
         $submissionId = (int) $submissionId;
         $stmt = $this->db->prepare(
             "SELECT id FROM research_submissions
-             WHERE id = ? AND status = 'fully_paid' AND serial_number IS NOT NULL
+             WHERE id = ? AND status IN ('fully_paid', 'under_review') AND serial_number IS NOT NULL
              LIMIT 1"
         );
         $stmt->bind_param('i', $submissionId);
@@ -426,7 +426,6 @@ class AdminRepository {
     public function upsertReviewerAssignment($submissionId, $reviewerId) {
         $submissionId = (int) $submissionId;
         $reviewerId = (int) $reviewerId;
-        $mode = 'created';
 
         $stmt = $this->db->prepare("SELECT id FROM reviews WHERE submission_id = ? LIMIT 1");
         $stmt->bind_param('i', $submissionId);
@@ -443,22 +442,32 @@ class AdminRepository {
             );
             $update->bind_param('ii', $reviewerId, $reviewId);
             $update->execute();
-            $mode = 'updated';
-        } else {
-            $insert = $this->db->prepare(
-                "INSERT INTO reviews (submission_id, reviewer_id, review_status)
-                 VALUES (?, ?, 'pending')"
+
+            // Also ensure submission status is under_review
+            $updateStatus = $this->db->prepare(
+                "UPDATE research_submissions SET status = 'under_review' WHERE id = ? LIMIT 1"
             );
-            $insert->bind_param('ii', $submissionId, $reviewerId);
-            $insert->execute();
+            $updateStatus->bind_param('i', $submissionId);
+            $updateStatus->execute();
+
+            return 'updated';
         }
 
-        // Assignment marks the submission as actively under review.
-        $updateSubmission = $this->db->prepare("UPDATE research_submissions SET status = 'under_review' WHERE id = ? LIMIT 1");
-        $updateSubmission->bind_param('i', $submissionId);
-        $updateSubmission->execute();
+        $insert = $this->db->prepare(
+            "INSERT INTO reviews (submission_id, reviewer_id, review_status)
+             VALUES (?, ?, 'pending')"
+        );
+        $insert->bind_param('ii', $submissionId, $reviewerId);
+        $insert->execute();
 
-        return $mode;
+        // Update submission status to 'under_review'
+        $updateStatus = $this->db->prepare(
+            "UPDATE research_submissions SET status = 'under_review' WHERE id = ? LIMIT 1"
+        );
+        $updateStatus->bind_param('i', $submissionId);
+        $updateStatus->execute();
+
+        return 'created';
     }
 
     private function fetchOne($sql) {
