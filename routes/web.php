@@ -306,6 +306,15 @@ switch ($path) {
         (new AuthController())->logout();
         break;
 
+    case '/api/notifications/mark-read':
+        // Lightweight endpoint: record "last seen" timestamp in session so the
+        // unread badge resets on next page load. No DB write — no schema change.
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $_SESSION['notif_last_seen'] = date('Y-m-d H:i:s');
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => true]);
+        exit;
+
     default:
         // Dynamic routes (e.g. submissions/123)
         if (preg_match('#^/student/submissions/(\d+)$#', $path, $matches)) {
