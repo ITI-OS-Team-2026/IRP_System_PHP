@@ -49,6 +49,9 @@ if (file_exists($envPath)) {
     }
 }
 
+// Portable env() helper — reads $_ENV (local .env) then getenv() (Railway/OS)
+require_once __DIR__ . '/../app/Helpers/env.php';
+
 // Load Composer autoloader (for mPDF and other packages)
 $autoloader = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($autoloader)) {
