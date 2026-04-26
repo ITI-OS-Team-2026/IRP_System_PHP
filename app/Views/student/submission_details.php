@@ -290,37 +290,54 @@ function formatDateTime($datetime) {
                         </div>
                         <div class="flex justify-center">
                             <div class="relative max-w-[500px]">
-                                <?php foreach ($timelineStages as $stageNumber => $stageLabel): ?>
-                                    <?php
-                                        $isCompleted = $stageNumber < $currentTimelineStage;
-                                        $isCurrent = $stageNumber == $currentTimelineStage;
-                                        $isUpcoming = $stageNumber > $currentTimelineStage;
-                                        $isLastStage = $stageNumber == count($timelineStages);
+                                <?php
+                                $isRejected = $submission['status'] === 'rejected';
+                                foreach ($timelineStages as $stageNumber => $stageLabel): 
+                                    $isCompleted = $stageNumber < $currentTimelineStage;
+                                    $isCurrent = $stageNumber == $currentTimelineStage;
+                                    $isUpcoming = $stageNumber > $currentTimelineStage;
+                                    $isLastStage = $stageNumber == count($timelineStages);
+                                    
+                                    $isRejectionStage = $isRejected && $isCurrent;
 
-                                        if ($isCompleted) {
-                                            $circleClass = 'bg-green-100 text-green-700 border border-green-300';
-                                            $labelClass = 'text-charcoal';
-                                        } elseif ($isCurrent) {
-                                            $circleClass = 'bg-blue-500 text-white';
-                                            $labelClass = 'text-charcoal font-bold';
-                                        } else {
-                                            $circleClass = 'bg-slate-300 text-slate-600';
-                                            $labelClass = 'text-slate-600';
-                                        }
-                                    ?>
+                                    if ($isRejectionStage) {
+                                        $circleClass = 'bg-red-500 text-white shadow-[0_0_0_4px_rgba(239,68,68,0.2)]';
+                                        $labelClass = 'text-red-700 font-bold';
+                                    } elseif ($isCompleted) {
+                                        $circleClass = 'bg-green-100 text-green-700 border border-green-300';
+                                        $labelClass = 'text-charcoal';
+                                    } elseif ($isCurrent) {
+                                        $circleClass = 'bg-blue-500 text-white shadow-[0_0_0_4px_rgba(59,130,246,0.2)]';
+                                        $labelClass = 'text-charcoal font-bold';
+                                    } else {
+                                        $circleClass = 'bg-slate-100 text-slate-400 border border-slate-200';
+                                        $labelClass = 'text-slate-400';
+                                    }
+                                ?>
                                     <div class="relative flex items-start gap-4 <?= !$isLastStage ? 'pb-12' : '' ?>">
                                         <?php if (!$isLastStage): ?>
-                                            <div class="absolute right-4 top-8 bottom-0 w-px <?= $isCompleted ? 'bg-green-500' : 'bg-slate-300' ?>"></div>
+                                            <div class="absolute right-4 top-8 bottom-0 w-px <?= $isCompleted ? 'bg-green-500' : 'bg-slate-200' ?>"></div>
                                         <?php endif; ?>
                                         <div class="relative z-10">
                                             <div class="w-8 h-8 rounded-full flex items-center justify-center <?= htmlspecialchars($circleClass, ENT_QUOTES, 'UTF-8') ?>">
-                                                <span class="text-sm font-bold"><?= (int) $stageNumber ?></span>
+                                                <?php if ($isRejectionStage): ?>
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                <?php elseif ($isCompleted): ?>
+                                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                                <?php else: ?>
+                                                    <span class="text-sm font-bold"><?= (int) $stageNumber ?></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="flex-1 pt-1 text-right">
                                             <div class="text-sm font-button <?= htmlspecialchars($labelClass, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($stageLabel, ENT_QUOTES, 'UTF-8') ?></div>
-                                            <?php if ($isCurrent): ?>
-                                                <div class="text-xs text-blue-600 mt-1">المرحلة الحالية</div>
+                                            <?php if ($isRejectionStage): ?>
+                                                <div class="text-xs text-red-600 mt-1 font-bold flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[14px]">error</span>
+                                                    تم الرفض هنا
+                                                </div>
+                                            <?php elseif ($isCurrent): ?>
+                                                <div class="text-xs text-blue-600 mt-1 font-bold">المرحلة الحالية</div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
