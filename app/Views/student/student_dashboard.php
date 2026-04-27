@@ -109,7 +109,7 @@ $summaryCards = [
         'title' => 'إجمالي الأبحاث',
         'description' => 'عدد جميع الأبحاث المقدمة في النظام.',
         'icon' => 'description',
-        'accent' => 'bg-primary',
+        'accent' => 'bg-indigo-700',
     ],
     [
         'count' => $pendingCount,
@@ -156,31 +156,31 @@ function timeAgo($datetime) {
 <head>
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
-<body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
+<body class="min-h-screen bg-gray-50 text-gray-900 rtl font-body-lg">
     <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
-            <div class="p-5 border-b border-slate-200 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-gray-200 shadow-sm lg:shadow-none">
+            <div class="p-5 border-b border-gray-200 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-xl bg-indigo-100 overflow-hidden flex items-center justify-center text-indigo-700">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
                 </div>
                 <div>
-                    <h1 class="font-h1 text-lg text-charcoal">IRB</h1>
-                    <p class="text-sm text-slate-gray">بوابة الباحث</p>
+                    <h1 class="font-h1 text-lg text-gray-900">IRB</h1>
+                    <p class="text-sm text-gray-600">بوابة الباحث</p>
                 </div>
             </div>
 
             <nav class="p-4 space-y-1">
                 <?php foreach ($sidebarItems as $item): ?>
                     <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>"
-                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-colors <?= !empty($item['active']) ? 'bg-primary text-on-primary shadow-sm' : 'text-slate-gray hover:bg-slate-100 hover:text-charcoal' ?>">
+                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-all <?= !empty($item['active']) ? 'bg-indigo-700 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ?>">
                         <span class="material-symbols-outlined text-[20px]"><?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?></span>
                         <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
                     </a>
                 <?php endforeach; ?>
             </nav>
 
-            <div class="p-4 mt-auto border-t border-slate-200">
+            <div class="p-4 mt-auto border-t border-gray-200">
                 <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -192,14 +192,14 @@ function timeAgo($datetime) {
         <!-- Main Content -->
         <main class="flex-1">
             <!-- Top Header -->
-            <header class="bg-white border-b border-slate-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
                 <div>
-                    <p class="text-sm text-slate-gray">لوحة تحكم الباحث</p>
-                    <h2 class="font-h1 text-2xl text-charcoal">مرحباً، <?= htmlspecialchars($currentUser['name'] ?? '', ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p class="text-sm text-gray-600">لوحة تحكم الباحث</p>
+                    <h2 class="font-h1 text-2xl text-gray-900">مرحباً، <?= htmlspecialchars($currentUser['name'] ?? '', ENT_QUOTES, 'UTF-8') ?></h2>
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="<?php echo BASE_URL; ?>/student/submission/create"
-                       class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
+                       class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                         <span class="material-symbols-outlined text-[18px]">note_add</span>
                         تقديم بحث جديد
                     </a>
@@ -211,7 +211,7 @@ function timeAgo($datetime) {
                                 aria-label="الإشعارات"
                                 aria-expanded="false"
                                 aria-controls="notif-dropdown"
-                                class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200 relative hover:bg-slate-200 transition-colors">
+                                class="w-10 h-10 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center border border-gray-200 relative hover:bg-gray-200 transition-colors">
                             <span class="material-symbols-outlined text-[20px]">notifications</span>
                             <?php if ($unreadCount > 0): ?>
                             <span id="notif-badge"
@@ -230,25 +230,25 @@ function timeAgo($datetime) {
                         <div id="notif-dropdown"
                              role="dialog"
                              aria-label="الإشعارات"
-                             class="hidden absolute left-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 overflow-hidden origin-top-right"
+                             class="hidden absolute left-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden origin-top-right"
                              style="animation: notifFadeIn 0.15s ease;">
 
                             <!-- Header -->
-                            <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                                <span class="font-bold text-charcoal text-sm">الإشعارات</span>
+                            <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                                <span class="font-bold text-gray-900 text-sm">الإشعارات</span>
                                 <button id="notif-mark-read-btn"
                                         type="button"
-                                        class="text-xs text-primary hover:underline transition-colors">
+                                        class="text-xs text-indigo-700 hover:underline transition-colors">
                                     تحديد الكل كمقروء
                                 </button>
                             </div>
 
                             <!-- List -->
-                            <div class="divide-y divide-slate-100 max-h-72 overflow-y-auto" id="notif-list">
+                            <div class="divide-y divide-gray-200 max-h-72 overflow-y-auto" id="notif-list">
                                 <?php if (empty($notifications)): ?>
                                     <div class="p-6 text-center">
-                                        <span class="material-symbols-outlined text-4xl text-slate-300 mb-2 block">notifications_off</span>
-                                        <p class="text-sm text-slate-gray">لا توجد إشعارات حالياً</p>
+                                        <span class="material-symbols-outlined text-4xl text-gray-300 mb-2 block">notifications_off</span>
+                                        <p class="text-sm text-gray-600">لا توجد إشعارات حالياً</p>
                                     </div>
                                 <?php else: ?>
                                     <?php foreach ($notifications as $notif): ?>
@@ -256,23 +256,23 @@ function timeAgo($datetime) {
                                             $nAction      = $notif['action'] ?? '';
                                             $nLabel       = $actionLabels[$nAction] ?? $nAction;
                                             $isPaymentN   = str_starts_with($nAction, 'payment');
-                                            $dotClass     = $isPaymentN ? 'bg-emerald-500' : 'bg-primary';
-                                            $iconBg       = $isPaymentN ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-primary';
+                                            $dotClass     = $isPaymentN ? 'bg-emerald-500' : 'bg-indigo-700';
+                                            $iconBg       = $isPaymentN ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700';
                                             $nIcon        = $isPaymentN ? 'payments' : 'notifications';
                                         ?>
-                                        <div class="notif-item px-4 py-3 hover:bg-slate-50 transition-colors cursor-default"
+                                        <div class="notif-item px-4 py-3 hover:bg-gray-50 transition-colors cursor-default"
                                              data-time="<?= htmlspecialchars($notif['created_at'], ENT_QUOTES, 'UTF-8') ?>">
                                             <div class="flex items-start gap-3">
                                                 <div class="w-8 h-8 rounded-full <?= $iconBg ?> flex items-center justify-center shrink-0 mt-0.5">
                                                     <span class="material-symbols-outlined text-[15px]"><?= $nIcon ?></span>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-xs font-bold text-charcoal leading-5"><?= htmlspecialchars($nLabel, ENT_QUOTES, 'UTF-8') ?></p>
-                                                    <p class="text-xs text-slate-gray mt-0.5 leading-5"><?= htmlspecialchars($notif['details'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                                                    <p class="text-xs font-bold text-gray-900 leading-5"><?= htmlspecialchars($nLabel, ENT_QUOTES, 'UTF-8') ?></p>
+                                                    <p class="text-xs text-gray-600 mt-0.5 leading-5"><?= htmlspecialchars($notif['details'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
                                                     <?php if (!empty($notif['submission_title'])): ?>
-                                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate"><?= htmlspecialchars($notif['submission_title'], ENT_QUOTES, 'UTF-8') ?></p>
+                                                        <p class="text-[10px] text-gray-400 mt-0.5 truncate"><?= htmlspecialchars($notif['submission_title'], ENT_QUOTES, 'UTF-8') ?></p>
                                                     <?php endif; ?>
-                                                    <p class="text-[10px] text-slate-400 mt-1"><?= timeAgo($notif['created_at']) ?></p>
+                                                    <p class="text-[10px] text-gray-400 mt-1"><?= timeAgo($notif['created_at']) ?></p>
                                                 </div>
                                                 <span class="notif-unread-dot w-2 h-2 rounded-full <?= $dotClass ?> shrink-0 mt-2 transition-opacity"></span>
                                             </div>
@@ -282,8 +282,8 @@ function timeAgo($datetime) {
                             </div>
 
                             <!-- Footer -->
-                            <div class="px-4 py-2.5 border-t border-slate-200 bg-slate-50 text-center">
-                                <span class="text-xs text-slate-400">آخر <?= count($notifications) ?> إشعارات</span>
+                            <div class="px-4 py-2.5 border-t border-gray-200 bg-gray-50 text-center">
+                                <span class="text-xs text-gray-400">آخر <?= count($notifications) ?> إشعارات</span>
                             </div>
                         </div><!-- /notif-dropdown -->
                     </div><!-- /notif-wrapper -->
@@ -294,16 +294,16 @@ function timeAgo($datetime) {
                 <!-- Summary Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                     <?php foreach ($summaryCards as $card): ?>
-                        <article class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)] p-5 flex flex-col gap-4">
+                        <article class="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-5 flex flex-col gap-4">
                             <div class="flex items-start justify-between gap-4">
-                                <div class="text-3xl font-bold text-charcoal"><?= (int)$card['count'] ?></div>
-                                <div class="w-10 h-10 rounded-lg <?= htmlspecialchars($card['accent'], ENT_QUOTES, 'UTF-8') ?> text-white flex items-center justify-center">
+                                <div class="text-3xl font-bold text-gray-900"><?= (int)$card['count'] ?></div>
+                                <div class="w-10 h-10 rounded-lg bg-indigo-700 text-white flex items-center justify-center">
                                     <span class="material-symbols-outlined text-[20px]"><?= htmlspecialchars($card['icon'], ENT_QUOTES, 'UTF-8') ?></span>
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <h3 class="font-h1 text-lg text-charcoal"><?= htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8') ?></h3>
-                                <p class="text-sm leading-7 text-slate-gray"><?= htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8') ?></p>
+                                <h3 class="font-h1 text-lg text-gray-900"><?= htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                <p class="text-sm leading-7 text-gray-600"><?= htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8') ?></p>
                             </div>
                         </article>
                     <?php endforeach; ?>
@@ -311,19 +311,19 @@ function timeAgo($datetime) {
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     <!-- Submissions Table -->
-                    <div class="lg:col-span-2 rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                        <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-                            <h3 class="font-h1 text-lg text-charcoal">أبحاثي</h3>
-                            <span class="text-sm text-slate-gray"><?= (int)$totalSubmissions ?> بحث</span>
+                    <div class="lg:col-span-2 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+                            <h3 class="font-h1 text-lg text-gray-900">أبحاثي</h3>
+                            <span class="text-sm text-gray-600"><?= (int)$totalSubmissions ?> بحث</span>
                         </div>
 
                         <?php if (empty($submissions)): ?>
                             <div class="p-8 text-center">
-                                <span class="material-symbols-outlined text-5xl text-slate-300 mb-4 block">science</span>
-                                <p class="text-slate-gray text-lg mb-2">لا توجد أبحاث حتى الآن</p>
-                                <p class="text-sm text-slate-400 mb-6">ابدأ بتقديم أول بحث لك عبر الزر</p>
+                                <span class="material-symbols-outlined text-5xl text-gray-300 mb-4 block">science</span>
+                                <p class="text-gray-600 text-lg mb-2">لا توجد أبحاث حتى الآن</p>
+                                <p class="text-sm text-gray-500 mb-6">ابدأ بتقديم أول بحث لك عبر الزر</p>
                                 <a href="<?php echo BASE_URL; ?>/student/submission/create"
-                                   class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors">
+                                   class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                     <span class="material-symbols-outlined text-[18px]">note_add</span>
                                     تقديم بحث جديد
                                 </a>
@@ -331,25 +331,25 @@ function timeAgo($datetime) {
                         <?php else: ?>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-right">
-                                    <thead class="bg-slate-50 border-b border-slate-200">
+                                    <thead class="bg-gray-100 border-b border-gray-200">
                                         <tr>
-                                            <th class="px-5 py-3 text-sm font-button text-slate-gray">عنوان البحث</th>
-                                            <th class="px-5 py-3 text-sm font-button text-slate-gray">الحالة</th>
-                                            <th class="px-5 py-3 text-sm font-button text-slate-gray">تاريخ التقديم</th>
-                                            <th class="px-5 py-3 text-sm font-button text-slate-gray">إجراءات</th>
+                                            <th class="px-5 py-3 text-sm font-button text-gray-600">عنوان البحث</th>
+                                            <th class="px-5 py-3 text-sm font-button text-gray-600">الحالة</th>
+                                            <th class="px-5 py-3 text-sm font-button text-gray-600">تاريخ التقديم</th>
+                                            <th class="px-5 py-3 text-sm font-button text-gray-600">إجراءات</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-slate-100">
+                                    <tbody class="divide-y divide-gray-200">
                                         <?php foreach ($submissions as $sub): ?>
                                             <?php
-                                                $status = $statusMap[$sub['status']] ?? ['label' => $sub['status'], 'color' => 'bg-slate-100 text-slate-800'];
+                                                $status = $statusMap[$sub['status']] ?? ['label' => $sub['status'], 'color' => 'bg-gray-100 text-gray-800'];
                                                 $date = date('Y/m/d', strtotime($sub['created_at']));
                                             ?>
-                                            <tr class="hover:bg-slate-50 transition-colors">
+                                            <tr class="hover:bg-gray-50 transition-colors">
                                                 <td class="px-5 py-4">
-                                                    <div class="font-bold text-charcoal text-sm"><?= htmlspecialchars($sub['title'], ENT_QUOTES, 'UTF-8') ?></div>
+                                                    <div class="font-bold text-gray-900 text-sm"><?= htmlspecialchars($sub['title'], ENT_QUOTES, 'UTF-8') ?></div>
                                                     <?php if ($sub['serial_number']): ?>
-                                                        <div class="text-xs text-slate-gray mt-1"><?= htmlspecialchars($sub['serial_number'], ENT_QUOTES, 'UTF-8') ?></div>
+                                                        <div class="text-xs text-gray-600 mt-1"><?= htmlspecialchars($sub['serial_number'], ENT_QUOTES, 'UTF-8') ?></div>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td class="px-5 py-4">
@@ -357,10 +357,10 @@ function timeAgo($datetime) {
                                                         <?= htmlspecialchars($status['label'], ENT_QUOTES, 'UTF-8') ?>
                                                     </span>
                                                 </td>
-                                                <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
+                                                <td class="px-5 py-4 text-sm text-gray-600"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td class="px-5 py-4">
                                                     <div class="flex flex-col gap-2">
-                                                        <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                        <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-indigo-700 hover:underline">
                                                             <span class="material-symbols-outlined text-[16px]">visibility</span>
                                                             عرض التفاصيل
                                                         </a>
@@ -393,35 +393,35 @@ function timeAgo($datetime) {
                     </div>
 
                     <!-- Notifications Panel -->
-                    <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                        <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-                            <h3 class="font-h1 text-lg text-charcoal">آخر الإشعارات</h3>
-                            <span class="material-symbols-outlined text-slate-gray text-[20px]">notifications</span>
+                    <div class="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300">
+                        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+                            <h3 class="font-h1 text-lg text-gray-900">آخر الإشعارات</h3>
+                            <span class="material-symbols-outlined text-gray-600 text-[20px]">notifications</span>
                         </div>
 
                         <?php if ($latestNotification): ?>
                             <div class="px-5 py-4">
                                 <div class="notification-item flex items-start gap-3" title="<?= htmlspecialchars($latestNotification['message'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <span class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1.5 text-xs font-button text-on-primary shrink-0">
+                                    <span class="inline-flex items-center justify-center rounded-md bg-indigo-700 px-2 py-1.5 text-xs font-button text-white shrink-0">
                                         <?= htmlspecialchars(mb_substr($actionLabels[$latestNotification['type']] ?? 'إشعار', 0, 20, 'UTF-8'), ENT_QUOTES, 'UTF-8') ?>
                                     </span>
                                     <div class="flex-1 text-right">
-                                        <p class="notification-text text-sm leading-7 text-charcoal">
+                                        <p class="notification-text text-sm leading-7 text-gray-900">
                                             <?= htmlspecialchars($latestNotification['message'], ENT_QUOTES, 'UTF-8') ?>
                                         </p>
-                                        <p class="text-xs text-slate-400 mt-1"><?= timeAgo($latestNotification['created_at']) ?></p>
+                                        <p class="text-xs text-gray-500 mt-1"><?= timeAgo($latestNotification['created_at']) ?></p>
                                     </div>
                                 </div>
-                                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
-                                    <a href="#" onclick="openNotificationsDropdown(event)" class="view-all-notifications text-sm font-button text-primary hover:underline">
+                                <div class="mt-4 pt-3 border-t border-gray-200 text-center">
+                                    <a href="#" onclick="openNotificationsDropdown(event)" class="view-all-notifications text-sm font-button text-indigo-700 hover:underline">
                                         عرض كل الإشعارات
                                     </a>
                                 </div>
                             </div>
                         <?php else: ?>
                             <div class="p-6 text-center">
-                                <span class="material-symbols-outlined text-4xl text-slate-300 mb-2 block">notifications_off</span>
-                                <p class="text-sm text-slate-gray">لا توجد إشعارات حالياً</p>
+                                <span class="material-symbols-outlined text-4xl text-gray-300 mb-2 block">notifications_off</span>
+                                <p class="text-sm text-gray-600">لا توجد إشعارات حالياً</p>
                             </div>
                         <?php endif; ?>
                     </div>

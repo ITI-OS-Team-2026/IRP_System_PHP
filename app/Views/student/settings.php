@@ -42,30 +42,30 @@ $sidebarItems = [
 <head>
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
-<body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
+<body class="min-h-screen bg-gray-50 text-gray-900 rtl font-body-lg">
     <div class="min-h-screen flex flex-col lg:flex-row">
-        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
-            <div class="p-5 border-b border-slate-200 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-gray-200 shadow-sm lg:shadow-none">
+            <div class="p-5 border-b border-gray-200 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-xl bg-indigo-100 overflow-hidden flex items-center justify-center text-indigo-700">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
                 </div>
                 <div>
-                    <h1 class="font-h1 text-lg text-charcoal">IRB</h1>
-                    <p class="text-sm text-slate-gray">بوابة الباحث</p>
+                    <h1 class="font-h1 text-lg text-gray-900">IRB</h1>
+                    <p class="text-sm text-gray-600">بوابة الباحث</p>
                 </div>
             </div>
 
             <nav class="p-4 space-y-1">
                 <?php foreach ($sidebarItems as $item): ?>
                     <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>"
-                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-colors <?= !empty($item['active']) ? 'bg-primary text-on-primary shadow-sm' : 'text-slate-gray hover:bg-slate-100 hover:text-charcoal' ?>">
+                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-all <?= !empty($item['active']) ? 'bg-indigo-700 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ?>">
                         <span class="material-symbols-outlined text-[20px]"><?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?></span>
                         <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
                     </a>
                 <?php endforeach; ?>
             </nav>
 
-            <div class="p-4 mt-auto border-t border-slate-200">
+            <div class="p-4 mt-auto border-t border-gray-200">
                 <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -75,17 +75,17 @@ $sidebarItems = [
         </aside>
 
         <main class="flex-1">
-            <header class="bg-white border-b border-slate-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
                 <div>
-                    <p class="text-sm text-slate-gray">الإعدادات</p>
-                    <h2 class="font-h1 text-2xl text-charcoal">إعدادات الحساب</h2>
+                    <p class="text-sm text-gray-600">الإعدادات</p>
+                    <h2 class="font-h1 text-2xl text-gray-900">إعدادات الحساب</h2>
                 </div>
             </header>
 
             <section class="px-4 md:px-8 py-6 space-y-6">
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">البيانات الشخصية</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">البيانات الشخصية</h3>
                     </div>
 
                     <?php if ($profileErrorMessage !== ''): ?>
@@ -111,44 +111,44 @@ $sidebarItems = [
                     <form method="POST" action="<?php echo BASE_URL; ?>/student/settings/update" class="p-5 space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="full_name" class="block text-sm font-button text-charcoal mb-2">الاسم الكامل <span class="text-red-600">*</span></label>
+                                <label for="full_name" class="block text-sm font-button text-gray-900 mb-2">الاسم الكامل <span class="text-red-600">*</span></label>
                                 <input type="text" id="full_name" name="full_name" required
                                        value="<?= htmlspecialchars($student['full_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
 
                             <div>
-                                <label for="email" class="block text-sm font-button text-charcoal mb-2">البريد الإلكتروني</label>
+                                <label for="email" class="block text-sm font-button text-gray-900 mb-2">البريد الإلكتروني</label>
                                 <input type="email" id="email" readonly
                                        value="<?= htmlspecialchars($student['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-gray focus:outline-none">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-600 focus:outline-none">
                             </div>
 
                             <div>
-                                <label for="phone_number" class="block text-sm font-button text-charcoal mb-2">رقم الهاتف <span class="text-red-600">*</span></label>
+                                <label for="phone_number" class="block text-sm font-button text-gray-900 mb-2">رقم الهاتف <span class="text-red-600">*</span></label>
                                 <input type="text" id="phone_number" name="phone_number" required
                                        value="<?= htmlspecialchars($student['phone_number'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
 
                             <div>
-                                <label for="department" class="block text-sm font-button text-charcoal mb-2">القسم <span class="text-red-600">*</span></label>
+                                <label for="department" class="block text-sm font-button text-gray-900 mb-2">القسم <span class="text-red-600">*</span></label>
                                 <input type="text" id="department" name="department" required
                                        value="<?= htmlspecialchars($student['department'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
 
                             <div class="md:col-span-2">
-                                <label for="specialty" class="block text-sm font-button text-charcoal mb-2">التخصص <span class="text-red-600">*</span></label>
+                                <label for="specialty" class="block text-sm font-button text-gray-900 mb-2">التخصص <span class="text-red-600">*</span></label>
                                 <input type="text" id="specialty" name="specialty" required
                                        value="<?= htmlspecialchars($student['specialty'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3">
                             <button type="submit"
-                                    class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
+                                    class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                 <span class="material-symbols-outlined text-[18px]">save</span>
                                 حفظ التغييرات
                             </button>
@@ -156,9 +156,9 @@ $sidebarItems = [
                     </form>
                 </div>
 
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">تغيير كلمة المرور</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">تغيير كلمة المرور</h3>
                     </div>
 
                     <?php if ($passwordErrorMessage !== ''): ?>
@@ -184,27 +184,27 @@ $sidebarItems = [
                     <form method="POST" action="<?php echo BASE_URL; ?>/student/settings/password" class="p-5 space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="md:col-span-2">
-                                <label for="current_password" class="block text-sm font-button text-charcoal mb-2">كلمة المرور الحالية <span class="text-red-600">*</span></label>
+                                <label for="current_password" class="block text-sm font-button text-gray-900 mb-2">كلمة المرور الحالية <span class="text-red-600">*</span></label>
                                 <input type="password" id="current_password" name="current_password" required
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
 
                             <div>
-                                <label for="new_password" class="block text-sm font-button text-charcoal mb-2">كلمة المرور الجديدة <span class="text-red-600">*</span></label>
+                                <label for="new_password" class="block text-sm font-button text-gray-900 mb-2">كلمة المرور الجديدة <span class="text-red-600">*</span></label>
                                 <input type="password" id="new_password" name="new_password" minlength="8" required
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
 
                             <div>
-                                <label for="confirm_password" class="block text-sm font-button text-charcoal mb-2">تأكيد كلمة المرور الجديدة <span class="text-red-600">*</span></label>
+                                <label for="confirm_password" class="block text-sm font-button text-gray-900 mb-2">تأكيد كلمة المرور الجديدة <span class="text-red-600">*</span></label>
                                 <input type="password" id="confirm_password" name="confirm_password" minlength="8" required
-                                       class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                                       class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3">
                             <button type="submit"
-                                    class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
+                                    class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                 <span class="material-symbols-outlined text-[18px]">lock_reset</span>
                                 تغيير كلمة المرور
                             </button>

@@ -5,20 +5,34 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>إنشاء حساب جديد - IRB Portal</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script>
         window.BASE_URL = '<?php echo BASE_URL; ?>';
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
+                    "colors": {
                         "primary": "#1a146b",
                         "royal-indigo": "#312E81",
-                        "paper-white": "#FDFDFC",
                         "charcoal": "#1A1C1E",
                         "secondary": "#5c5f61",
-                        "on-primary": "#ffffff"
+                        "outline": "#777682",
+                        "paper-white": "#FDFDFC",
+                        "cool-slate": "#F8FAFC",
+                        "surface": "#f9f9fc",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Amiri"],
+                        "h1": ["Amiri"],
+                        "body-lg": ["Tajawal"],
+                        "numeral": ["Tajawal"],
+                        "button": ["Tajawal"],
+                        "body-sm": ["Tajawal"]
                     }
                 }
             }
@@ -40,101 +54,131 @@
         .toast-error { background-color: #dc2626; }
     </style>
 </head>
-<body class="bg-paper-white text-on-surface min-h-screen flex font-body-lg">
+<body class="bg-gray-50 text-gray-900 antialiased h-screen w-full overflow-hidden flex selection:bg-indigo-100 selection:text-indigo-700">
 
-<main class="flex-1 flex flex-col md:flex-row min-h-screen">
-    <!-- Branding Side -->
-    <div class="hidden md:flex md:w-2/5 bg-royal-indigo text-on-primary flex-col justify-between p-12 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-        <div class="relative z-10">
-            <div class="flex items-center gap-3 mb-12">
-                <span class="material-symbols-outlined text-4xl">account_balance</span>
-                <span class="font-bold text-2xl tracking-widest uppercase">IRB Portal</span>
-            </div>
-        </div>
-        <div class="relative z-10">
-            <blockquote class="text-3xl leading-tight mb-6 font-bold">
-                "البحث العلمي هو نافذة الأمة نحو المستقبل، والأخلاقيات هي الإطار الذي يحمي هذا المستقبل."
-            </blockquote>
-            <p class="text-lg opacity-80">— الميثاق الأخلاقي للبحث العلمي</p>
-        </div>
-        <div class="relative z-10 text-sm opacity-60">
-            © 2024 Institutional Review Board. All rights reserved.
-        </div>
-    </div>
+<!-- Right Panel: Form (RTL Start) -->
+<main class="w-full lg:w-1/2 h-full bg-white flex flex-col justify-center px-8 md:px-16 lg:px-24 xl:px-32 relative z-10 overflow-y-auto">
+    <!-- Header / Logo -->
+    <header class="mb-12">
+        <h1 class="font-h1 text-4xl text-gray-900 mb-1">مجلس المراجعة المؤسسية</h1>
+        <p class="font-body-sm text-sm text-gray-600 uppercase tracking-widest">Institutional Review Board</p>
+    </header>
 
-    <!-- Form Side -->
-    <div class="w-full md:w-3/5 flex items-center justify-center p-8 lg:p-12 bg-paper-white relative overflow-y-auto">
-        <div class="w-full max-w-xl">
+    <!-- Form Container -->
+    <div class="w-full max-w-md">
             <!-- Tabs -->
             <div class="flex w-full mb-8">
-                <a href="<?php echo BASE_URL; ?>/login" class="flex-1 pb-3 text-center border-b border-outline text-outline hover:text-charcoal transition-colors">
+                <a href="<?php echo BASE_URL; ?>/login" class="flex-1 pb-3 text-center border-b border-gray-300 font-button text-button text-gray-600 hover:text-gray-900 focus:outline-none transition-colors">
                     تسجيل الدخول
                 </a>
-                <a href="<?php echo BASE_URL; ?>/register" class="flex-1 pb-3 text-center border-b-2 border-charcoal font-bold text-charcoal">
+                <a href="<?php echo BASE_URL; ?>/register" class="flex-1 pb-3 text-center border-b-2 border-indigo-700 font-button text-button text-gray-900 focus:outline-none">
                     إنشاء حساب
                 </a>
             </div>
 
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-charcoal mb-2">إنشاء حساب طالب</h1>
-                <p class="text-secondary">يرجى إدخال كافة البيانات المطلوبة ورفع صور البطاقة.</p>
+            <div class="mb-6">
+                <h2 class="font-h1 text-3xl text-gray-900 mb-2">إنشاء حساب طالب</h2>
+                <p class="font-body-sm text-gray-600">يرجى إدخال كافة البيانات المطلوبة ورفع صور البطاقة.</p>
             </div>
 
             <form id="registerForm" class="space-y-4" enctype="multipart/form-data">
+                <!-- Full Name -->
+                <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold" for="fullName">الاسم بالكامل (رباعي)</label>
+                        <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="fullName" name="full_name" placeholder="الاسم رباعياً كما في البطاقة" type="text" required/>
+                    </div>
+
+                <!-- Two Column Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1 md:col-span-2">
-                        <label class="text-sm font-bold text-charcoal" for="fullName">الاسم بالكامل (رباعي)</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="fullName" name="full_name" placeholder="الاسم رباعياً كما في البطاقة" type="text" required/>
-                    </div>
-                    
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal" for="email">البريد الإلكتروني</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="email" name="email" placeholder="example@university.edu" type="email" required/>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold" for="email">البريد الإلكتروني</label>
+                        <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="email" name="email" placeholder="example@university.edu" type="email" required/>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal" for="phone">رقم الهاتف</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="phone" name="phone_number" placeholder="01XXXXXXXXX" type="tel" required/>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold" for="phone">رقم الهاتف</label>
+                        <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="phone" name="phone_number" placeholder="01XXXXXXXXX" type="tel" required/>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal" for="department">القسم</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="department" name="department" placeholder="القسم الأكاديمي" type="text" required/>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold" for="department">القسم</label>
+                        <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="department" name="department" placeholder="القسم الأكاديمي" type="text" required/>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal" for="specialty">التخصص</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="specialty" name="specialty" placeholder="التخصص الدقيق" type="text" required/>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold" for="specialty">التخصص</label>
+                        <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="specialty" name="specialty" placeholder="التخصص الدقيق" type="text" required/>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal">صورة البطاقة (وجه)</label>
-                        <input type="file" id="idFront" name="id_front" accept="image/*" class="w-full border border-dashed border-charcoal p-2 text-sm" required/>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold">صورة البطاقة (وجه)</label>
+                        <input type="file" id="idFront" name="id_front" accept="image/*" class="w-full border border-dashed border-gray-300 px-3 py-2.5 text-sm rounded-lg bg-gray-50" required/>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-bold text-charcoal">صورة البطاقة (ظهر)</label>
-                        <input type="file" id="idBack" name="id_back" accept="image/*" class="w-full border border-dashed border-charcoal p-2 text-sm" required/>
-                    </div>
-
-                    <div class="flex flex-col gap-1 md:col-span-2">
-                        <label class="text-sm font-bold text-charcoal" for="password">كلمة المرور</label>
-                        <input class="w-full bg-paper-white border border-charcoal p-3 rounded-none focus:ring-2 focus:ring-royal-indigo outline-none" id="password" name="password" placeholder="••••••••" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required/>
-                        <p class="text-xs text-slate-gray">يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
+                    <div class="flex flex-col gap-2">
+                        <label class="font-body-sm text-sm text-gray-900 font-bold">صورة البطاقة (ظهر)</label>
+                        <input type="file" id="idBack" name="id_back" accept="image/*" class="w-full border border-dashed border-gray-300 px-3 py-2.5 text-sm rounded-lg bg-gray-50" required/>
                     </div>
                 </div>
 
-                <div class="pt-4">
-                    <button id="submitBtn" class="w-full bg-royal-indigo text-white py-4 font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 group" type="submit">
+                <!-- Password -->
+                <div class="flex flex-col gap-2">
+                    <label class="font-body-sm text-sm text-gray-900 font-bold" for="password">كلمة المرور</label>
+                    <input class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg font-body-lg text-base text-gray-900 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all" id="password" name="password" placeholder="••••••••" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}" title="8 أحرف على الأقل مع حرف كبير وحرف صغير ورقم ورمز خاص" required/>
+                    <p class="font-body-sm text-xs text-gray-600">يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل وحرف كبير وحرف صغير ورقم ورمز خاص.</p>
+                </div>
+
+                <div class="pt-2">
+                    <button id="submitBtn" type="submit" class="w-full mt-4 bg-indigo-700 text-white py-4 font-button text-button rounded-lg border border-indigo-700 hover:bg-indigo-800 transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5 flex justify-center items-center gap-2 group">
                         <span>تسجيل الحساب</span>
-                        <span class="material-symbols-outlined transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
+                        <span class="material-symbols-outlined text-white transform group-hover:-translate-x-1 transition-transform rtl:-scale-x-100">arrow_forward</span>
                     </button>
                 </div>
             </form>
+
+            <!-- Footer Links -->
+            <div class="mt-12 flex flex-col gap-2 border-t border-gray-200 pt-6">
+                <p class="font-body-sm text-sm text-gray-600">
+                    بالتسجيل في هذا النظام، فإنك توافق على <a class="text-indigo-700 underline hover:text-indigo-800" href="#">بروتوكول الخصوصية</a> و <a class="text-indigo-700 underline hover:text-indigo-800" href="#">المعايير الأخلاقية</a> الخاصة بمجلس المراجعة المؤسسية.
+                </p>
+            </div>
         </div>
     </div>
 </main>
+
+<!-- Left Panel: Quote/Branding -->
+<aside class="hidden lg:flex w-1/2 h-full relative flex-col justify-between p-16 overflow-hidden bg-indigo-900" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuDqi_Ls0kDkZx8Bj2tZ0p_qJp8K13zi08ZVrjjXSozCbQCQZJN_AfZRP9pkEnihZFnLkUaBxduiJOup97VBq0cKVK6mI8kcnj9Aj_Oqg_WO42Kd3EJZzf9kgZQlgez5v2XgOWWnMcU3y2YUI1-tyJaTB-fc3thUkZ_Rpw0GNdKggpWcpsyOaQPOeiSfObhjgUWxY39nJG_D1efgBQwfMNzpR0uuRMdFoq7vFRdx5CHgGKEv_CZ-tRbDm3NVYQN8dRiHMDZGpj2ywJ'); background-size: cover; background-position: center;">
+    <!-- Deep Indigo Overlay -->
+    <div class="absolute inset-0 bg-indigo-900/90 mix-blend-multiply z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-indigo-900 via-transparent to-indigo-900/60 z-0"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col h-full justify-between" dir="rtl">
+        <!-- Branding -->
+        <div class="flex items-center gap-3 text-indigo-200">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+            <span class="font-body-lg text-lg uppercase tracking-widest font-bold">بوابة البحث العلمي</span>
+        </div>
+
+        <!-- Quote -->
+        <blockquote class="max-w-2xl self-start text-right">
+            <p class="font-display-lg text-4xl text-white leading-relaxed mb-8 font-bold" style="line-height: 1.4;">
+                "النزاهة الأكاديمية الصارمة هي أساس كل تقدم علمي موثوق."
+            </p>
+            <footer class="flex items-center gap-4 justify-start">
+                <div class="h-[2px] w-16 bg-indigo-200"></div>
+                <span class="font-body-lg text-lg text-indigo-200 tracking-wide font-bold">المعيار الذهبي لأخلاقيات البحث</span>
+            </footer>
+        </blockquote>
+
+        <!-- Bottom Note -->
+        <div class="text-right">
+            <p class="font-numeral text-sm text-indigo-200 opacity-70">
+                IRB.SYS.V2.0.4 // الأرشيف الآمن
+            </p>
+        </div>
+    </div>
+</aside>
 
 <div id="toast" class="toast">
     <span id="toastIcon" class="material-symbols-outlined"></span>

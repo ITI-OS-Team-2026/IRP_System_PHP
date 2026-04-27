@@ -68,31 +68,31 @@ function formatDate($datetime) {
 <head>
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
-<body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
+<body class="min-h-screen bg-gray-50 text-gray-900 rtl font-body-lg">
     <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
-            <div class="p-5 border-b border-slate-200 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-gray-200 shadow-sm lg:shadow-none">
+            <div class="p-5 border-b border-gray-200 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-xl bg-indigo-100 overflow-hidden flex items-center justify-center text-indigo-700">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
                 </div>
                 <div>
-                    <h1 class="font-h1 text-lg text-charcoal">IRB</h1>
-                    <p class="text-sm text-slate-gray">بوابة الباحث</p>
+                    <h1 class="font-h1 text-lg text-gray-900">IRB</h1>
+                    <p class="text-sm text-gray-600">بوابة الباحث</p>
                 </div>
             </div>
 
             <nav class="p-4 space-y-1">
                 <?php foreach ($sidebarItems as $item): ?>
                     <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>"
-                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-colors <?= !empty($item['active']) ? 'bg-primary text-on-primary shadow-sm' : 'text-slate-gray hover:bg-slate-100 hover:text-charcoal' ?>">
+                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-all <?= !empty($item['active']) ? 'bg-indigo-700 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ?>">
                         <span class="material-symbols-outlined text-[20px]"><?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?></span>
                         <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
                     </a>
                 <?php endforeach; ?>
             </nav>
 
-            <div class="p-4 mt-auto border-t border-slate-200">
+            <div class="p-4 mt-auto border-t border-gray-200">
                 <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -104,13 +104,13 @@ function formatDate($datetime) {
         <!-- Main Content -->
         <main class="flex-1">
             <!-- Top Header -->
-            <header class="bg-white border-b border-slate-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
                 <div>
-                    <p class="text-sm text-slate-gray">أبحاثي</p>
-                    <h2 class="font-h1 text-2xl text-charcoal">أبحاثي</h2>
+                    <p class="text-sm text-gray-600">أبحاثي</p>
+                    <h2 class="font-h1 text-2xl text-gray-900">أبحاثي</h2>
                 </div>
                 <a href="<?php echo BASE_URL; ?>/student/submission/create"
-                   class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors shadow-sm">
+                   class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                     <span class="material-symbols-outlined text-[18px]">note_add</span>
                     تقديم بحث جديد
                 </a>
@@ -128,20 +128,20 @@ function formatDate($datetime) {
                 <?php endif; ?>
 
                 <!-- Submissions Table -->
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-                        <h3 class="font-h1 text-lg text-charcoal">قائمة أبحاثي</h3>
-                        <span class="text-sm text-slate-gray"><?= (int)count($submissions) ?> بحث</span>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+                        <h3 class="font-h1 text-lg text-gray-900">قائمة أبحاثي</h3>
+                        <span class="text-sm text-gray-600"><?= (int)count($submissions) ?> بحث</span>
                     </div>
 
                     <?php if (empty($submissions)): ?>
                         <!-- Empty State -->
                         <div class="p-12 text-center">
-                            <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">science</span>
-                            <p class="text-slate-gray text-lg mb-2">لا توجد أبحاث حتى الآن</p>
-                            <p class="text-sm text-slate-400 mb-6">ابدأ بتقديم أول بحث لك</p>
+                            <span class="material-symbols-outlined text-6xl text-gray-300 mb-4 block">science</span>
+                            <p class="text-gray-600 text-lg mb-2">لا توجد أبحاث حتى الآن</p>
+                            <p class="text-sm text-gray-500 mb-6">ابدأ بتقديم أول بحث لك</p>
                             <a href="<?php echo BASE_URL; ?>/student/submission/create"
-                               class="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-sm hover:bg-royal-indigo transition-colors">
+                               class="inline-flex items-center gap-2 bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                 <span class="material-symbols-outlined text-[18px]">note_add</span>
                                 تقديم بحث جديد
                             </a>
@@ -150,31 +150,31 @@ function formatDate($datetime) {
                         <!-- Submissions Table -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-right">
-                                <thead class="bg-slate-50 border-b border-slate-200">
+                                <thead class="bg-gray-100 border-b border-gray-200">
                                     <tr>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">عنوان البحث</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">الباحث الرئيسي</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">الرقم التسلسلي</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">الحالة</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">تاريخ التقديم</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">إجراءات</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">عنوان البحث</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">الباحث الرئيسي</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">الرقم التسلسلي</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">الحالة</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">تاريخ التقديم</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">إجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100">
+                                <tbody class="divide-y divide-gray-200">
                                     <?php foreach ($submissions as $sub): ?>
                                         <?php
-                                            $status = $statusMap[$sub['status']] ?? ['label' => $sub['status'], 'color' => 'bg-slate-100 text-slate-800'];
+                                            $status = $statusMap[$sub['status']] ?? ['label' => $sub['status'], 'color' => 'bg-gray-100 text-gray-800'];
                                             $date = formatDate($sub['created_at']);
                                             $serialNumber = $sub['serial_number'] ?? 'لم يُحدد بعد';
                                         ?>
-                                        <tr class="hover:bg-slate-50 transition-colors">
+                                        <tr class="hover:bg-gray-50 transition-colors">
                                             <td class="px-5 py-4">
-                                                <div class="font-bold text-charcoal text-sm"><?= htmlspecialchars($sub['title'], ENT_QUOTES, 'UTF-8') ?></div>
+                                                <div class="font-bold text-gray-900 text-sm"><?= htmlspecialchars($sub['title'], ENT_QUOTES, 'UTF-8') ?></div>
                                             </td>
-                                            <td class="px-5 py-4 text-sm text-slate-gray">
+                                            <td class="px-5 py-4 text-sm text-gray-600">
                                                 <?= htmlspecialchars($sub['principal_investigator'], ENT_QUOTES, 'UTF-8') ?>
                                             </td>
-                                            <td class="px-5 py-4 text-sm text-slate-gray">
+                                            <td class="px-5 py-4 text-sm text-gray-600">
                                                 <?= htmlspecialchars($serialNumber, ENT_QUOTES, 'UTF-8') ?>
                                             </td>
                                             <td class="px-5 py-4">
@@ -182,10 +182,10 @@ function formatDate($datetime) {
                                                     <?= htmlspecialchars($status['label'], ENT_QUOTES, 'UTF-8') ?>
                                                 </span>
                                             </td>
-                                            <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="px-5 py-4 text-sm text-gray-600"><?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8') ?></td>
                                             <td class="px-5 py-4">
                                                 <div class="flex flex-col gap-2">
-                                                    <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                    <a href="<?php echo BASE_URL; ?>/student/submissions/<?= (int) $sub['id'] ?>" class="inline-flex items-center gap-1 text-sm font-button text-indigo-700 hover:underline">
                                                         <span class="material-symbols-outlined text-[16px]">visibility</span>
                                                         عرض التفاصيل
                                                     </a>

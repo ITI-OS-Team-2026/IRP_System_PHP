@@ -119,13 +119,13 @@ foreach ($documents as $document) {
 }
 
 $reviewStatusMap = [
-    'pending' => ['label' => 'قيد المراجعة', 'color' => 'bg-slate-100 text-slate-700'],
+    'pending' => ['label' => 'قيد المراجعة', 'color' => 'bg-gray-100 text-gray-700'],
     'approved' => ['label' => 'تمت الموافقة', 'color' => 'bg-green-100 text-green-800'],
     'revision_requested' => ['label' => 'مطلوب تعديل', 'color' => 'bg-red-100 text-red-800'],
     'rejected' => ['label' => 'مرفوض', 'color' => 'bg-red-100 text-red-800'],
 ];
 
-$statusInfo = $statusMap[$submission['status']] ?? ['label' => $submission['status'], 'color' => 'bg-slate-100 text-slate-700'];
+$statusInfo = $statusMap[$submission['status']] ?? ['label' => $submission['status'], 'color' => 'bg-gray-100 text-gray-700'];
 $coInvestigators = trim((string) ($submission['co_investigators'] ?? ''));
 $serialNumber = $submission['serial_number'] ?: 'لم يُحدد بعد';
 
@@ -171,30 +171,30 @@ function formatDateTime($datetime) {
 <head>
 <?php require __DIR__ . '/../layouts/head.php'; ?>
 </head>
-<body class="min-h-screen bg-[#f6f7fb] text-charcoal rtl font-body-lg">
+<body class="min-h-screen bg-gray-50 text-gray-900 rtl font-body-lg">
     <div class="min-h-screen flex flex-col lg:flex-row">
-        <aside class="w-full lg:w-[260px] bg-white border-r border-slate-200 shadow-sm lg:shadow-none">
-            <div class="p-5 border-b border-slate-200 flex items-center gap-4">
-                <div class="w-14 h-14 rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500">
+        <aside class="w-full lg:w-[260px] bg-white border-r border-gray-200 shadow-sm lg:shadow-none">
+            <div class="p-5 border-b border-gray-200 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-xl bg-indigo-100 overflow-hidden flex items-center justify-center text-indigo-700">
                     <span class="material-symbols-outlined text-3xl">account_balance</span>
                 </div>
                 <div>
-                    <h1 class="font-h1 text-lg text-charcoal">IRB</h1>
-                    <p class="text-sm text-slate-gray">بوابة الباحث</p>
+                    <h1 class="font-h1 text-lg text-gray-900">IRB</h1>
+                    <p class="text-sm text-gray-600">بوابة الباحث</p>
                 </div>
             </div>
 
             <nav class="p-4 space-y-1">
                 <?php foreach ($sidebarItems as $item): ?>
                     <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>"
-                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-colors <?= !empty($item['active']) ? 'bg-primary text-on-primary shadow-sm' : 'text-slate-gray hover:bg-slate-100 hover:text-charcoal' ?>">
+                       class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button transition-all <?= !empty($item['active']) ? 'bg-indigo-700 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' ?>">
                         <span class="material-symbols-outlined text-[20px]"><?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?></span>
                         <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
                     </a>
                 <?php endforeach; ?>
             </nav>
 
-            <div class="p-4 mt-auto border-t border-slate-200">
+            <div class="p-4 mt-auto border-t border-gray-200">
                 <a href="<?php echo BASE_URL; ?>/logout"
                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-button text-red-600 hover:bg-red-50 transition-colors">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
@@ -204,14 +204,14 @@ function formatDateTime($datetime) {
         </aside>
 
         <main class="flex-1">
-            <header class="bg-white border-b border-slate-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
                 <div>
-                    <p class="text-sm text-slate-gray">أبحاثي</p>
-                    <p class="text-xs text-slate-gray mb-1">تفاصيل البحث</p>
-                    <h2 class="font-h1 text-2xl text-charcoal"><?= htmlspecialchars($submission['title'], ENT_QUOTES, 'UTF-8') ?></h2>
+                    <p class="text-sm text-gray-600">أبحاثي</p>
+                    <p class="text-xs text-gray-600 mb-1">تفاصيل البحث</p>
+                    <h2 class="font-h1 text-2xl text-gray-900"><?= htmlspecialchars($submission['title'], ENT_QUOTES, 'UTF-8') ?></h2>
                 </div>
                 <a href="<?php echo BASE_URL; ?>/student/submissions"
-                   class="inline-flex items-center gap-2 bg-slate-100 text-charcoal px-4 py-2.5 rounded-lg font-button text-sm hover:bg-slate-200 transition-colors">
+                   class="inline-flex items-center gap-2 bg-gray-100 text-gray-900 px-4 py-2.5 rounded-lg font-button text-sm hover:bg-gray-200 transition-colors">
                     <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                     العودة إلى أبحاثي
                 </a>
@@ -232,41 +232,41 @@ function formatDateTime($datetime) {
                         <?php unset($_SESSION['submission_error']); ?>
                     </div>
                 <?php endif; ?>
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">معلومات البحث</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">معلومات البحث</h3>
                     </div>
                     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">عنوان البحث</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars($submission['title'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">عنوان البحث</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars($submission['title'], ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">اسم الباحث الرئيسي</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars($submission['principal_investigator'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">اسم الباحث الرئيسي</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars($submission['principal_investigator'], ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">المشاركون في البحث</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars($coInvestigators !== '' ? $coInvestigators : 'لا يوجد', ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">المشاركون في البحث</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars($coInvestigators !== '' ? $coInvestigators : 'لا يوجد', ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">الرقم التسلسلي</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars($serialNumber, ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">الرقم التسلسلي</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars($serialNumber, ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">تاريخ التقديم</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars(formatDateTime($submission['created_at']), ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">تاريخ التقديم</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars(formatDateTime($submission['created_at']), ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
-                        <div class="rounded-lg border border-slate-200 p-4">
-                            <p class="text-slate-gray mb-1">آخر تحديث</p>
-                            <p class="font-button text-charcoal"><?= htmlspecialchars(formatDateTime($submission['updated_at']), ENT_QUOTES, 'UTF-8') ?></p>
+                        <div class="rounded-lg border border-gray-200 p-4">
+                            <p class="text-gray-600 mb-1">آخر تحديث</p>
+                            <p class="font-button text-gray-900"><?= htmlspecialchars(formatDateTime($submission['updated_at']), ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">الحالة الحالية</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">الحالة الحالية</h3>
                     </div>
                     <div class="p-5 space-y-5">
                         <div class="flex flex-wrap items-center gap-4">
@@ -305,18 +305,18 @@ function formatDateTime($datetime) {
                                         $labelClass = 'text-red-700 font-bold';
                                     } elseif ($isCompleted) {
                                         $circleClass = 'bg-green-100 text-green-700 border border-green-300';
-                                        $labelClass = 'text-charcoal';
+                                        $labelClass = 'text-gray-900';
                                     } elseif ($isCurrent) {
                                         $circleClass = 'bg-blue-500 text-white shadow-[0_0_0_4px_rgba(59,130,246,0.2)]';
-                                        $labelClass = 'text-charcoal font-bold';
+                                        $labelClass = 'text-gray-900 font-bold';
                                     } else {
-                                        $circleClass = 'bg-slate-100 text-slate-400 border border-slate-200';
-                                        $labelClass = 'text-slate-400';
+                                        $circleClass = 'bg-gray-100 text-gray-400 border border-gray-200';
+                                        $labelClass = 'text-gray-400';
                                     }
                                 ?>
                                     <div class="relative flex items-start gap-4 <?= !$isLastStage ? 'pb-12' : '' ?>">
                                         <?php if (!$isLastStage): ?>
-                                            <div class="absolute right-4 top-8 bottom-0 w-px <?= $isCompleted ? 'bg-green-500' : 'bg-slate-200' ?>"></div>
+                                            <div class="absolute right-4 top-8 bottom-0 w-px <?= $isCompleted ? 'bg-green-500' : 'bg-gray-200' ?>"></div>
                                         <?php endif; ?>
                                         <div class="relative z-10">
                                             <div class="w-8 h-8 rounded-full flex items-center justify-center <?= htmlspecialchars($circleClass, ENT_QUOTES, 'UTF-8') ?>">
@@ -347,33 +347,33 @@ function formatDateTime($datetime) {
                     </div>
                 </div>
 
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">المستندات المرفوعة</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">المستندات المرفوعة</h3>
                     </div>
                     <?php if (empty($documents)): ?>
-                        <div class="p-6 text-sm text-slate-gray">لا توجد مستندات مرفوعة لهذا البحث.</div>
+                        <div class="p-6 text-sm text-gray-600">لا توجد مستندات مرفوعة لهذا البحث.</div>
                     <?php else: ?>
                         <div class="overflow-x-auto">
                             <table class="w-full text-right">
-                                <thead class="bg-slate-50 border-b border-slate-200">
+                                <thead class="bg-gray-100 border-b border-gray-200">
                                     <tr>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">نوع المستند</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">تاريخ الرفع</th>
-                                        <th class="px-5 py-3 text-sm font-button text-slate-gray">تحميل</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">نوع المستند</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">تاريخ الرفع</th>
+                                        <th class="px-5 py-3 text-sm font-button text-gray-600">تحميل</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100">
+                                <tbody class="divide-y divide-gray-200">
                                     <?php foreach ($documents as $document): ?>
                                         <?php
                                             $documentType = $documentTypeMap[$document['document_type']] ?? $document['document_type'];
                                             $downloadPath = BASE_URL . '/storage/' . ltrim($document['file_path'], '/');
                                         ?>
-                                        <tr class="hover:bg-slate-50 transition-colors">
-                                            <td class="px-5 py-4 text-sm text-charcoal"><?= htmlspecialchars($documentType, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="px-5 py-4 text-sm text-slate-gray"><?= htmlspecialchars(formatDateTime($document['uploaded_at']), ENT_QUOTES, 'UTF-8') ?></td>
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="px-5 py-4 text-sm text-gray-900"><?= htmlspecialchars($documentType, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="px-5 py-4 text-sm text-gray-600"><?= htmlspecialchars(formatDateTime($document['uploaded_at']), ENT_QUOTES, 'UTF-8') ?></td>
                                             <td class="px-5 py-4">
-                                                <a href="<?= htmlspecialchars($downloadPath, ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="inline-flex items-center gap-1 text-sm font-button text-primary hover:underline">
+                                                <a href="<?= htmlspecialchars($downloadPath, ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="inline-flex items-center gap-1 text-sm font-button text-indigo-700 hover:underline">
                                                     <span class="material-symbols-outlined text-[16px]">download</span>
                                                     تنزيل
                                                 </a>
@@ -386,21 +386,21 @@ function formatDateTime($datetime) {
                     <?php endif; ?>
                 </div>
 
-                <div class="rounded-xl border border-[#3f4779] bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
-                    <div class="px-5 py-4 border-b border-slate-200">
-                        <h3 class="font-h1 text-lg text-charcoal">ملاحظات المراجعة</h3>
+                <div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-200">
+                        <h3 class="font-h1 text-lg text-gray-900">ملاحظات المراجعة</h3>
                     </div>
                     <?php if (empty($reviews)): ?>
-                        <div class="p-6 text-sm text-slate-gray">لم تتم المراجعة بعد</div>
+                        <div class="p-6 text-sm text-gray-600">لم تتم المراجعة بعد</div>
                     <?php else: ?>
-                        <div class="divide-y divide-slate-100">
+                        <div class="divide-y divide-gray-200">
                             <?php foreach ($reviews as $review): ?>
                                 <?php
                                     $reviewStatus = $review['review_status'];
                                     if ($reviewStatus === 'modification_requested') {
                                         $reviewStatus = 'revision_requested';
                                     }
-                                    $reviewInfo = $reviewStatusMap[$reviewStatus] ?? ['label' => $reviewStatus, 'color' => 'bg-slate-100 text-slate-700'];
+                                    $reviewInfo = $reviewStatusMap[$reviewStatus] ?? ['label' => $reviewStatus, 'color' => 'bg-gray-100 text-gray-700'];
                                     $showFeedback = in_array($reviewStatus, ['revision_requested', 'rejected']);
                                 ?>
                                 <div class="p-5 space-y-3">
@@ -410,7 +410,7 @@ function formatDateTime($datetime) {
                                         </span>
                                     </div>
                                     <?php if ($showFeedback): ?>
-                                        <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-charcoal leading-7">
+                                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-900 leading-7">
                                             <?= nl2br(htmlspecialchars($review['feedback_notes'] ?: 'لا توجد ملاحظات.', ENT_QUOTES, 'UTF-8')) ?>
                                         </div>
                                     <?php endif; ?>
@@ -421,7 +421,7 @@ function formatDateTime($datetime) {
                 </div>
 
                 <?php if ($submission['status'] === 'revision_requested'): ?>
-                <div class="rounded-xl border border-red-300 bg-red-50 shadow-[0_2px_12px_rgba(15,23,42,0.05)] mt-6 relative overflow-hidden">
+                <div class="rounded-xl border border-red-300 bg-red-50 shadow-sm mt-6 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
                     <div class="px-5 py-4 border-b border-red-200">
                         <h3 class="font-h1 text-lg text-red-800 flex items-center gap-2">
@@ -435,21 +435,21 @@ function formatDateTime($datetime) {
                             <?php foreach ($documentTypeMap as $documentKey => $documentLabel): ?>
                                 <div class="rounded-lg border border-red-200 bg-white p-4 space-y-2">
                                     <div class="flex items-center justify-between gap-4">
-                                        <label class="block text-sm font-bold text-charcoal">
+                                        <label class="block text-sm font-bold text-gray-900">
                                             <?= htmlspecialchars($documentLabel, ENT_QUOTES, 'UTF-8') ?>
                                         </label>
                                         <?php if (isset($currentDocumentByType[$documentKey])): ?>
-                                            <span class="text-xs text-slate-600">
+                                            <span class="text-xs text-gray-600">
                                                 النسخة الحالية: V<?= (int) ($currentDocumentByType[$documentKey]['version'] ?? 1) ?>
                                             </span>
                                         <?php endif; ?>
                                     </div>
                                     <input type="file" name="revised_files[<?= htmlspecialchars($documentKey, ENT_QUOTES, 'UTF-8') ?>]" accept=".pdf,.doc,.docx"
-                                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-button file:bg-primary file:text-white hover:file:bg-indigo-700 cursor-pointer border border-slate-300 rounded-lg bg-white">
+                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-button file:bg-indigo-700 file:text-white hover:file:bg-indigo-800 cursor-pointer border border-gray-300 rounded-lg bg-white">
                                 </div>
                             <?php endforeach; ?>
                             <div class="flex justify-end pt-2">
-                                <button type="submit" class="bg-red-600 text-white px-6 py-2.5 rounded-lg font-button text-sm hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2">
+                                <button type="submit" class="bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-button text-sm hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-[18px]">send</span>
                                     إرسال التعديلات للمراجع
                                 </button>

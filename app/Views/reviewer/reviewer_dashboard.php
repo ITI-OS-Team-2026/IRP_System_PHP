@@ -37,93 +37,93 @@
         body { font-family: 'Tajawal', sans-serif; background-color: #FDFDFC; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col text-charcoal">
+<body class="min-h-screen flex flex-col text-gray-900 bg-gray-50">
 
-<header class="bg-white border-b border-charcoal flex justify-between items-center w-full px-8 h-16 fixed top-0 z-50">
-    <div class="text-xl font-black text-indigo-900">IRB Portal</div>
-    <div class="flex items-center gap-4 text-slate-600">
-        <span class="material-symbols-outlined cursor-pointer hover:text-royal-indigo transition-colors">notifications</span>
-        <div class="w-8 h-8 rounded-full bg-slate-200 border border-charcoal flex items-center justify-center">
+<header class="bg-white border-b border-gray-200 flex justify-between items-center w-full px-8 h-16 fixed top-0 z-50 shadow-sm">
+    <div class="text-xl font-bold text-indigo-700">IRB Portal</div>
+    <div class="flex items-center gap-4 text-gray-600">
+        <span class="material-symbols-outlined cursor-pointer hover:text-indigo-700 transition-colors">notifications</span>
+        <div class="w-8 h-8 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center">
             <span class="material-symbols-outlined">person</span>
         </div>
     </div>
 </header>
 
 <div class="flex flex-1 pt-16">
-    <nav class="bg-slate-50 border-l border-charcoal fixed inset-y-0 right-0 w-64 flex flex-col z-40 mt-16 pt-8 px-4">
+    <nav class="bg-white border-l border-gray-200 fixed inset-y-0 right-0 w-64 flex flex-col z-40 mt-16 pt-8 px-4 shadow-sm">
         <div class="mb-8 px-4">
-            <div class="w-12 h-12 bg-surface-variant mb-4 flex items-center justify-center border border-charcoal">
-                <span class="material-symbols-outlined text-secondary">domain</span>
+            <div class="w-12 h-12 bg-indigo-100 mb-4 flex items-center justify-center rounded-xl">
+                <span class="material-symbols-outlined text-indigo-700">domain</span>
             </div>
-            <h2 class="text-lg font-bold text-slate-900 leading-tight">مساحة المراجع</h2>
-            <p class="text-xs text-secondary mt-1">مجلس المراجعة المؤسسية</p>
+            <h2 class="text-lg font-bold text-gray-900 leading-tight">مساحة المراجع</h2>
+            <p class="text-xs text-gray-600 mt-1">مجلس المراجعة المؤسسية</p>
         </div>
         <ul class="flex flex-col gap-2">
             <li>
-                <a class="bg-indigo-900 text-white font-bold flex items-center gap-3 px-4 py-3 border border-charcoal" href="<?php echo BASE_URL; ?>/reviewer/dashboard">
+                <a class="bg-indigo-700 text-white font-bold flex items-center gap-3 px-4 py-3 rounded-lg transition-all" href="<?php echo BASE_URL; ?>/reviewer/dashboard">
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assignment</span>
                     <span>الأبحاث المعينة</span>
                 </a>
             </li>
             <li>
-                <a class="text-slate-700 hover:bg-slate-200 flex items-center gap-3 px-4 py-3 border border-transparent transition-colors" href="<?php echo BASE_URL; ?>/reviewer/history">
+                <a class="text-gray-700 hover:bg-gray-100 flex items-center gap-3 px-4 py-3 rounded-lg transition-all" href="<?php echo BASE_URL; ?>/reviewer/history">
                     <span class="material-symbols-outlined">history</span>
                     <span>السجل</span>
                 </a>
             </li>
         </ul>
-        <div class="mt-auto p-4 border-t border-charcoal">
-            <a href="<?php echo BASE_URL; ?>/logout" class="text-red-600 flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors">
+        <div class="mt-auto p-4 border-t border-gray-200">
+            <a href="<?php echo BASE_URL; ?>/logout" class="text-red-600 flex items-center gap-3 px-4 py-3 hover:bg-red-50 rounded-lg transition-all">
                 <span class="material-symbols-outlined">logout</span>
                 تسجيل الخروج
             </a>
         </div>
     </nav>
 
-    <main class="flex-1 mr-64 p-12 max-w-7xl mx-auto w-full">
-        <header class="mb-12 border-b border-charcoal pb-6">
-            <h1 class="font-h1 text-4xl text-charcoal mb-2">لوحة تحكم المراجع</h1>
-            <p class="text-lg text-secondary">الأبحاث المعينة للمراجعة والتقييم ضمن الإطار الزمني المحدد.</p>
+    <main class="flex-1 mr-64 p-8 max-w-7xl mx-auto w-full">
+        <header class="mb-8 border-b border-gray-200 pb-6">
+            <h1 class="font-h1 text-3xl text-gray-900 mb-2">لوحة تحكم المراجع</h1>
+            <p class="text-lg text-gray-600">الأبحاث المعينة للمراجعة والتقييم ضمن الإطار الزمني المحدد.</p>
         </header>
 
         <?php if (isset($_SESSION['review_success'])): ?>
-            <div class="mb-8 p-4 bg-green-50 border border-green-600 text-green-700 flex items-center gap-3 font-bold">
+            <div class="mb-6 p-4 bg-green-50 border border-green-600 text-green-700 rounded-lg flex items-center gap-3 font-bold">
                 <span class="material-symbols-outlined">check_circle</span>
                 <?= htmlspecialchars($_SESSION['review_success']) ?>
                 <?php unset($_SESSION['review_success']); ?>
             </div>
         <?php endif; ?>
 
-        <div class="bg-white border border-charcoal overflow-hidden">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
             <table class="w-full text-right border-collapse">
-                <thead class="bg-cool-slate border-b border-charcoal">
+                <thead class="bg-gray-100 border-b border-gray-200">
                     <tr>
-                        <th class="py-4 px-6 font-bold border-l border-charcoal">الرقم التسلسلي</th>
-                        <th class="py-4 px-6 font-bold border-l border-charcoal">عنوان البحث</th>
-                        <th class="py-4 px-6 font-bold border-l border-charcoal">تاريخ التقديم</th>
-                        <th class="py-4 px-6 font-bold">الإجراء</th>
+                        <th class="py-4 px-6 font-bold text-gray-900 border-l border-gray-200">الرقم التسلسلي</th>
+                        <th class="py-4 px-6 font-bold text-gray-900 border-l border-gray-200">عنوان البحث</th>
+                        <th class="py-4 px-6 font-bold text-gray-900 border-l border-gray-200">تاريخ التقديم</th>
+                        <th class="py-4 px-6 font-bold text-gray-900">الإجراء</th>
                     </tr>
                 </thead>
-                <tbody class="text-charcoal">
+                <tbody class="text-gray-900">
                     <?php if (empty($assignedReviews)): ?>
                         <tr>
-                            <td colspan="4" class="py-12 px-6 text-center text-secondary font-bold">لا توجد أبحاث معينة للمراجعة حالياً.</td>
+                            <td colspan="4" class="py-12 px-6 text-center text-gray-600 font-bold">لا توجد أبحاث معينة للمراجعة حالياً.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($assignedReviews as $review): ?>
-                        <tr class="border-b border-surface-variant hover:bg-slate-50 transition-colors">
-                            <td class="py-5 px-6 border-l border-surface-variant font-numeral font-bold text-royal-indigo">
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="py-5 px-6 border-l border-gray-200 font-numeral font-bold text-indigo-700">
                                 <?= htmlspecialchars($review['serial_number'] ?: 'قيد المعالجة') ?>
                             </td>
-                            <td class="py-5 px-6 border-l border-surface-variant">
+                            <td class="py-5 px-6 border-l border-gray-200">
                                 <span class="block font-bold mb-1 line-clamp-2"><?= htmlspecialchars($review['title']) ?></span>
                             </td>
-                            <td class="py-5 px-6 border-l border-surface-variant font-numeral">
+                            <td class="py-5 px-6 border-l border-gray-200 font-numeral text-gray-600">
                                 <?= date('d/m/Y', strtotime($review['created_at'])) ?>
                             </td>
                             <td class="py-5 px-6">
-                                <a href="<?php echo BASE_URL; ?>/reviewer/view/<?= $review['submission_id'] ?>" 
-                                   class="block bg-royal-indigo text-white px-5 py-2.5 hover:bg-primary transition-colors text-center font-bold text-sm">
+                                <a href="<?php echo BASE_URL; ?>/reviewer/view/<?= $review['submission_id'] ?>"
+                                   class="block bg-indigo-700 text-white px-5 py-2.5 hover:bg-indigo-800 transition-all text-center font-bold text-sm rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                     ابدأ المراجعة
                                 </a>
                             </td>
