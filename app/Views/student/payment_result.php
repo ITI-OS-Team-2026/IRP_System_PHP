@@ -21,61 +21,61 @@ if ($sourceType === 'card') {
     <title><?= $pageTitle ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen bg-gray-50 text-gray-900 rtl font-body-lg">
     <div class="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
         <?php if ($success): ?>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
-                <h1 class="text-2xl font-bold text-green-700 mb-1">تم الدفع بنجاح!</h1>
-                <p class="text-slate-500 text-sm">تم تأكيد دفع الرسوم الأولية بنجاح</p>
+                <h1 class="font-h1 text-3xl text-gray-900 mb-2">تم الدفع بنجاح!</h1>
+                <p class="text-gray-600">تم استلام دفعتك وسيتم معالجتها</p>
             </div>
 
-            <div class="border border-slate-200 rounded-lg divide-y divide-slate-100 mb-6">
+            <div class="border border-gray-200 rounded-lg divide-y divide-gray-100 mb-6">
                 <?php if ($orderId > 0): ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">رقم الطلب</span>
-                    <span class="font-semibold text-slate-800"><?= (int) $orderId ?></span>
+                    <span class="text-gray-500 text-sm">رقم الطلب</span>
+                    <span class="font-semibold text-gray-800"><?= (int) $orderId ?></span>
                 </div>
                 <?php endif; ?>
                 <?php if ($transactionId > 0): ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">رقم العملية</span>
-                    <span class="font-semibold text-slate-800"><?= (int) $transactionId ?></span>
+                    <span class="text-gray-500 text-sm">رقم العملية</span>
+                    <span class="font-semibold text-gray-800"><?= (int) $transactionId ?></span>
                 </div>
                 <?php endif; ?>
                 <?php if ($amountCents > 0): ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">المبلغ</span>
-                    <span class="font-bold text-green-700 text-lg"><?= number_format($amountCents / 100, 2) ?> <?= $currency ?></span>
+                    <span class="text-gray-500 text-sm">المبلغ</span>
+                    <span class="font-bold text-indigo-700 text-lg"><?= number_format($amountCents / 100, 2) ?> <?= $currency ?></span>
                 </div>
                 <?php endif; ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">طريقة الدفع</span>
-                    <span class="font-semibold text-slate-800"><?= $paymentMethodLabel ?></span>
+                    <span class="text-gray-500 text-sm">طريقة الدفع</span>
+                    <span class="font-semibold text-gray-800"><?= $paymentMethodLabel ?></span>
                 </div>
                 <?php if ($sourcePan !== ''): ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">الرقم</span>
-                    <span class="font-mono text-slate-800"><?= $sourcePan ?></span>
+                    <span class="text-gray-500 text-sm">الرقم</span>
+                    <span class="font-mono text-gray-800"><?= $sourcePan ?></span>
                 </div>
                 <?php endif; ?>
                 <?php if ($createdAt !== ''): ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">تاريخ العملية</span>
-                    <span class="text-slate-800"><?= $createdAt ?></span>
+                    <span class="text-gray-500 text-sm">تاريخ العملية</span>
+                    <span class="text-gray-800"><?= $createdAt ?></span>
                 </div>
                 <?php endif; ?>
                 <div class="flex justify-between items-center px-4 py-3">
-                    <span class="text-slate-500 text-sm">الحالة</span>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">مكتملة</span>
+                    <span class="text-gray-500 text-sm">الحالة</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">مكتملة</span>
                 </div>
             </div>
 
-            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="block w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition text-center font-semibold">
+            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="inline-flex items-center gap-2 bg-indigo-700 text-white px-6 py-3 rounded-lg font-button hover:bg-indigo-800 transition-all shadow-sm hover:shadow-lg">
                 العودة إلى طلباتي
             </a>
 
@@ -87,9 +87,9 @@ if ($sourceType === 'card') {
                     </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-yellow-700 mb-1">الدفع قيد المعالجة</h1>
-                <p class="text-slate-500 text-sm">تم استلام طلب الدفع وهو قيد المعالجة. سيتم تحديث الحالة قريبا.</p>
+                <p class="text-gray-500 text-sm">تم استلام طلب الدفع وهو قيد المعالجة. سيتم تحديث الحالة قريبا.</p>
             </div>
-            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="block w-full bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-700 transition text-center font-semibold">
+            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="inline-flex items-center gap-2 bg-yellow-600 text-white px-6 py-3 rounded-lg font-button hover:bg-yellow-700 transition-all shadow-sm hover:shadow-lg">
                 العودة إلى طلباتي
             </a>
 
@@ -101,7 +101,7 @@ if ($sourceType === 'card') {
                     </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-red-700 mb-1">فشل الدفع</h1>
-                <p class="text-slate-500 text-sm">لم يتم إتمام عملية الدفع. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.</p>
+                <p class="text-gray-500 text-sm">لم يتم إتمام عملية الدفع. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.</p>
             </div>
 
             <?php if ($txnResponseCode !== ''): ?>
@@ -110,16 +110,16 @@ if ($sourceType === 'card') {
             </div>
             <?php endif; ?>
 
-            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="block w-full bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition text-center font-semibold">
+            <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/submissions" class="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-button hover:bg-red-700 transition-all shadow-sm hover:shadow-lg">
                 العودة إلى طلباتي
             </a>
         <?php endif; ?>
 
         <div class="mt-4 text-center">
             <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/dashboard" class="text-sm text-slate-500 hover:text-slate-700 underline">لوحة التحكم</a>
+                <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/student/dashboard" class="text-sm text-gray-500 hover:text-gray-700 underline">لوحة التحكم</a>
             <?php else: ?>
-                <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/login" class="text-sm text-slate-500 hover:text-slate-700 underline">تسجيل الدخول</a>
+                <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/login" class="text-sm text-gray-500 hover:text-gray-700 underline">تسجيل الدخول</a>
             <?php endif; ?>
         </div>
     </div>
